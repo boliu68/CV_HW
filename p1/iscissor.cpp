@@ -2,7 +2,12 @@
 #include<limits.h>
 #include<math.h>
 #include<iostream>
+#include<opencv2/opencv.hpp>
+#include<opencv2/imgproc/imgproc.hpp>
 #include "iscissor.h"
+#include "helper.h"
+using namespace cv;
+using namespace std;
 
 const int linktable[8][2]={{1,0},{1,-1},{0,-1},{-1,-1}
                             ,{-1,0},{-1,1},{0,1},{1,1}};
@@ -19,14 +24,17 @@ PixelNode::PixelNode(int c,int r):FibHeapNode()
     totalCost=DBL_MAX;
 }
 
-Iscissor::Iscissor(QImage * image)
+Iscissor::Iscissor(QImage * image, CostFunction cf)
 {
     img=image;
     pixelnodes.resize(img->height());
-    for(size_t i=0;i<img->height();i++)
-        for(size_t j=0;j<img->width();j++)
+    for(int i=0;i<img->height();i++)
+        for(int j=0;j<img->width();j++)
             pixelnodes[i].push_back(new PixelNode(i,j));
+    mask=image->createHeuristicMask();
+    mask.fill(1);
     seed=NULL;
+    costfunction=cf;
     costFun();
 }
 
@@ -106,7 +114,7 @@ void Iscissor::updatePathTree()
         for(int i=0;i<8;i++)
         {
             q->Neighbor(i,c,r);
-            if(c>=0&&c<img->width()&&r>=0&&r<img->height())
+            if(c>=0&&c<img->width()&&r>=0&&r<img->height()&&mask.pixel(c,r)!=0)
             {
                 PixelNode *pn=pixelnodes[r][c];
                 if(pn->state!=PixelNode::EXPANDED)
@@ -135,7 +143,7 @@ void Iscissor::updatePathTree()
     }
 }
 
-void Iscissor::costFun()
+void Iscissor::costFunModify()
 {
     int height=img->height();
     int width=img->width();
@@ -184,72 +192,72 @@ double Iscissor::getD(int i, int j, int link, const QImage &tmpimg)
     if(link==0)
     {
         int c0[3],c1[3],c2[3],c3[3];
-        transColorFormat(tmpimg.pixel(i,j-1),c0);
-        transColorFormat(tmpimg.pixel(i+1,j-1),c1);
-        transColorFormat(tmpimg.pixel(i,j+1),c2);
-        transColorFormat(tmpimg.pixel(i+1,j+1),c3);
+        (tmpimg.pixel(i,j-1),c0);
+        transQColorFormat(tmpimg.pixel(i+1,j-1),c1);
+        transQColorFormat(tmpimg.pixel(i,j+1),c2);
+        transQColorFormat(tmpimg.pixel(i+1,j+1),c3);
         for(int i=0;i<3;i++)
             d[i]=fabs((c0[i]+c1[i])/2.0-(c2[i]+c3[i])/2.0)/2.0;
     }
     else if(link==1)
     {
         int c0[3],c1[3];
-        transColorFormat(tmpimg.pixel(i+1,j),c0);
-        transColorFormat(tmpimg.pixel(i,j-1),c1);
+        transQColorFormat(tmpimg.pixel(i+1,j),c0);
+        transQColorFormat(tmpimg.pixel(i,j-1),c1);
         for(int i=0;i<3;i++)
             d[i]=fabs(c0[i]-c1[i])/sqrt(2.0);
     }
     else if(link==2)
     {
         int c0[3],c1[3],c2[3],c3[3];
-        transColorFormat(tmpimg.pixel(i-1,j),c0);
-        transColorFormat(tmpimg.pixel(i-1,j-1),c1);
-        transColorFormat(tmpimg.pixel(i+1,j),c2);
-        transColorFormat(tmpimg.pixel(i+1,j-1),c3);
+        transQColorFormat(tmpimg.pixel(i-1,j),c0);
+        transQColorFormat(tmpimg.pixel(i-1,j-1),c1);
+        transQColorFormat(tmpimg.pixel(i+1,j),c2);
+        transQColorFormat(tmpimg.pixel(i+1,j-1),c3);
         for(int i=0;i<3;i++)
             d[i]=fabs((c0[i]+c1[i])/2.0-(c2[i]+c3[i])/2.0)/2.0;
     }
     else if(link==3)
     {
         int c0[3],c1[3];
-        transColorFormat(tmpimg.pixel(i-1,j-1),c0);
-        transColorFormat(tmpimg.pixel(i-1,j),c1);
+        transQColorFormat(tmpimg.pixel(i-1,j-1),c0);
+        transQColorFormat(tmpimg.pixel(i-1,j),c1);
         for(int i=0;i<3;i++)
             d[i]=fabs(c0[i]-c1[i])/sqrt(2.0);
     }
     else if(link==4)
     {
         int c0[3],c1[3],c2[3],c3[3];
-        transColorFormat(tmpimg.pixel(i,j-1),c0);
-        transColorFormat(tmpimg.pixel(i-1,j-1),c1);
-        transColorFormat(tmpimg.pixel(i-1,j+1),c2);
-        transColorFormat(tmpimg.pixel(i,j+1),c3);
+        transQColorFormat(tmpimg.pixel(i,j-1),c0);
+        transQColorFormat(tmpimg.pixel(i-1,j-1),c1);
+        transQColorFormat(tmpimg.pixel(i-1,j+1),c2);
+        transQColorFormat(tmpimg.pixel(i,j+1),c3);
         for(int i=0;i<3;i++)
             d[i]=fabs((c0[i]+c1[i])/2.0-(c2[i]+c3[i])/2.0)/2.0;
     }
     else if(link==5)
     {
         int c0[3],c1[3];
-        transColorFormat(tmpimg.pixel(i-1,j),c0);
-        transColorFormat(tmpimg.pixel(i,j+1),c1);
+        transQColorFormat(tmpimg.pixel(i-1,j),c0);
+        transQColorFormat(tmpimg.pixel(i,j+1),c1);
         for(int i=0;i<3;i++)
             d[i]=fabs(c0[i]-c1[i])/sqrt(2.0);
     }
     else if(link==6)
     {
         int c0[3],c1[3],c2[3],c3[3];
-        transColorFormat(tmpimg.pixel(i-1,j),c0);
-        transColorFormat(tmpimg.pixel(i-1,j+1),c1);
-        transColorFormat(tmpimg.pixel(i+1,j+1),c2);
-        transColorFormat(tmpimg.pixel(i+1,j),c3);
+        transQColorFormat(tmpimg.pixel(i-1,j),c0);
+        transQColorFormat(tmpimg.pixel(i-1,j+1),c1);
+        transQColorFormat(tmpimg.pixel(i+1,j+1),c2);
+        transQColorFormat(tmpimg.pixel(i+1,j),c3);
         for(int i=0;i<3;i++)
             d[i]=fabs((c0[i]+c1[i])/2.0-(c2[i]+c3[i])/2.0)/2.0;
     }
     else
     {
         int c0[3],c1[3];
-        transColorFormat(tmpimg.pixel(i+1,j),c0);
-        transColorFormat(tmpimg.pixel(i,j+1),c1);
+        transQColorFormat(tmpimg.pixel(i+1,j),c0);
+        transQColorFormat(tmpimg.pixel(i,j+1),c1);
         for(int i=0;i<3;i++)
             d[i]=fabs(c0[i]-c1[i])/sqrt(2.0);
     }
@@ -257,13 +265,6 @@ double Iscissor::getD(int i, int j, int link, const QImage &tmpimg)
         D+=d[i]*d[i];
     D=sqrt(D/3.0);
     return D;
-}
-
-void Iscissor::transColorFormat(QRgb qrgb, int color[])
-{
-    color[0]=qRed(qrgb);
-    color[1]=qGreen(qrgb);
-    color[2]=qBlue(qrgb);
 }
 
 void PixelNode::operator =(PixelNode& RHS)
@@ -358,4 +359,110 @@ void Iscissor::getPath(int column, int row, vector<QPoint> &path)
         pn=pn->prevNode;
     }
     reverse(path.begin(),path.end());
+}
+
+void Iscissor::setCostFunction(CostFunction cf)
+{
+    costfunction=cf;
+    costFun();
+}
+
+void Iscissor::costFun()
+{
+    if(costfunction==MODIFIED)
+        costFunModify();
+    else if(costfunction==ORIGIN)
+        costFunOrigin();
+}
+
+void Iscissor::costFunOrigin()
+{
+    Mat cvimg;
+    QImageToCVMat(*img,cvimg);
+    Mat gray(cvimg.rows,cvimg.cols,CV_8U);
+    cvtColor(cvimg,gray,CV_RGB2GRAY);
+    Mat lap(cvimg.rows,cvimg.cols,CV_64F);
+    Laplacian(cvimg,lap,CV_64F);
+    Mat sobx(cvimg.rows,cvimg.cols,CV_64F);
+    Mat soby(cvimg.rows,cvimg.cols,CV_64F);
+    Sobel(cvimg,sobx,CV_64F,1,0);
+    Sobel(cvimg,soby,CV_64F,0,1);
+    Mat grad(cvimg.rows,cvimg.cols,CV_64F);
+    Mat fz(cvimg.rows,cvimg.cols,CV_64F);
+    Mat fg(cvimg.rows,cvimg.cols,CV_64F);
+    Mat D(cvimg.rows,cvimg.cols,CV_64FC2);
+    double maxG=0;
+    for(int i=0;i<cvimg.rows;i++)
+        for(int j=0;j<cvimg.cols;j++)
+        {
+            double dx=sobx.at<double>(i,j);
+            double dy=soby.at<double>(i,j);
+            double g=sqrt(dx*dx+dy*dy);
+            grad.at<double>(i,j)=g;
+            if(maxG<g)
+                maxG=g;
+            D.at<Vec2d>(i,j)=Vec2d(dy/g,-dx/g);
+        }
+    for(int i=0;i<cvimg.rows;i++)
+        for(int j=0;j<cvimg.cols;j++)
+        {
+            fz.at<double>(i,j)=abs(lap.at<double>(i,j))<0.01?0:1;
+            fg.at<double>(i,j)=1-grad.at<double>(i,j)/maxG;
+
+        }
+    double wz=0.43,wd=0.43,wg=0.14;
+    for(int i=0;i<cvimg.rows;i++)
+        for(int j=0;j<cvimg.cols;j++)
+        {
+            PixelNode *pn=pixelnodes[i][j];
+            for(int k=0;k<8;k++)
+            {
+                int c,r;
+                pn->Neighbor(k,c,r);
+                if(c>=0&&c<cvimg.cols&&r>=0&&r<cvimg.rows)
+                {
+                    Vec2d l(i-r,j-c);
+                    double dp=l.dot(D.at<double>(i,j));
+                    if(dp<0)
+                    {
+                        l=-l;
+                        dp=-dp;
+                    }
+                    double dq=l.dot(D.at<double>(r,c));
+                    double fd=(acos(dp)+acos(dq))/CV_PI;
+                    pn->setLinkCost(k,wz*fz.at<double>(r,c)+wg*fg.at<double>(r,c)+wd*fd);
+                }
+            }
+        }
+}
+
+void Iscissor::setMask(const QImage &m)
+{
+    mask=m;
+}
+
+QPoint Iscissor::snapSeed(int column, int row)
+{
+    Mat cvimg;
+    QImageToCVMat(*img,cvimg);
+    Mat gray(cvimg.rows,cvimg.cols,CV_8U);
+    cvtColor(cvimg,gray,CV_RGB2GRAY);
+    Mat edge;
+    Canny(gray,edge,31,127,3,true);
+    double m=DBL_MAX;
+    int c,r;
+    for(int i=0;i<edge.rows;i++)
+        for(int j=0;j<edge.cols;j++)
+            if(edge.at<uchar>(i,j)!=0)
+            {
+                double d=(i-r)*(i-r)+(j-c)*(j-c);
+                if(d<m)
+                {
+                    m=d;
+                    c=j;
+                    r=i;
+                }
+            }
+    setSeed(c,r);
+    return QPoint(c,r);
 }
