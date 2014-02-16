@@ -32,18 +32,27 @@ public:
 
 class Iscissor
 {
+public:
+    enum CostFunction{MODIFIED, ORIGIN};//cost function,modified is the basic requriement in this project,origin is the paper's
 private:
     QImage * img;
+    QImage mask;
     vector<vector<PixelNode*> > pixelnodes;
     PixelNode *seed;
-    virtual void costFun();
-    virtual double getD(int i,int j,int link, const QImage &tmpimg);
-    void transColorFormat(QRgb qrgb,int color[3]);
+    CostFunction costfunction;
+    void costFun();
+    void costFunModify();
+    void costFunOrigin();
+    double getD(int i,int j,int link, const QImage &tmpimg);
     void updatePathTree();
     void initializePixelNodes();
 public:
-    Iscissor(QImage *image);//image is the original image
+    Iscissor(QImage *image,CostFunction cf=MODIFIED);//image is the original image
+    void setCostFunction(CostFunction cf);
     void setSeed(int column,int row);
+    QPoint snapSeed(int column,int row);
+    //find one edge point closed to the input as a seed, return the new seed meanwhile update path tree
+    void setMask(const QImage &m);//set the region that path mask stay
     QImage drawPixelNode();
     QImage drawCostGraph();
     QImage drawPathTree();

@@ -21,6 +21,15 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     iscissor.h \
     fibheap.h \
-    binheap.h
+    binheap.h \
+    helper.h
 
 FORMS    += mainwindow.ui
+
+OPENCVENABLE = 1
+!include(QTFlagsOpenCV.pri) {
+    error("Cannot include QTFlagsOpenCV.pri")
+}
+
+OTHER_FILES += \
+    libraryDetector.pri
