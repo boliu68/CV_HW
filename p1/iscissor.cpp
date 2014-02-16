@@ -94,10 +94,7 @@ QImage Iscissor::drawPixelNode()
     cg.fill(qRgb(0,0,0));
     for(int j=0;j<h;j++)
         for(int i=0;i<w;i++)
-        {
-            PixelNode *pn=pixelnodes[j][i];
             cg.setPixel(3*i+1,3*j+1,img->pixel(i,j));
-        }
     return cg;
 }
 void Iscissor::updatePathTree()
@@ -185,8 +182,6 @@ void Iscissor::costFunModify()
 
 double Iscissor::getD(int i, int j, int link, const QImage &tmpimg)
 {
-    QRgb color0,color1;
-    int r0,g0,b0,r1,g1,b1;
     double D=0;
     double d[3];
     if(link==0)
@@ -450,12 +445,12 @@ QPoint Iscissor::snapSeed(int column, int row)
     Mat edge;
     Canny(gray,edge,31,127,3,true);
     double m=DBL_MAX;
-    int c,r;
+    int c=column,r=row;
     for(int i=0;i<edge.rows;i++)
         for(int j=0;j<edge.cols;j++)
             if(edge.at<uchar>(i,j)!=0)
             {
-                double d=(i-r)*(i-r)+(j-c)*(j-c);
+                double d=(i-row)*(i-row)+(j-column)*(j-column);
                 if(d<m)
                 {
                     m=d;
