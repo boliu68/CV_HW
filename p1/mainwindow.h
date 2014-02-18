@@ -2,6 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QImage>
+#include <QPixmap>
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +21,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+private slots:
+	void OpenImage();
+
 };
 
 #endif // MAINWINDOW_H
