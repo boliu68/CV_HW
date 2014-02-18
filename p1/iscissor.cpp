@@ -200,7 +200,7 @@ double Iscissor::getD(int i, int j, int link, const QImage &tmpimg)
         transQColorFormat(tmpimg.pixel(i+1,j),c0);
         transQColorFormat(tmpimg.pixel(i,j-1),c1);
         for(int i=0;i<3;i++)
-            d[i]=fabs(c0[i]-c1[i])/sqrt(2.0);
+            d[i]=fabs(1.0 * (c0[i]-c1[i]))/sqrt(2.0);
     }
     else if(link==2)
     {
@@ -218,7 +218,7 @@ double Iscissor::getD(int i, int j, int link, const QImage &tmpimg)
         transQColorFormat(tmpimg.pixel(i-1,j-1),c0);
         transQColorFormat(tmpimg.pixel(i-1,j),c1);
         for(int i=0;i<3;i++)
-            d[i]=fabs(c0[i]-c1[i])/sqrt(2.0);
+            d[i]=fabs(1.0 * (c0[i]-c1[i]))/sqrt(2.0);
     }
     else if(link==4)
     {
@@ -236,7 +236,7 @@ double Iscissor::getD(int i, int j, int link, const QImage &tmpimg)
         transQColorFormat(tmpimg.pixel(i-1,j),c0);
         transQColorFormat(tmpimg.pixel(i,j+1),c1);
         for(int i=0;i<3;i++)
-            d[i]=fabs(c0[i]-c1[i])/sqrt(2.0);
+            d[i]=fabs(1.0 * (c0[i]-c1[i]))/sqrt(2.0);
     }
     else if(link==6)
     {
@@ -254,7 +254,7 @@ double Iscissor::getD(int i, int j, int link, const QImage &tmpimg)
         transQColorFormat(tmpimg.pixel(i+1,j),c0);
         transQColorFormat(tmpimg.pixel(i,j+1),c1);
         for(int i=0;i<3;i++)
-            d[i]=fabs(c0[i]-c1[i])/sqrt(2.0);
+            d[i]=fabs(1.0* (c0[i]-c1[i]))/sqrt(2.0);
     }
     for(int i=0;i<3;i++)
         D+=d[i]*d[i];
