@@ -167,8 +167,8 @@ void Iscissor::costFunModify()
                     maxD=pn->LinkCost(k);
             }
         }
-    for(int j=1;j<height+1;j++)
-        for(int i=1;i<width+1;i++)
+    for(int j=0;j<height;j++)
+        for(int i=0;i<width;i++)
         {
              PixelNode *pn=pixelnodes[j][i];
             for(int k=0;k<8;k++)
