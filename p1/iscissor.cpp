@@ -159,7 +159,11 @@ void Iscissor::costFunModify()
     for(int j=1;j<height+1;j++)
         for(int i=1;i<width+1;i++)
         {
+<<<<<<< HEAD
             PixelNode *pn=pixelnodes[j-1][i-1];
+=======
+            PixelNode *pn=pixelnodes[j - 1][i - 1];
+>>>>>>> origin/master
             for(int k=0;k<8;k++)
             {
                 pn->setLinkCost(k,getD(i,j,k,tmpimg));
@@ -170,7 +174,7 @@ void Iscissor::costFunModify()
     for(int j=0;j<height;j++)
         for(int i=0;i<width;i++)
         {
-             PixelNode *pn=pixelnodes[j][i];
+             PixelNode *pn=pixelnodes[j - 1][i - 1];
             for(int k=0;k<8;k++)
             {
                 double D=pn->LinkCost(k);
@@ -200,7 +204,7 @@ double Iscissor::getD(int i, int j, int link, const QImage &tmpimg)
         transQColorFormat(tmpimg.pixel(i+1,j),c0);
         transQColorFormat(tmpimg.pixel(i,j-1),c1);
         for(int i=0;i<3;i++)
-            d[i]=fabs(c0[i]-c1[i])/sqrt(2.0);
+            d[i]=fabs(1.0 * (c0[i]-c1[i]))/sqrt(2.0);
     }
     else if(link==2)
     {
@@ -218,7 +222,7 @@ double Iscissor::getD(int i, int j, int link, const QImage &tmpimg)
         transQColorFormat(tmpimg.pixel(i-1,j-1),c0);
         transQColorFormat(tmpimg.pixel(i-1,j),c1);
         for(int i=0;i<3;i++)
-            d[i]=fabs(c0[i]-c1[i])/sqrt(2.0);
+            d[i]=fabs(1.0 * (c0[i]-c1[i]))/sqrt(2.0);
     }
     else if(link==4)
     {
@@ -236,7 +240,7 @@ double Iscissor::getD(int i, int j, int link, const QImage &tmpimg)
         transQColorFormat(tmpimg.pixel(i-1,j),c0);
         transQColorFormat(tmpimg.pixel(i,j+1),c1);
         for(int i=0;i<3;i++)
-            d[i]=fabs(c0[i]-c1[i])/sqrt(2.0);
+            d[i]=fabs(1.0 * (c0[i]-c1[i]))/sqrt(2.0);
     }
     else if(link==6)
     {
@@ -254,7 +258,7 @@ double Iscissor::getD(int i, int j, int link, const QImage &tmpimg)
         transQColorFormat(tmpimg.pixel(i+1,j),c0);
         transQColorFormat(tmpimg.pixel(i,j+1),c1);
         for(int i=0;i<3;i++)
-            d[i]=fabs(c0[i]-c1[i])/sqrt(2.0);
+            d[i]=fabs(1.0* (c0[i]-c1[i]))/sqrt(2.0);
     }
     for(int i=0;i<3;i++)
         D+=d[i]*d[i];

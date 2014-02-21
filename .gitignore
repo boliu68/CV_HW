@@ -1,0 +1,10 @@
+*.tlog
+*.opensdf
+*.sdf
+*.lastbuildstate
+*.manifest
+*.filters
+*.vcxproj
+*.sln
+*.unsuccessfulbuild
+*.ipch

@@ -6,6 +6,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+	//state initialization
+	isctl_pressed = false;
+	is_seed = false;
 }
 
 MainWindow::~MainWindow()
