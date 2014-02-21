@@ -18,7 +18,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
@@ -49,13 +48,12 @@ public:
     QMenu *menuTool;
     QMenu *menuScissor_2;
     QToolBar *mainToolBar;
-    QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(512, 481);
+        MainWindow->resize(949, 833);
         SaveContour = new QAction(MainWindow);
         SaveContour->setObjectName(QStringLiteral("SaveContour"));
         SaveMask = new QAction(MainWindow);
@@ -91,15 +89,19 @@ public:
         Load_Image->setObjectName(QStringLiteral("Load_Image"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
+        centralWidget->setEnabled(true);
         ShowImage = new QLabel(centralWidget);
         ShowImage->setObjectName(QStringLiteral("ShowImage"));
-        ShowImage->setGeometry(QRect(0, 0, 461, 301));
+        ShowImage->setEnabled(true);
+        ShowImage->setGeometry(QRect(0, 0, 401, 480));
+        ShowImage->setFocusPolicy(Qt::ClickFocus);
+        ShowImage->setAcceptDrops(true);
         ShowImage->setScaledContents(false);
         ShowImage->setIndent(0);
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 512, 21));
+        menuBar->setGeometry(QRect(0, 0, 949, 21));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuTool = new QMenu(menuBar);
@@ -110,9 +112,6 @@ public:
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
         MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
-        statusBar = new QStatusBar(MainWindow);
-        statusBar->setObjectName(QStringLiteral("statusBar"));
-        MainWindow->setStatusBar(statusBar);
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuTool->menuAction());
@@ -134,7 +133,6 @@ public:
         menuScissor_2->addAction(MinPath);
 
         retranslateUi(MainWindow);
-        QObject::connect(QuitButton, SIGNAL(triggered()), MainWindow, SLOT(close()));
         QObject::connect(Load_Image, SIGNAL(triggered()), MainWindow, SLOT(OpenImage()));
         QObject::connect(ImageOnly, SIGNAL(triggered()), MainWindow, SLOT(on_image_only()));
         QObject::connect(ImageContour, SIGNAL(triggered()), MainWindow, SLOT(on_image_contour()));

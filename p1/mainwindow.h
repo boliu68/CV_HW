@@ -9,6 +9,7 @@
 #include "workstates.h"
 #include <qevent.h>
 #include "iscissor.h"
+#include <QPainter>
 
 
 namespace Ui {
@@ -26,11 +27,17 @@ public:
 private:
     Ui::MainWindow *ui;
 
+	QImage * img;
+	QPainter * pter;
+	void draw_image();
+	void click_position(int x, int y, int &x_, int &y_); //obtain the position with respect to the label
+
 	Iscissor * ics; //the iscissor class
 
 	int workstates; //to indiciate in which work state.
 
 	bool isctl_pressed;//to record whether the control buttion is pressed
+	bool is_seed; //to record whether the seed point is alread put.
 
 private slots:
 	void OpenImage();

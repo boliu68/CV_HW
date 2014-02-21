@@ -11,7 +11,7 @@ void MainWindow::OpenImage()
    "Images files (*.jpg *.png);");
 
 	
-	QImage * img = new QImage;
+	img = new QImage;
 
 	if (! (img->load(filename)))
 	{
@@ -20,10 +20,11 @@ void MainWindow::OpenImage()
                                      tr("Fail to open Image!"));
 	}
 	
+	//initialize the painter
+	pter = new QPainter(img);
+
 	//Show the image
-	this->resize(img->width(), img->height());
-	ui->ShowImage->resize(img->width(), img->height());
-	ui->ShowImage->setPixmap(QPixmap::fromImage(*img));
+	draw_image();
 
 	//initialize the IS class
 	ics = new Iscissor(img);

@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	//state initialization
 	isctl_pressed = false;
+	is_seed = false;
 }
 
 MainWindow::~MainWindow()

@@ -6,3 +6,5 @@
 *.filters
 *.vcxproj
 *.sln
+*.unsuccessfulbuild
+*.ipch
