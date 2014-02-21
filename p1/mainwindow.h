@@ -6,6 +6,10 @@
 #include <QMessageBox>
 #include <QImage>
 #include <QPixmap>
+#include "workstates.h"
+#include <qevent.h>
+#include "iscissor.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -22,8 +26,28 @@ public:
 private:
     Ui::MainWindow *ui;
 
+	Iscissor * ics; //the iscissor class
+
+	int workstates; //to indiciate in which work state.
+
+	bool isctl_pressed;//to record whether the control buttion is pressed
+
 private slots:
 	void OpenImage();
+
+	//the slots to change workstates
+	void on_image_only(){workstates = image_only;};
+	void on_image_contour(){workstates = image_only_contour;};
+	void on_pixel_node(){workstates = pixel_node;};
+	void on_cost_graph(){workstates = cost_graph;};
+	void on_path_tree(){workstates = path_tree;};
+	void on_min_path(){workstates = min_path;this->setMouseTracking(true);};
+
+protected:
+	//overwrite the track the mouse press event
+	void mousePressEvent(QMouseEvent * e);
+	void keyPressEvent(QKeyEvent *e);  
+	void keyReleaseEvent(QKeyEvent *e);
 
 };
 

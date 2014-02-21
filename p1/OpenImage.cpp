@@ -20,7 +20,12 @@ void MainWindow::OpenImage()
                                      tr("Fail to open Image!"));
 	}
 	
+	//Show the image
 	this->resize(img->width(), img->height());
 	ui->ShowImage->resize(img->width(), img->height());
 	ui->ShowImage->setPixmap(QPixmap::fromImage(*img));
+
+	//initialize the IS class
+	ics = new Iscissor(img);
+
 }

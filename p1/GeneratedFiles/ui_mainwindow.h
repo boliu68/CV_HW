@@ -55,7 +55,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(465, 352);
+        MainWindow->resize(512, 481);
         SaveContour = new QAction(MainWindow);
         SaveContour->setObjectName(QStringLiteral("SaveContour"));
         SaveMask = new QAction(MainWindow);
@@ -99,7 +99,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 465, 21));
+        menuBar->setGeometry(QRect(0, 0, 512, 21));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuTool = new QMenu(menuBar);
@@ -136,6 +136,11 @@ public:
         retranslateUi(MainWindow);
         QObject::connect(QuitButton, SIGNAL(triggered()), MainWindow, SLOT(close()));
         QObject::connect(Load_Image, SIGNAL(triggered()), MainWindow, SLOT(OpenImage()));
+        QObject::connect(ImageOnly, SIGNAL(triggered()), MainWindow, SLOT(on_image_only()));
+        QObject::connect(ImageContour, SIGNAL(triggered()), MainWindow, SLOT(on_image_contour()));
+        QObject::connect(MinPath, SIGNAL(triggered()), MainWindow, SLOT(on_min_path()));
+        QObject::connect(PathTree, SIGNAL(triggered()), MainWindow, SLOT(on_path_tree()));
+        QObject::connect(PixelNode, SIGNAL(triggered()), MainWindow, SLOT(on_pixel_node()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
