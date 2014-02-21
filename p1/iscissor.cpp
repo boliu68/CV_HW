@@ -159,11 +159,7 @@ void Iscissor::costFunModify()
     for(int j=1;j<height+1;j++)
         for(int i=1;i<width+1;i++)
         {
-<<<<<<< HEAD
             PixelNode *pn=pixelnodes[j-1][i-1];
-=======
-            PixelNode *pn=pixelnodes[j - 1][i - 1];
->>>>>>> origin/master
             for(int k=0;k<8;k++)
             {
                 pn->setLinkCost(k,getD(i,j,k,tmpimg));
@@ -174,7 +170,7 @@ void Iscissor::costFunModify()
     for(int j=0;j<height;j++)
         for(int i=0;i<width;i++)
         {
-             PixelNode *pn=pixelnodes[j - 1][i - 1];
+             PixelNode *pn=pixelnodes[j][i];
             for(int k=0;k<8;k++)
             {
                 double D=pn->LinkCost(k);
