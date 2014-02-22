@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <vector>
+#include <stdexcept>
 
 using namespace std;
 
@@ -18,33 +19,79 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 
 				//change the coordinate
 				int x, y;
-				click_position(e->x(), e->y(), x, y);
-				pter = new QPainter(pimg);
-
-				if(is_seed)
+				if (click_position(e->x(), e->y(), x, y))
 				{
-					//seed already exist, draw the path;
-					//otherwise, only draw the clickpoint.
-					vector<QPoint> path;
-					ics->getPath(x, y, path);
 
-					pter->setPen(QPen(Qt::green, 1));
-					pter->drawPoints(&path[0], path.size());
+					pter = new QPainter(pimg);
 
-					pter->setPen(QPen(Qt::blue, 3));
-					pter->drawPoint(x, y);
-				}
+					if(is_seed)
+					{
+						//seed already exist, draw the path;
+						//otherwise, only draw the clickpoint.
+						vector<QPoint> path;
+						ics->getPath(x, y, path);
+
+						//store the path to ex_path
+						ex_path[path_id].insert(ex_path[path_id].end(), path.begin(), path.end());
+					}
 								
-				//Draw the point
-				pter->setPen(QPen(Qt::red, 3));
-				pter->drawPoint(x, y);
-				pter->end();
-				draw_image();
+					//Draw the point
+					pter->setPen(QPen(Qt::red, 3));
+					pter->drawPoint(x, y);
+					pter->end();
+					draw_image();
 
-				is_seed = true;
-				//update the seed
-				ics->setSeed(x, y);
+					if (ex_path.size() == 0)
+					{
+						vector<QPoint> a_point;
+						a_point.push_back(QPoint(x,y));
+						ex_path.push_back(a_point);
+					}
+
+					//begin to tracking the mouse
+					this->setMouseTracking(true);
+					ui->centralWidget->setMouseTracking(true);
+					ui->ShowImage->setMouseTracking(true);
+
+					//update the seed
+					ics->setSeed(x, y);
+					is_seed = true;
+
+				}
 			}
+		}
+	}
+}
+
+
+void MainWindow::mouseMoveEvent(QMouseEvent * e)
+{
+	if (workstates == image_only_contour)
+	{
+		if (is_seed)
+		{
+			//track the mouse
+			int x, y;
+			if (click_position(e->x(), e->y(), x, y))
+			{
+				delete pimg;
+				pimg = new QImage(img->copy());
+
+				pter = new QPainter(pimg);
+				vector<QPoint> path;
+
+				ics->getPath(x, y, path);
+
+				pter->setPen(Qt::green);
+				pter->drawPoints(&ex_path[path_id][0], ex_path[path_id].size());
+
+				pter->drawPoints(&path[0], path.size());
+				pter->end();
+
+				draw_image();
+				
+			}
+
 		}
 	}
 }
@@ -69,20 +116,17 @@ void MainWindow::keyPressEvent(QKeyEvent * e)
 	if (isctl_pressed && isplus_pressed)
 	{
 		//enlarge the picture
-		QImage * img_tmp = NULL;
-		img_tmp = new QImage(img->scaled(pimg->width() * 1.5, pimg->height() * 1.5, Qt::KeepAspectRatio));
-		delete pimg;
-		pimg = img_tmp;
+		size = size * 2.0;
+
 		draw_image();
 	}
 
 	if (isctl_pressed && isminus_pressed)
 	{
 		//ensmaller the picture.
-		QImage * img_tmp = NULL;
-		img_tmp = new QImage(img->scaled(pimg->width() / 1.5, pimg->height() / 1.5, Qt::KeepAspectRatio));
-		delete pimg;
-		pimg = img_tmp;
+		
+		size = size / 2.0;
+
 		draw_image();
 	}
 }
@@ -105,8 +149,9 @@ void MainWindow::keyReleaseEvent(QKeyEvent * e)
 }
 
 
-void MainWindow::click_position(int x, int y, int& x_, int& y_)
+bool MainWindow::click_position(int x, int y, int& x_, int& y_)
 {
-	x_ = x - ui->centralWidget->x();
-	y_ = y - ui->centralWidget->y();
+	x_ = floor((x - ui->centralWidget->x()) / size);
+	y_ = floor((y - ui->centralWidget->y()) / size);
+	return (x_ >=0 && y_ >=0 && x_ < img->width() && y_ < img->height());
 }

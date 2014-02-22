@@ -33,9 +33,12 @@ private:
 	QImage * pimg;//used for painting;
 	QPainter * pter;
 	void draw_image();
-	void click_position(int x, int y, int &x_, int &y_); //obtain the position with respect to the label
+	bool click_position(int x, int y, int &x_, int &y_); //obtain the position with respect to the label
 
 	Iscissor * ics; //the iscissor class
+	vector<vector<QPoint>> ex_path;
+	int path_id; //to indicate the id of path;
+	float size;//the size the shown image
 
 	int workstates; //to indiciate in which work state.
 
@@ -49,16 +52,17 @@ private slots:
 	void OpenImage();
 
 	//the slots to change workstates
-	void on_image_only();
-	void on_image_contour();
-	void on_pixel_node();
-	void on_cost_graph();
-	void on_path_tree();
-	void on_min_path();
+    void on_image_only();
+    void on_image_contour();
+    void on_pixel_node();
+    void on_cost_graph();
+    void on_path_tree();
+    void on_min_path();
 
 protected:
 	//overwrite the track the mouse press event
 	void mousePressEvent(QMouseEvent * e);
+	void mouseMoveEvent(QMouseEvent* e);
 	void keyPressEvent(QKeyEvent *e);  
 	void keyReleaseEvent(QKeyEvent *e);
 
