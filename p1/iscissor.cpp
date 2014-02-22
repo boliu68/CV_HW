@@ -30,7 +30,7 @@ Iscissor::Iscissor(QImage * image, CostFunction cf)
     pixelnodes.resize(img->height());
     for(int i=0;i<img->height();i++)
         for(int j=0;j<img->width();j++)
-            pixelnodes[i].push_back(new PixelNode(i,j));
+            pixelnodes[i].push_back(new PixelNode(j,i));
     mask=image->createHeuristicMask();
     mask.fill(1);
     seed=NULL;
@@ -40,7 +40,7 @@ Iscissor::Iscissor(QImage * image, CostFunction cf)
 
 void Iscissor::setSeed(int column,int row)
 {
-    seed=pixelnodes[column][row];
+    seed=pixelnodes[row][column];
     updatePathTree();
 }
 
@@ -53,14 +53,14 @@ QImage Iscissor::drawCostGraph()
         {
             PixelNode *pn=pixelnodes[j][i];
             cg.setPixel(3*i+1,3*j+1,img->pixel(i,j));
-            cg.setPixel(3*i+2,3*j+1,pn->LinkCost(0));
-            cg.setPixel(3*i+2,3*j,pn->LinkCost(1));
-            cg.setPixel(3*i+1,3*j,pn->LinkCost(2));
-            cg.setPixel(3*i,3*j,pn->LinkCost(3));
-            cg.setPixel(3*i,3*j+1,pn->LinkCost(4));
-            cg.setPixel(3*i,3*j+2,pn->LinkCost(5));
-            cg.setPixel(3*i+1,3*j+2,pn->LinkCost(6));
-            cg.setPixel(3*i+2,3*j+2,pn->LinkCost(7));
+            cg.setPixel(3*i+2,3*j+1,qRgb(pn->LinkCost(0)*1.5,pn->LinkCost(0)*1.5,pn->LinkCost(0)*1.5));
+            cg.setPixel(3*i+2,3*j,qRgb(pn->LinkCost(1)*1.5,pn->LinkCost(1)*1.5,pn->LinkCost(1)*1.5));
+            cg.setPixel(3*i+1,3*j,qRgb(pn->LinkCost(2)*1.5,pn->LinkCost(2)*1.5,pn->LinkCost(2)*1.5));
+            cg.setPixel(3*i,3*j,qRgb(pn->LinkCost(3)*1.5,pn->LinkCost(3)*1.5,pn->LinkCost(3)*1.5));
+            cg.setPixel(3*i,3*j+1,qRgb(pn->LinkCost(4)*1.5,pn->LinkCost(4)*1.5,pn->LinkCost(4)*1.5));
+            cg.setPixel(3*i,3*j+2,qRgb(pn->LinkCost(5)*1.5,pn->LinkCost(5)*1.5,pn->LinkCost(5)*1.5));
+            cg.setPixel(3*i+1,3*j+2,qRgb(pn->LinkCost(6)*1.5,pn->LinkCost(6)*1.5,pn->LinkCost(6)*1.5));
+            cg.setPixel(3*i+2,3*j+2,qRgb(pn->LinkCost(7)*1.5,pn->LinkCost(7)*1.5,pn->LinkCost(7)*1.5));
         }
     return cg;
 }
@@ -144,33 +144,22 @@ void Iscissor::costFunModify()
 {
     int height=img->height();
     int width=img->width();
-    QImage tmpimg(width+2,height+2,img->format());
-    for(int j=0;j<height+2;j++)
-        for(int i=0;i<width+2;i++)
-        {
-            if(j==0||j==height+1)
-                tmpimg.setPixel(i,j,qRgb(0,0,0));
-            else if(i==0||i==width+1)
-                tmpimg.setPixel(i,j,qRgb(0,0,0));
-            else
-                tmpimg.setPixel(i,j,img->pixel(i-1,j-1));
-        }
     double maxD=-1.0;
-    for(int j=1;j<height+1;j++)
-        for(int i=1;i<width+1;i++)
+    for(int j=0;j<height;j++)
+        for(int i=0;i<width;i++)
         {
-            PixelNode *pn=pixelnodes[j - 1][i - 1];
+            PixelNode *pn=pixelnodes[j][i];
             for(int k=0;k<8;k++)
             {
-                pn->setLinkCost(k,getD(i,j,k,tmpimg));
+                pn->setLinkCost(k,getD(i,j,k));
                 if(pn->LinkCost(k)>maxD)
                     maxD=pn->LinkCost(k);
             }
         }
-    for(int j=1;j<height+1;j++)
-        for(int i=1;i<width+1;i++)
+    for(int j=0;j<height;j++)
+        for(int i=0;i<width;i++)
         {
-             PixelNode *pn=pixelnodes[j - 1][i - 1];
+             PixelNode *pn=pixelnodes[j][i];
             for(int k=0;k<8;k++)
             {
                 double D=pn->LinkCost(k);
@@ -180,79 +169,95 @@ void Iscissor::costFunModify()
         }
 }
 
-double Iscissor::getD(int i, int j, int link, const QImage &tmpimg)
+double Iscissor::getD(int i, int j, int link)
 {
     double D=0;
     double d[3];
     if(link==0)
     {
+        if(j==0||j==img->height()-1||i==img->width()-1)
+            return -1.0;
         int c0[3],c1[3],c2[3],c3[3];
-        (tmpimg.pixel(i,j-1),c0);
-        transQColorFormat(tmpimg.pixel(i+1,j-1),c1);
-        transQColorFormat(tmpimg.pixel(i,j+1),c2);
-        transQColorFormat(tmpimg.pixel(i+1,j+1),c3);
+        transQColorFormat(img->pixel(i,j-1),c0);
+        transQColorFormat(img->pixel(i+1,j-1),c1);
+        transQColorFormat(img->pixel(i,j+1),c2);
+        transQColorFormat(img->pixel(i+1,j+1),c3);
         for(int i=0;i<3;i++)
             d[i]=fabs((c0[i]+c1[i])/2.0-(c2[i]+c3[i])/2.0)/2.0;
     }
     else if(link==1)
     {
+        if(j==0||i==img->width()-1)
+            return -1.0;
         int c0[3],c1[3];
-        transQColorFormat(tmpimg.pixel(i+1,j),c0);
-        transQColorFormat(tmpimg.pixel(i,j-1),c1);
+        transQColorFormat(img->pixel(i+1,j),c0);
+        transQColorFormat(img->pixel(i,j-1),c1);
         for(int i=0;i<3;i++)
             d[i]=fabs(1.0 * (c0[i]-c1[i]))/sqrt(2.0);
     }
     else if(link==2)
     {
+        if(i==0||j==0||i==img->width()-1)
+            return -1.0;
         int c0[3],c1[3],c2[3],c3[3];
-        transQColorFormat(tmpimg.pixel(i-1,j),c0);
-        transQColorFormat(tmpimg.pixel(i-1,j-1),c1);
-        transQColorFormat(tmpimg.pixel(i+1,j),c2);
-        transQColorFormat(tmpimg.pixel(i+1,j-1),c3);
+        transQColorFormat(img->pixel(i-1,j),c0);
+        transQColorFormat(img->pixel(i-1,j-1),c1);
+        transQColorFormat(img->pixel(i+1,j),c2);
+        transQColorFormat(img->pixel(i+1,j-1),c3);
         for(int i=0;i<3;i++)
             d[i]=fabs((c0[i]+c1[i])/2.0-(c2[i]+c3[i])/2.0)/2.0;
     }
     else if(link==3)
     {
+        if(i==0||j==0)
+            return -1.0;
         int c0[3],c1[3];
-        transQColorFormat(tmpimg.pixel(i-1,j-1),c0);
-        transQColorFormat(tmpimg.pixel(i-1,j),c1);
+        transQColorFormat(img->pixel(i-1,j-1),c0);
+        transQColorFormat(img->pixel(i-1,j),c1);
         for(int i=0;i<3;i++)
             d[i]=fabs(1.0 * (c0[i]-c1[i]))/sqrt(2.0);
     }
     else if(link==4)
     {
         int c0[3],c1[3],c2[3],c3[3];
-        transQColorFormat(tmpimg.pixel(i,j-1),c0);
-        transQColorFormat(tmpimg.pixel(i-1,j-1),c1);
-        transQColorFormat(tmpimg.pixel(i-1,j+1),c2);
-        transQColorFormat(tmpimg.pixel(i,j+1),c3);
+        if(i==0||j==0||j==img->height()-1)
+            return -1.0;
+        transQColorFormat(img->pixel(i,j-1),c0);
+        transQColorFormat(img->pixel(i-1,j-1),c1);
+        transQColorFormat(img->pixel(i-1,j+1),c2);
+        transQColorFormat(img->pixel(i,j+1),c3);
         for(int i=0;i<3;i++)
             d[i]=fabs((c0[i]+c1[i])/2.0-(c2[i]+c3[i])/2.0)/2.0;
     }
     else if(link==5)
     {
+        if(i==0||j==img->height()-1)
+            return -1.0;
         int c0[3],c1[3];
-        transQColorFormat(tmpimg.pixel(i-1,j),c0);
-        transQColorFormat(tmpimg.pixel(i,j+1),c1);
+        transQColorFormat(img->pixel(i-1,j),c0);
+        transQColorFormat(img->pixel(i,j+1),c1);
         for(int i=0;i<3;i++)
             d[i]=fabs(1.0 * (c0[i]-c1[i]))/sqrt(2.0);
     }
     else if(link==6)
     {
         int c0[3],c1[3],c2[3],c3[3];
-        transQColorFormat(tmpimg.pixel(i-1,j),c0);
-        transQColorFormat(tmpimg.pixel(i-1,j+1),c1);
-        transQColorFormat(tmpimg.pixel(i+1,j+1),c2);
-        transQColorFormat(tmpimg.pixel(i+1,j),c3);
+        if(i==0||i==img->width()-1||j==img->height()-1)
+            return -1.0;
+        transQColorFormat(img->pixel(i-1,j),c0);
+        transQColorFormat(img->pixel(i-1,j+1),c1);
+        transQColorFormat(img->pixel(i+1,j+1),c2);
+        transQColorFormat(img->pixel(i+1,j),c3);
         for(int i=0;i<3;i++)
             d[i]=fabs((c0[i]+c1[i])/2.0-(c2[i]+c3[i])/2.0)/2.0;
     }
     else
     {
         int c0[3],c1[3];
-        transQColorFormat(tmpimg.pixel(i+1,j),c0);
-        transQColorFormat(tmpimg.pixel(i,j+1),c1);
+        if(i==img->width()-1||j==img->height()-1)
+            return -1.0;
+        transQColorFormat(img->pixel(i+1,j),c0);
+        transQColorFormat(img->pixel(i,j+1),c1);
         for(int i=0;i<3;i++)
             d[i]=fabs(1.0* (c0[i]-c1[i]))/sqrt(2.0);
     }
@@ -262,30 +267,32 @@ double Iscissor::getD(int i, int j, int link, const QImage &tmpimg)
     return D;
 }
 
-void PixelNode::operator =(PixelNode& RHS)
+void PixelNode::operator =(FibHeapNode& RHS)
 {
+    PixelNode& pRHS=(PixelNode&)RHS;
     FHN_Assign(RHS);
-    totalCost=RHS.totalCost;
+    totalCost=pRHS.totalCost;
 }
 
-int PixelNode::operator ==(PixelNode& RHS)
+int PixelNode::operator ==(FibHeapNode& RHS)
 {
+    PixelNode& pRHS=(PixelNode&)RHS;
     if (FHN_Cmp(RHS)) return 0;
     // Key compare goes here in derived classes
     if(RHS.NegInfinityFlag&&NegInfinityFlag) return 1;
-    return totalCost==RHS.totalCost;
+    return totalCost==pRHS.totalCost;
 }
 
-int PixelNode::operator <(PixelNode& RHS)
+int PixelNode::operator <(FibHeapNode& RHS)
 {
      int X;
-
+     PixelNode& pRHS=(PixelNode&)RHS;
      if ((X=FHN_Cmp(RHS)) != 0)
       return X < 0 ? 1 : 0;
      // Key compare goes here in derived classes
      if(RHS.NegInfinityFlag&&NegInfinityFlag)
          return 0;
-     return totalCost<RHS.totalCost;
+     return totalCost<pRHS.totalCost;
 }
 
 void PixelNode::Print()

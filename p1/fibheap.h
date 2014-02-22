@@ -36,7 +36,6 @@ friend class FibHeap;
      short Degree, Mark;
 
 protected:
-     short NegInfinityFlag;
      int  FHN_Cmp(FibHeapNode& RHS);
      void FHN_Assign(FibHeapNode& RHS);
 
@@ -50,6 +49,7 @@ public:
      virtual int  operator <(FibHeapNode& RHS);
 
      virtual void Print();
+     short NegInfinityFlag;
 };
 
 //========================================================================
