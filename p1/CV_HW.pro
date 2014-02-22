@@ -16,13 +16,17 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     iscissor.cpp \
     fibheap.cpp \
-    binheap.cpp
+    binheap.cpp \
+    OpenImage.cpp \
+    inputtrack.cpp \
+    drawimage.cpp
 
 HEADERS  += mainwindow.h \
     iscissor.h \
     fibheap.h \
     binheap.h \
-    helper.h
+    helper.h \
+    workstates.h
 
 FORMS    += mainwindow.ui
 

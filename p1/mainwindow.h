@@ -43,12 +43,20 @@ private slots:
 	void OpenImage();
 
 	//the slots to change workstates
-	void on_image_only(){workstates = image_only;};
-	void on_image_contour(){workstates = image_only_contour;};
-	void on_pixel_node(){workstates = pixel_node;};
-	void on_cost_graph(){workstates = cost_graph;};
-	void on_path_tree(){workstates = path_tree;};
-	void on_min_path(){workstates = min_path;this->setMouseTracking(true);};
+    void on_image_only()
+    {
+        workstates = image_only;
+        draw_image();
+    }
+    void on_image_contour(){workstates = image_only_contour;draw_image();}
+    void on_pixel_node(){workstates = pixel_node;draw_image();}
+    void on_cost_graph()
+    {
+        workstates = cost_graph;
+        draw_image();
+    }
+    void on_path_tree(){workstates = path_tree;draw_image();}
+    void on_min_path(){workstates = min_path;this->setMouseTracking(true);draw_image();}
 
 protected:
 	//overwrite the track the mouse press event

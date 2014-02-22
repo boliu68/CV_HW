@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	//state initialization
 	isctl_pressed = false;
 	is_seed = false;
+    workstates=image_only;
 }
 
 MainWindow::~MainWindow()

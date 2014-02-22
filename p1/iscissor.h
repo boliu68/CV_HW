@@ -23,9 +23,9 @@ public:
     PixelNode *prevNode;
     double Column();
     double Row();
-    virtual void operator =(PixelNode& RHS);
-    virtual int  operator ==(PixelNode& RHS);
-    virtual int  operator <(PixelNode& RHS);
+    virtual void operator =(FibHeapNode& RHS);
+    virtual int  operator ==(FibHeapNode& RHS);
+    virtual int  operator <(FibHeapNode& RHS);
     virtual void Print();
     void Neighbor(int link,int &c,int &r);//return column and row of neighbor in link direction
 };
@@ -43,7 +43,7 @@ private:
     void costFun();
     void costFunModify();
     void costFunOrigin();
-    double getD(int i,int j,int link, const QImage &tmpimg);
+    double getD(int i, int j, int link);
     void updatePathTree();
     void initializePixelNodes();
 public:
