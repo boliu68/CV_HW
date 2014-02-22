@@ -139,6 +139,7 @@ public:
         QObject::connect(MinPath, SIGNAL(triggered()), MainWindow, SLOT(on_min_path()));
         QObject::connect(PathTree, SIGNAL(triggered()), MainWindow, SLOT(on_path_tree()));
         QObject::connect(PixelNode, SIGNAL(triggered()), MainWindow, SLOT(on_pixel_node()));
+        QObject::connect(CostGraph, SIGNAL(triggered()), MainWindow, SLOT(on_cost_graph()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi

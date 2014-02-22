@@ -6,8 +6,8 @@
 */
 void MainWindow::draw_image()
 {
-	//this->resize(img->width(), img->height());
-	ui->ShowImage->resize(img->width(), img->height());
+	this->resize(pimg->width(), pimg->height());
+	ui->ShowImage->resize(pimg->width(), pimg->height());
+	ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
 	//ui->centralWidget->resize(img->width(), img->height());
-	ui->ShowImage->setPixmap(QPixmap::fromImage(*img));
 }
