@@ -6,12 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>949</width>
-    <height>833</height>
+    <width>463</width>
+    <height>576</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <weight>50</weight>
+    <italic>false</italic>
+    <bold>false</bold>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string> Intelligent Scissor Runze Zhang &amp; Bo Liu</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="enabled">
@@ -25,9 +32,15 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>401</width>
-      <height>480</height>
+      <width>500</width>
+      <height>500</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>15</pointsize>
+     </font>
     </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
@@ -51,11 +64,31 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>949</width>
-     <height>21</height>
+     <width>463</width>
+     <height>29</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+     <pointsize>15</pointsize>
+     <underline>true</underline>
+    </font>
+   </property>
    <widget class="QMenu" name="menuFile">
+    <property name="geometry">
+     <rect>
+      <x>152</x>
+      <y>108</y>
+      <width>153</width>
+      <height>160</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <underline>false</underline>
+     </font>
+    </property>
     <property name="title">
      <string>File</string>
     </property>
@@ -67,6 +100,14 @@
     <addaction name="QuitButton"/>
    </widget>
    <widget class="QMenu" name="menuTool">
+    <property name="geometry">
+     <rect>
+      <x>212</x>
+      <y>108</y>
+      <width>120</width>
+      <height>96</height>
+     </rect>
+    </property>
     <property name="title">
      <string>Tool</string>
     </property>
@@ -88,10 +129,22 @@
    <property name="text">
     <string>Save Contour</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>13</pointsize>
+    </font>
+   </property>
   </action>
   <action name="SaveMask">
    <property name="text">
     <string>Save Mask</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>13</pointsize>
+    </font>
    </property>
   </action>
   <action name="actionWork_Mode">
@@ -157,6 +210,12 @@
    <property name="text">
     <string>Quit</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>13</pointsize>
+    </font>
+   </property>
   </action>
   <action name="LoadImage">
    <property name="text">
@@ -167,15 +226,34 @@
    <property name="text">
     <string>Load Image</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>13</pointsize>
+     <underline>false</underline>
+    </font>
+   </property>
   </action>
   <action name="scissor">
    <property name="text">
     <string>Scissor</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>13</pointsize>
+    </font>
+   </property>
   </action>
   <action name="brush">
    <property name="text">
     <string>Brush</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>13</pointsize>
+    </font>
    </property>
   </action>
  </widget>
