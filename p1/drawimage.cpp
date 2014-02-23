@@ -8,40 +8,46 @@ void MainWindow::draw_image()
 {
 	if(workstates == image_only||workstates ==image_only_contour)
     {
-
-		/*QImage * img_tmp;
-		img_tmp = pimg;
-		pimg = new QImage(pimg->scaled(img->width() * size, img->height() * size, Qt::KeepAspectRatio));
-		delete img_tmp;*/
         ui->ShowImage->resize(pimg->width(), pimg->height());
         ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
-		ui->centralWidget->resize(pimg->width(), pimg->height());
-		this->resize(pimg->width(), pimg->height());
+		ui->centralWidget->resize(pimg->width() + 50, pimg->height() + 50);
+		this->resize(pimg->width() + 50, pimg->height() + 50);
+	}
+	else if(workstates == pixel_node)
+	{
+		QImage pn=ics->drawPixelNode();
+		delete pimg;
+		pimg = new QImage(pn.scaled(pn.width() * size, pn.height() * size));
+        ui->ShowImage->resize(pimg->width(), pimg->height());
+        ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
+		ui->centralWidget->resize(pimg->width() + 50, pimg->height() + 50);
+		this->resize(pimg->width() + 50, pimg->height() + 50);
 	}
     else if(workstates ==cost_graph)
     {
         QImage cg=ics->drawCostGraph();
-        ui->ShowImage->resize(cg.width(), cg.height());
-        ui->ShowImage->setPixmap(QPixmap::fromImage(cg));
-		ui->centralWidget->resize(cg.width(), cg.height());
-		this->resize(cg.width(), cg.height());
+		delete pimg;
+		pimg = new QImage(cg.scaled(cg.width() * size, cg.height() * size));
+        ui->ShowImage->resize(pimg->width(), pimg->height());
+        ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
+		ui->centralWidget->resize(pimg->width() + 50, pimg->height() + 50);
+		this->resize(pimg->width() + 50, pimg->height() + 50);
     }
     else if(workstates==path_tree)
     {
-        ui->ShowImage->resize(pathtree->width(), pathtree->height());
-        ui->ShowImage->setPixmap(QPixmap::fromImage(*pathtree));
-		ui->centralWidget->resize(pathtree->width(), pathtree->height());
-		this->resize(pathtree->width(), pathtree->height());
+		delete pimg;
+		pimg = new QImage(pathtree->scaled(pathtree->width() * size, pathtree->height() * size));
+        ui->ShowImage->resize(pimg->width(), pimg->height());
+        ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
+		ui->centralWidget->resize(pimg->width() + 50, pimg->height() + 50);
+		this->resize(pimg->width() + 50, pimg->height() + 50);
     }
 	else if(workstates == min_path)
 	{
-		/*QImage * img_tmp = pimg;
-		pimg = new QImage(pimg->scaled(pimg->width() * size, pimg->height() * size, Qt::KeepAspectRatio));
-		delete img_tmp;*/
         ui->ShowImage->resize(pimg->width(), pimg->height());
         ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
-		ui->centralWidget->resize(pimg->width(), pimg->height());
-		this->resize(pimg->width(), pimg->height());
+		ui->centralWidget->resize(pimg->width() + 50, pimg->height() + 50);
+		this->resize(pimg->width() + 50, pimg->height() + 50);
 	}
 }
 

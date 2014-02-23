@@ -41,12 +41,13 @@ public:
     QAction *QuitButton;
     QAction *LoadImage;
     QAction *Load_Image;
+    QAction *scissor;
+    QAction *brush;
     QWidget *centralWidget;
     QLabel *ShowImage;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuTool;
-    QMenu *menuScissor_2;
     QToolBar *mainToolBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -87,6 +88,10 @@ public:
         LoadImage->setObjectName(QStringLiteral("LoadImage"));
         Load_Image = new QAction(MainWindow);
         Load_Image->setObjectName(QStringLiteral("Load_Image"));
+        scissor = new QAction(MainWindow);
+        scissor->setObjectName(QStringLiteral("scissor"));
+        brush = new QAction(MainWindow);
+        brush->setObjectName(QStringLiteral("brush"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         centralWidget->setEnabled(true);
@@ -101,13 +106,11 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 949, 25));
+        menuBar->setGeometry(QRect(0, 0, 949, 21));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuTool = new QMenu(menuBar);
         menuTool->setObjectName(QStringLiteral("menuTool"));
-        menuScissor_2 = new QMenu(menuTool);
-        menuScissor_2->setObjectName(QStringLiteral("menuScissor_2"));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -121,25 +124,14 @@ public:
         menuFile->addAction(SaveMask);
         menuFile->addSeparator();
         menuFile->addAction(QuitButton);
-        menuTool->addAction(menuScissor_2->menuAction());
-        menuScissor_2->addAction(actionWork_Mode_2);
-        menuScissor_2->addAction(ImageOnly);
-        menuScissor_2->addAction(ImageContour);
-        menuScissor_2->addSeparator();
-        menuScissor_2->addAction(actionDebug_Mode_2);
-        menuScissor_2->addAction(PixelNode);
-        menuScissor_2->addAction(CostGraph);
-        menuScissor_2->addAction(PathTree);
-        menuScissor_2->addAction(MinPath);
+        menuTool->addAction(scissor);
+        menuTool->addAction(brush);
 
         retranslateUi(MainWindow);
         QObject::connect(Load_Image, SIGNAL(triggered()), MainWindow, SLOT(OpenImage()));
-        QObject::connect(ImageOnly, SIGNAL(triggered()), MainWindow, SLOT(on_image_only()));
-        QObject::connect(ImageContour, SIGNAL(triggered()), MainWindow, SLOT(on_image_contour()));
-        QObject::connect(MinPath, SIGNAL(triggered()), MainWindow, SLOT(on_min_path()));
-        QObject::connect(PathTree, SIGNAL(triggered()), MainWindow, SLOT(on_path_tree()));
-        QObject::connect(PixelNode, SIGNAL(triggered()), MainWindow, SLOT(on_pixel_node()));
-        QObject::connect(CostGraph, SIGNAL(triggered()), MainWindow, SLOT(on_cost_graph()));
+        QObject::connect(SaveContour, SIGNAL(triggered()), MainWindow, SLOT(save_contour()));
+        QObject::connect(SaveMask, SIGNAL(triggered()), MainWindow, SLOT(save_mask()));
+        QObject::connect(scissor, SIGNAL(triggered()), MainWindow, SLOT(on_scissor()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -162,10 +154,11 @@ public:
         QuitButton->setText(QApplication::translate("MainWindow", "Quit", 0));
         LoadImage->setText(QApplication::translate("MainWindow", "Load Image", 0));
         Load_Image->setText(QApplication::translate("MainWindow", "Load Image", 0));
+        scissor->setText(QApplication::translate("MainWindow", "Scissor", 0));
+        brush->setText(QApplication::translate("MainWindow", "Brush", 0));
         ShowImage->setText(QString());
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0));
         menuTool->setTitle(QApplication::translate("MainWindow", "Tool", 0));
-        menuScissor_2->setTitle(QApplication::translate("MainWindow", "Scissor", 0));
     } // retranslateUi
 
 };

@@ -52,7 +52,7 @@
      <x>0</x>
      <y>0</y>
      <width>949</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -70,21 +70,8 @@
     <property name="title">
      <string>Tool</string>
     </property>
-    <widget class="QMenu" name="menuScissor_2">
-     <property name="title">
-      <string>Scissor</string>
-     </property>
-     <addaction name="actionWork_Mode_2"/>
-     <addaction name="ImageOnly"/>
-     <addaction name="ImageContour"/>
-     <addaction name="separator"/>
-     <addaction name="actionDebug_Mode_2"/>
-     <addaction name="PixelNode"/>
-     <addaction name="CostGraph"/>
-     <addaction name="PathTree"/>
-     <addaction name="MinPath"/>
-    </widget>
-    <addaction name="menuScissor_2"/>
+    <addaction name="scissor"/>
+    <addaction name="brush"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTool"/>
@@ -181,6 +168,16 @@
     <string>Load Image</string>
    </property>
   </action>
+  <action name="scissor">
+   <property name="text">
+    <string>Scissor</string>
+   </property>
+  </action>
+  <action name="brush">
+   <property name="text">
+    <string>Brush</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
@@ -202,90 +199,42 @@
    </hints>
   </connection>
   <connection>
-   <sender>ImageOnly</sender>
+   <sender>SaveContour</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>on_image_only()</slot>
+   <slot>save_contour()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>232</x>
-     <y>175</y>
+     <x>474</x>
+     <y>416</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>ImageContour</sender>
+   <sender>SaveMask</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>on_image_contour()</slot>
+   <slot>save_mask()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>255</x>
-     <y>240</y>
+     <x>474</x>
+     <y>416</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>MinPath</sender>
+   <sender>scissor</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>on_min_path()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>255</x>
-     <y>240</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>PathTree</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_path_tree()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>255</x>
-     <y>240</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>PixelNode</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_pixel_node()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>255</x>
-     <y>240</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>CostGraph</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_cost_graph()</slot>
+   <slot>on_scissor()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -306,5 +255,9 @@
   <slot>on_cost_graph()</slot>
   <slot>on_path_tree()</slot>
   <slot>on_min_path()</slot>
+  <slot>save_contour()</slot>
+  <slot>save_mask()</slot>
+  <slot>on_scissor()</slot>
+  <slot>on_brush()</slot>
  </slots>
 </ui>

@@ -25,13 +25,16 @@ void MainWindow::keyPressEvent(QKeyEvent * e)
 	{
 		isentr_pressed= true;
 	}
-
+	if(e->key() == Qt::Key_Backspace)
+	{
+		isback_pressed = true;
+	}
 
 
 	if (isctl_pressed && isplus_pressed)
 	{
 		//enlarge the picture
-		float scale;
+		float scale = 1.0;
 		if (workstates == image_only_contour){scale = 1.0;}
 		else{scale == 3.0;}
 		size = size * 2.0;
@@ -45,7 +48,7 @@ void MainWindow::keyPressEvent(QKeyEvent * e)
 	if (isctl_pressed && isminus_pressed)
 	{
 		//ensmaller the picture.
-		float scale = 0.0;
+		float scale = 1.0;
 		if (workstates == image_only_contour){scale = 1.0;}
 		else{scale == 3.0;}
 		size = size / 2.0;
@@ -61,9 +64,10 @@ void MainWindow::keyPressEvent(QKeyEvent * e)
 		if (is_seed)
 		{
 			//finish current contour
-			this->setMouseTracking(false);
-			ui->centralWidget->setMouseTracking(false);
-			ui->ShowImage->setMouseTracking(false);
+			//this->setMouseTracking(false);
+			//ui->centralWidget->setMouseTracking(false);
+			//ui->ShowImage->setMouseTracking(false);
+			setCursor(Qt::ArrowCursor);
 
 			reset_image();
 
@@ -79,9 +83,10 @@ void MainWindow::keyPressEvent(QKeyEvent * e)
 		if(is_seed)
 		{
 			//finish current contour
-			this->setMouseTracking(false);
-			ui->centralWidget->setMouseTracking(false);
-			ui->ShowImage->setMouseTracking(false);
+			//this->setMouseTracking(false);
+			//ui->centralWidget->setMouseTracking(false);
+			//ui->ShowImage->setMouseTracking(false);
+			setCursor(Qt::ArrowCursor);
 
 			reset_image();
 			closet_point();
@@ -90,6 +95,30 @@ void MainWindow::keyPressEvent(QKeyEvent * e)
 
 			is_seed = false;
 			path_id ++;
+		}
+	}
+
+	if(isback_pressed)
+	{
+		//delete the stored existed path with respect to the chosen one.
+		if (!is_seed)
+		{
+			if (chosen_path != -1)
+			{
+				vector<vector<QPoint>>::iterator iter = ex_path.begin() + chosen_path;
+				ex_path.erase(iter);
+				iter = click_point.begin() + chosen_path;
+				click_point.erase(iter);
+
+				path_id = ex_path.size();
+				chosen_path = -1;
+
+				if (workstates == image_only_contour)modify_expath(1.0);
+				else if(workstates == min_path)modify_expath(3.0);
+				reset_image();
+				paint_path();
+				draw_image();
+			}
 		}
 	}
 }
@@ -112,6 +141,10 @@ void MainWindow::keyReleaseEvent(QKeyEvent * e)
 	{
 		isentr_pressed= false;
 	}
+	if(e->key() == Qt::Key_Backspace)
+	{
+		isback_pressed = false;
+	}
 
 }
 
@@ -127,56 +160,4 @@ void MainWindow::modify_expath(float scale)
 			iter ++;
 		}
 	}
-}
-
-
-void MainWindow::closet_point()
-{
-	vector<QPoint>::iterator final_point = click_point[path_id].end() - 1;
-	vector<QPoint>::iterator closet;
-	float closet_dist = 1e10;
-
-	vector<QPoint>::iterator iter = click_point[path_id].begin();
-
-	while(iter !=  (click_point[path_id].end() - 2))
-	{
-		if(((final_point->x() - iter->x()) * (final_point->x() - iter->x()) 
-			+ (final_point->y() - iter->y()) * (final_point->y() - iter->y())) < closet_dist)
-		{
-			closet_dist = (final_point->x() - iter->x()) * (final_point->x() - iter->x()) 
-			+ (final_point->y() - iter->y()) * (final_point->y() - iter->y());
-			closet = iter;
-		}
-		iter ++;
-	}
-
-	vector<QPoint> path;
-	ics->getPath(closet->x(), closet->y(), path);
-
-	ex_path[path_id].insert(ex_path[path_id].end(), path.begin(), path.end());
-}
-
-
-void MainWindow::paint_path()
-{
-	float scale = 1.0;
-	if (workstates == image_only_contour){scale = 1.0;}
-	else if(workstates == min_path){scale = 3.0;}
-	modify_expath(scale);
-
-	//fix the existed path
-	pter = new QPainter(pimg);
-	
-	for (int i = 0; i < scale_expath.size(); ++i)
-	{
-		if (i == path_id){pter->setPen(QPen(Qt::green, 2 * size));}
-		else {pter->setPen(QPen(Qt::red, 2 * size));}
-
-		pter->drawPoints(&scale_expath[i][0], scale_expath[i].size());
-	}
-	pter->end();
-	draw_image();
-
-	delete pathtree;
-	pathtree = new QImage(ics->drawPathTree());
 }
