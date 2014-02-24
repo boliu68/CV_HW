@@ -54,6 +54,16 @@ private slots:
 	//the slots to change workstates
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    void on_image_only();
+    void on_image_contour();
+    void on_pixel_node();
+    void on_cost_graph();
+    void on_path_tree();
+    void on_min_path();
+=======
+>>>>>>> 9bba361707a7b06d346d2c45679ca382bc54b6bb
     void on_image_only()
     {
         workstates = image_only;
@@ -68,6 +78,7 @@ private slots:
     }
     void on_path_tree(){workstates = path_tree;draw_image();}
     void on_min_path(){workstates = min_path;this->setMouseTracking(true);draw_image();}
+<<<<<<< HEAD
 =======
 	void on_image_only();
 	void on_image_contour();
@@ -84,6 +95,9 @@ private slots:
     void on_path_tree();
     void on_min_path();
 >>>>>>> 909e849172b2ab1b25e78db1e17fab014974d539
+=======
+>>>>>>> 3636f17478f45c645b5db5a062bdf6bf2e58ede9
+>>>>>>> 9bba361707a7b06d346d2c45679ca382bc54b6bb
 
 protected:
 	//overwrite the track the mouse press event

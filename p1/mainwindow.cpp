@@ -16,10 +16,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	is_seed = false;
 <<<<<<< HEAD
+<<<<<<< HEAD
     workstates=image_only;
 =======
 	workstates = image_only_contour;
 >>>>>>> 8281ddbe12dc7237ab07fc602fd8cbdca6b6f23b
+=======
+	workstates = image_only_contour;
+=======
+    workstates=image_only;
+>>>>>>> 3636f17478f45c645b5db5a062bdf6bf2e58ede9
+>>>>>>> 9bba361707a7b06d346d2c45679ca382bc54b6bb
 }
 
 MainWindow::~MainWindow()
