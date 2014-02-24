@@ -55,13 +55,17 @@ private slots:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 288329599a6db329418469ab0871736966e4671b
     void on_image_only();
     void on_image_contour();
     void on_pixel_node();
     void on_cost_graph();
     void on_path_tree();
     void on_min_path();
+<<<<<<< HEAD
 =======
 >>>>>>> 9bba361707a7b06d346d2c45679ca382bc54b6bb
     void on_image_only()
@@ -98,6 +102,8 @@ private slots:
 =======
 >>>>>>> 3636f17478f45c645b5db5a062bdf6bf2e58ede9
 >>>>>>> 9bba361707a7b06d346d2c45679ca382bc54b6bb
+=======
+>>>>>>> 288329599a6db329418469ab0871736966e4671b
 
 protected:
 	//overwrite the track the mouse press event

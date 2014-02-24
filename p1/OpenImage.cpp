@@ -7,7 +7,8 @@ void MainWindow::OpenImage()
 	QString filename = QFileDialog::getOpenFileName(
    this,
    "Load Images",
-   QDir::currentPath());
+   QDir::currentPath(),
+   "Images files (*.jpg *.png)");
 
 	
 	img = new QImage;
