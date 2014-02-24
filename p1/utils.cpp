@@ -14,8 +14,8 @@ bool MainWindow::click_position(int x, int y, int& x_, int& y_)
 		|| workstates == min_path)
 		{scale = 3.0 * size;}
 		
-	x_ = floor((x - ui->centralWidget->x()) / scale);
-	y_ = floor((y - ui->centralWidget->y()) / scale);
+	x_ = floor((x - ui->ShowImage->x() - ui->centralWidget->x()) / scale);
+	y_ = floor((y - ui->ShowImage->y() - ui->centralWidget->y()) / scale);
 	return (x_ >=0 && y_ >=0 && x_ < img->width() && y_ < img->height());
 }
 

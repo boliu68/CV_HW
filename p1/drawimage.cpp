@@ -10,6 +10,7 @@ void MainWindow::draw_image()
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	//this->resize(img->width(), img->height());
     //ui->ShowImage->resize(img->width(), img->height());
 	//ui->centralWidget->resize(img->width(), img->height());
@@ -23,10 +24,16 @@ void MainWindow::draw_image()
 
 =======
 >>>>>>> 288329599a6db329418469ab0871736966e4671b
+=======
+	int corner_x = ui->centralWidget->x() + ui->ShowImage->x();
+	int corner_y = ui->centralWidget->y() + ui->ShowImage->y();
+
+>>>>>>> origin/master
 	if(workstates == image_only||workstates ==image_only_contour)
     {
         ui->ShowImage->resize(pimg->width(), pimg->height());
         ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
+<<<<<<< HEAD
 <<<<<<< HEAD
 		ui->centralWidget->resize(pimg->width(), pimg->height());
 		this->resize(pimg->width(), pimg->height());
@@ -49,6 +56,10 @@ void MainWindow::draw_image()
 =======
 		ui->centralWidget->resize(pimg->width() + 50, pimg->height() + 50);
 		this->resize(pimg->width() + 50, pimg->height() + 50);
+=======
+		ui->centralWidget->resize(pimg->width(), pimg->height());
+		this->resize(pimg->width() + corner_x, pimg->height() + corner_y);
+>>>>>>> origin/master
 	}
 	else if(workstates == pixel_node)
 	{
@@ -57,9 +68,14 @@ void MainWindow::draw_image()
 		pimg = new QImage(pn.scaled(pn.width() * size, pn.height() * size));
         ui->ShowImage->resize(pimg->width(), pimg->height());
         ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
+<<<<<<< HEAD
 		ui->centralWidget->resize(pimg->width() + 50, pimg->height() + 50);
 		this->resize(pimg->width() + 50, pimg->height() + 50);
 >>>>>>> bbd39c6fcbf5b20e7815e28bb07fd623dea7770c
+=======
+		ui->centralWidget->resize(pimg->width(), pimg->height());
+		this->resize(pimg->width() + corner_x, pimg->height() + corner_y);
+>>>>>>> origin/master
 	}
 >>>>>>> 288329599a6db329418469ab0871736966e4671b
     else if(workstates ==cost_graph)
@@ -122,8 +138,8 @@ void MainWindow::draw_image()
 		pimg = new QImage(cg.scaled(cg.width() * size, cg.height() * size));
         ui->ShowImage->resize(pimg->width(), pimg->height());
         ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
-		ui->centralWidget->resize(pimg->width() + 50, pimg->height() + 50);
-		this->resize(pimg->width() + 50, pimg->height() + 50);
+		ui->centralWidget->resize(pimg->width(), pimg->height());
+		this->resize(pimg->width() + corner_x, pimg->height() + corner_y);
     }
     else if(workstates==path_tree)
     {
@@ -131,16 +147,21 @@ void MainWindow::draw_image()
 		pimg = new QImage(pathtree->scaled(pathtree->width() * size, pathtree->height() * size));
         ui->ShowImage->resize(pimg->width(), pimg->height());
         ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
+<<<<<<< HEAD
 		ui->centralWidget->resize(pimg->width() + 50, pimg->height() + 50);
 		this->resize(pimg->width() + 50, pimg->height() + 50);
 >>>>>>> bbd39c6fcbf5b20e7815e28bb07fd623dea7770c
+=======
+		ui->centralWidget->resize(pimg->width(), pimg->height());
+		this->resize(pimg->width() + corner_x, pimg->height() + corner_y);
+>>>>>>> origin/master
     }
 	else if(workstates == min_path)
 	{
         ui->ShowImage->resize(pimg->width(), pimg->height());
         ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
-		ui->centralWidget->resize(pimg->width() + 50, pimg->height() + 50);
-		this->resize(pimg->width() + 50, pimg->height() + 50);
+		ui->centralWidget->resize(pimg->width(), pimg->height());
+		this->resize(pimg->width() + corner_x, pimg->height() + corner_y);
 	}
 }
 
