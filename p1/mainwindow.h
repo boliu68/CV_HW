@@ -79,73 +79,14 @@ private slots:
 	void save_mask();
 
 	//the slots to change workstates
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 288329599a6db329418469ab0871736966e4671b
-    void on_image_only();
-=======
     /*void on_image_only();
->>>>>>> bbd39c6fcbf5b20e7815e28bb07fd623dea7770c
     void on_image_contour();
     void on_pixel_node();
     void on_cost_graph();
     void on_path_tree();
-<<<<<<< HEAD
-    void on_min_path();
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 9bba361707a7b06d346d2c45679ca382bc54b6bb
-    void on_image_only()
-    {
-        workstates = image_only;
-        draw_image();
-    }
-    void on_image_contour(){workstates = image_only_contour;draw_image();}
-    void on_pixel_node(){workstates = pixel_node;draw_image();}
-    void on_cost_graph()
-    {
-        workstates = cost_graph;
-        draw_image();
-    }
-    void on_path_tree(){workstates = path_tree;draw_image();}
-    void on_min_path(){workstates = min_path;this->setMouseTracking(true);draw_image();}
-<<<<<<< HEAD
-=======
-	void on_image_only();
-	void on_image_contour();
-	void on_pixel_node();
-	void on_cost_graph();
-	void on_path_tree();
-	void on_min_path();
->>>>>>> 8281ddbe12dc7237ab07fc602fd8cbdca6b6f23b
-=======
-    void on_image_only();
-    void on_image_contour();
-    void on_pixel_node();
-    void on_cost_graph();
-    void on_path_tree();
-    void on_min_path();
->>>>>>> 909e849172b2ab1b25e78db1e17fab014974d539
-=======
->>>>>>> 3636f17478f45c645b5db5a062bdf6bf2e58ede9
->>>>>>> 9bba361707a7b06d346d2c45679ca382bc54b6bb
-=======
->>>>>>> 288329599a6db329418469ab0871736966e4671b
-=======
-	void closet_point();
-	void paint_path();
->>>>>>> f61be8bfd49c90353c47466843719ef968cf0a62
-=======
     void on_min_path();*/
 	void on_scissor();
 	void on_brush();
->>>>>>> bbd39c6fcbf5b20e7815e28bb07fd623dea7770c
 
 protected:
 	//overwrite the track the mouse press event
