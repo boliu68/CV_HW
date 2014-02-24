@@ -31,12 +31,15 @@ private:
 
 	QImage * img;
 	QImage * pimg;//used for painting;
+	QImage * pathtree;
 	QPainter * pter;
 	void draw_image();
 	bool click_position(int x, int y, int &x_, int &y_); //obtain the position with respect to the label
 
 	Iscissor * ics; //the iscissor class
 	vector<vector<QPoint>> ex_path;
+	vector<vector<QPoint>> scale_expath;
+	vector<vector<QPoint>> click_point;
 	int path_id; //to indicate the id of path;
 	float size;//the size the shown image
 
@@ -45,11 +48,14 @@ private:
 	bool isctl_pressed;//to record whether the control buttion is pressed
 	bool isplus_pressed;
 	bool isminus_pressed;
+	bool isentr_pressed;
 
 	bool is_seed; //to record whether the seed point is alread put.
 
 private slots:
 	void OpenImage();
+	void modify_expath(float scale);
+	void reset_image();
 
 	//the slots to change workstates
 <<<<<<< HEAD
@@ -65,6 +71,7 @@ private slots:
     void on_cost_graph();
     void on_path_tree();
     void on_min_path();
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 9bba361707a7b06d346d2c45679ca382bc54b6bb
@@ -104,6 +111,10 @@ private slots:
 >>>>>>> 9bba361707a7b06d346d2c45679ca382bc54b6bb
 =======
 >>>>>>> 288329599a6db329418469ab0871736966e4671b
+=======
+	void closet_point();
+	void paint_path();
+>>>>>>> f61be8bfd49c90353c47466843719ef968cf0a62
 
 protected:
 	//overwrite the track the mouse press event

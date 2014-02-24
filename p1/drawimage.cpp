@@ -26,11 +26,10 @@ void MainWindow::draw_image()
 	if(workstates == image_only||workstates ==image_only_contour)
     {
 
-		QImage * img_tmp;
+		/*QImage * img_tmp;
 		img_tmp = pimg;
 		pimg = new QImage(pimg->scaled(img->width() * size, img->height() * size, Qt::KeepAspectRatio));
-		delete img_tmp;
-		
+		delete img_tmp;*/
         ui->ShowImage->resize(pimg->width(), pimg->height());
         ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
 		ui->centralWidget->resize(pimg->width(), pimg->height());
@@ -78,6 +77,7 @@ void MainWindow::draw_image()
     }
     else if(workstates==path_tree)
     {
+<<<<<<< HEAD
         QImage cg=ics->drawPathTree();
         ui->ShowImage->resize(cg.width(), cg.height());
         ui->ShowImage->setPixmap(QPixmap::fromImage(cg));
@@ -100,8 +100,23 @@ void MainWindow::draw_image()
 >>>>>>> 288329599a6db329418469ab0871736966e4671b
 		ui->centralWidget->resize(cg.width(), cg.height());
 		this->resize(cg.width(), cg.height());
+=======
+        ui->ShowImage->resize(pathtree->width(), pathtree->height());
+        ui->ShowImage->setPixmap(QPixmap::fromImage(*pathtree));
+		ui->centralWidget->resize(pathtree->width(), pathtree->height());
+		this->resize(pathtree->width(), pathtree->height());
+>>>>>>> f61be8bfd49c90353c47466843719ef968cf0a62
     }
-
+	else if(workstates == min_path)
+	{
+		/*QImage * img_tmp = pimg;
+		pimg = new QImage(pimg->scaled(pimg->width() * size, pimg->height() * size, Qt::KeepAspectRatio));
+		delete img_tmp;*/
+        ui->ShowImage->resize(pimg->width(), pimg->height());
+        ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
+		ui->centralWidget->resize(pimg->width(), pimg->height());
+		this->resize(pimg->width(), pimg->height());
+	}
 }
 
 <<<<<<< HEAD

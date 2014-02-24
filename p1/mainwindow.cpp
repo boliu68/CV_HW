@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	isctl_pressed = false;
 	isplus_pressed = false;
 	isminus_pressed = false;
+	isentr_pressed = false;
+
 	path_id = 0;
 	size = 1;
 
