@@ -11,11 +11,14 @@
 #include "iscissor.h"
 #include <QPainter>
 #include <vector>
+#include <QColor>
+#include "scissor_diag.h"
 
 using namespace std;
 
 namespace Ui {
 class MainWindow;
+class scissor_diag;
 }
 
 class MainWindow : public QMainWindow
@@ -25,39 +28,58 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+	int workstates; //to indiciate in which work state.
+	void on_image_only();
+    void on_image_contour();
+    void on_pixel_node();
+    void on_cost_graph();
+    void on_path_tree();
+    void on_min_path();
+	bool img_loaded;
 
 private:
     Ui::MainWindow *ui;
+	scissor_diag * sd;
 
 	QImage * img;
 	QImage * pimg;//used for painting;
 	QImage * pathtree;
+	QImage * mask;
 	QPainter * pter;
-	void draw_image();
-	bool click_position(int x, int y, int &x_, int &y_); //obtain the position with respect to the label
 
 	Iscissor * ics; //the iscissor class
 	vector<vector<QPoint>> ex_path;
 	vector<vector<QPoint>> scale_expath;
 	vector<vector<QPoint>> click_point;
-	int path_id; //to indicate the id of path;
-	float size;//the size the shown image
+	vector<QPoint> mask_point;
 
-	int workstates; //to indiciate in which work state.
+	int path_id; //to indicate the id of path;
+	int chosen_path;//to indicate the path that is click by mouse
+	float size;//the size the shown image
 
 	bool isctl_pressed;//to record whether the control buttion is pressed
 	bool isplus_pressed;
 	bool isminus_pressed;
 	bool isentr_pressed;
-
+	bool isback_pressed;
 	bool is_seed; //to record whether the seed point is alread put.
+
+	void draw_image();
+	bool click_position(int x, int y, int &x_, int &y_); //obtain the position with respect to the label
+	void modify_expath(float scale);
+	void reset_image();
+	void closet_point();
+	void paint_path(bool contain_mask = true);
+	void choose_path(int x, int y);
+	void add_mask(int x, int y);
 
 private slots:
 	void OpenImage();
-	void modify_expath(float scale);
-	void reset_image();
+	void save_contour();
+	void save_mask();
 
 	//the slots to change workstates
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -66,10 +88,14 @@ private slots:
 =======
 >>>>>>> 288329599a6db329418469ab0871736966e4671b
     void on_image_only();
+=======
+    /*void on_image_only();
+>>>>>>> bbd39c6fcbf5b20e7815e28bb07fd623dea7770c
     void on_image_contour();
     void on_pixel_node();
     void on_cost_graph();
     void on_path_tree();
+<<<<<<< HEAD
     void on_min_path();
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -115,6 +141,11 @@ private slots:
 	void closet_point();
 	void paint_path();
 >>>>>>> f61be8bfd49c90353c47466843719ef968cf0a62
+=======
+    void on_min_path();*/
+	void on_scissor();
+	void on_brush();
+>>>>>>> bbd39c6fcbf5b20e7815e28bb07fd623dea7770c
 
 protected:
 	//overwrite the track the mouse press event
@@ -122,7 +153,6 @@ protected:
 	void mouseMoveEvent(QMouseEvent* e);
 	void keyPressEvent(QKeyEvent *e);  
 	void keyReleaseEvent(QKeyEvent *e);
-
 };
 
 #endif // MAINWINDOW_H

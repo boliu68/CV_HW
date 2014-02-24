@@ -36,8 +36,8 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 						ex_path[path_id].insert(ex_path[path_id].end(), path.begin(), path.end());
 						click_point[path_id].push_back(QPoint(x,y));
 
-						delete pathtree;
-						pathtree = new QImage(ics->drawPathTree());
+						//delete pathtree;
+						//pathtree = new QImage(ics->drawPathTree());
 					}
 
 					//if (ex_path.size() == 0)
@@ -47,9 +47,12 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 						a_point.push_back(QPoint(x,y));
 						ex_path.push_back(a_point);
 						click_point.push_back(a_point);
-						pathtree = new QImage(ics->drawPathTree());
+						//pathtree = new QImage(ics->drawPathTree());
 					}
 					
+					delete pathtree;
+					pathtree = new QImage(ics->drawPathTree());
+
 					if(workstates == min_path){modify_expath(3.0);}
 					else if(workstates == image_only_contour){modify_expath(1.0);}
 
@@ -64,6 +67,12 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 
 				}
 			}
+
+			//else
+			//{//to choose the contour
+			//not press control as well as not is seed
+				
+			//}
 		}
 	}
 }
@@ -99,60 +108,57 @@ void MainWindow::mouseMoveEvent(QMouseEvent * e)
 				}
 
 				pter = new QPainter(pimg);
+				pter->setPen(QPen(Qt::green, 2 * size));
 
 				//paint the existed path
-				for (int i = 0; i < ex_path.size(); ++i)
+				/*for (int i = 0; i < ex_path.size(); ++i)
 				{
 					if (i == path_id){pter->setPen(QPen(Qt::green, 2 * size));}
 					else{pter->setPen(QPen(Qt::red, 2 * size));}
 					pter->drawPoints(&scale_expath[i][0], scale_expath[i].size());
-				}
+				}*/
 
 				pter->drawPoints(&path[0], path.size());
-				pter->end();
-				draw_image();
+				delete pter;
+
+				/*if (mask_point.size() > 0)
+				{
+					pter = new QPainter(pimg);
+					pter->setBrush(QBrush(QColor(128, 128, 255, 5), Qt::SolidPattern));
+					//pter->setPen(50);
+					//pter->drawPoints(&mask_point[0], mask_point.size());
+					vector<QPoint>::iterator iter = mask_point.begin();
+					int times = 0;
+					while(iter != mask_point.end())
+					{
+						if(times % 5 == 0)
+							pter->drawEllipse(QPoint(iter->x(), iter->y()), 20, 20);
+
+						times ++;
+						iter ++;
+					}
+					pter->end();
+				}*/
+				paint_path();
+				//draw_image();
 			}
 
 		}
-	}
-}
+		else
+		{
+			int x, y;
+			if (click_position(e->x(), e->y(), x, y));
+			choose_path(x, y);
+			paint_path();
+			draw_image();
 
-
-bool MainWindow::click_position(int x, int y, int& x_, int& y_)
-{
-	float scale;
-	if (workstates == image_only || workstates == image_only_contour)
-		{scale = size;}
-	if (workstates == pixel_node 
-		|| workstates == cost_graph 
-		|| workstates == path_tree 
-		|| workstates == min_path)
-		{scale = 3.0 * size;}
-		
-	x_ = floor((x - ui->centralWidget->x()) / scale);
-	y_ = floor((y - ui->centralWidget->y()) / scale);
-	return (x_ >=0 && y_ >=0 && x_ < img->width() && y_ < img->height());
-}
-
-
-void MainWindow::reset_image()
-{
-	float scale = 1.0;
-	if (workstates == image_only_contour)
-	{
-		//pimg = new QImage(img->copy());
-		QImage * img_tmp;
-		img_tmp = pimg;
-		pimg = new QImage(img->scaled(img->width() * size, img->height() * size, Qt::KeepAspectRatio));
-		delete img_tmp;
-		scale = 1.0;
-	}
-
-	else if(workstates == min_path)
-	{
-		delete pimg;
-		pimg = new QImage(pathtree->scaled(pathtree->width() * size, pathtree->height() * size, Qt::KeepAspectRatio));
-		scale = 3.0;
+			if(e->buttons() & Qt::LeftButton)
+			{
+				int x, y;
+				click_position(e->x(), e->y(), x, y);
+				add_mask(x, y);
+			}
+		}
 	}
 }
 

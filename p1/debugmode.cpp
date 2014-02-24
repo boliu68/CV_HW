@@ -36,8 +36,10 @@ void MainWindow::on_path_tree()
 void MainWindow::on_min_path()
 {
 	workstates = min_path;
+	delete pathtree;
+	pathtree = new QImage(ics->drawPathTree());
 	delete pimg;
-	pimg = new QImage(ics->drawPathTree());
+	pimg = new QImage(*pathtree);
 	draw_image();
 	modify_expath(3.0);
 	//obtain the min path

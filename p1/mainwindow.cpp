@@ -12,8 +12,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	isplus_pressed = false;
 	isminus_pressed = false;
 	isentr_pressed = false;
+	isback_pressed = false;
+	img_loaded = false;
 
 	path_id = 0;
+	chosen_path = -1;
 	size = 1;
 
 	is_seed = false;
