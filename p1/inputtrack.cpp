@@ -6,44 +6,46 @@ using namespace std;
 
 void MainWindow::mousePressEvent(QMouseEvent *e)
 {
-	if (!is_seed)
-	{
-		if(e->button() == Qt::LeftButton && isctl_pressed)
-		{
-			
-			setCursor(Qt::CrossCursor);
+	if (workstates == image_only_contour)
+	{//work in image_only_contour mode
+		//will show the contour
+		if(e->button() == Qt::LeftButton)
+		{//the shortcut
 
-			//change the coordinate
-			int x, y;
-			click_position(e->x(), e->y(), x, y);
+			if (isctl_pressed || is_seed)
+			{
+				setCursor(Qt::CrossCursor);
 
-			//set the seed
-			ics->setSeed(x, y);
-			is_seed = true;
+				//change the coordinate
+				int x, y;
+				click_position(e->x(), e->y(), x, y);
+				pter = new QPainter(pimg);
 
-			//Draw the seed
-			pter->setPen(QPen(Qt::red, 6));
-			pter->drawPoint(x, y);
-			draw_image();
+				if(is_seed)
+				{
+					//seed already exist, draw the path;
+					//otherwise, only draw the clickpoint.
+					vector<QPoint> path;
+					ics->getPath(x, y, path);
+
+					pter->setPen(QPen(Qt::green, 1));
+					pter->drawPoints(&path[0], path.size());
+
+					pter->setPen(QPen(Qt::blue, 3));
+					pter->drawPoint(x, y);
+				}
+								
+				//Draw the point
+				pter->setPen(QPen(Qt::red, 3));
+				pter->drawPoint(x, y);
+				pter->end();
+				draw_image();
+
+				is_seed = true;
+				//update the seed
+				ics->setSeed(x, y);
+			}
 		}
-	}
-	else
-	{
-		int x, y;
-		click_position(e->x(), e->y(), x, y);
-
-		vector<QPoint> path;
-		ics->getPath(x, y, path);
-
-		vector<QPoint>::iterator iter = path.begin();
-
-		pter->setPen(QPen(Qt::green, 3));
-		pter->drawPoints(&path[0], path.size());
-
-		pter->setPen(QPen(Qt::blue, 5));
-		pter->drawPoint(x, y);
-
-		draw_image();
 	}
 }
 
@@ -54,6 +56,35 @@ void MainWindow::keyPressEvent(QKeyEvent * e)
 	{
 		isctl_pressed = true;
 	}
+	if (e->key() == Qt::Key_Equal || e->key() == Qt::Key_Plus)
+	{
+		isplus_pressed = true;
+	}
+	if (e->key() == Qt::Key_hyphen || e->key() == Qt::Key_Minus)
+	{
+		isminus_pressed = true;
+	}
+
+
+	if (isctl_pressed && isplus_pressed)
+	{
+		//enlarge the picture
+		QImage * img_tmp = NULL;
+		img_tmp = new QImage(img->scaled(pimg->width() * 1.5, pimg->height() * 1.5, Qt::KeepAspectRatio));
+		delete pimg;
+		pimg = img_tmp;
+		draw_image();
+	}
+
+	if (isctl_pressed && isminus_pressed)
+	{
+		//ensmaller the picture.
+		QImage * img_tmp = NULL;
+		img_tmp = new QImage(img->scaled(pimg->width() / 1.5, pimg->height() / 1.5, Qt::KeepAspectRatio));
+		delete pimg;
+		pimg = img_tmp;
+		draw_image();
+	}
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent * e)
@@ -62,6 +93,15 @@ void MainWindow::keyReleaseEvent(QKeyEvent * e)
 	{
 		isctl_pressed = false;
 	}
+	if (e->key() == Qt::Key_Plus || e->key() == Qt::Key_Equal)
+	{
+		isplus_pressed = false;
+	}
+	if (e->key() == Qt::Key_hyphen || e->key() == Qt::Key_Minus)
+	{
+		isminus_pressed = false;
+	}
+
 }
 
 

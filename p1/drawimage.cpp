@@ -6,6 +6,7 @@
 */
 void MainWindow::draw_image()
 {
+<<<<<<< HEAD
 	//this->resize(img->width(), img->height());
     //ui->ShowImage->resize(img->width(), img->height());
 	//ui->centralWidget->resize(img->width(), img->height());
@@ -27,3 +28,10 @@ void MainWindow::draw_image()
         ui->ShowImage->setPixmap(QPixmap::fromImage(cg));
     }
 }
+=======
+	this->resize(pimg->width(), pimg->height());
+	ui->ShowImage->resize(pimg->width(), pimg->height());
+	ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
+	//ui->centralWidget->resize(img->width(), img->height());
+}
+>>>>>>> 8281ddbe12dc7237ab07fc602fd8cbdca6b6f23b

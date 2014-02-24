@@ -11,16 +11,16 @@ void MainWindow::OpenImage()
 
 	
 	img = new QImage;
+	pimg = new QImage;
 
-	if (! (img->load(filename)))
+	if (! (pimg->load(filename)))
 	{
 		 QMessageBox::information(this,
                                      tr("Fail to open Image"),
                                      tr("Fail to open Image!"));
 	}
 	
-	//initialize the painter
-	pter = new QPainter(img);
+	img->load(filename);
 
 	//Show the image
 	draw_image();
