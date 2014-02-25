@@ -101,7 +101,7 @@ QImage Iscissor::drawPixelNode()
 }
 void Iscissor::updatePathTree()
 {
-    mask.save("mask.png");
+    //mask.save("mask.png");
     initializePixelNodes();
     FibHeap heap;
     heap.Insert(seed);

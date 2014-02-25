@@ -175,7 +175,7 @@ void MainWindow::add_mask(int x, int y)
 		}
 	}
 	mask_pt->end();
-    mask->save("mask.png");
+    //mask->save("mask.png");
 
 	ics->setMask(*mask);
 }
