@@ -18,17 +18,28 @@ SOURCES += main.cpp\
     fibheap.cpp \
     binheap.cpp \
     OpenImage.cpp \
-    inputtrack.cpp \
-    drawimage.cpp
+    drawimage.cpp \
+    utils.cpp \
+    scissor_diag.cpp \
+    scissor_configure.cpp \
+    sc_ok.cpp \
+    savefile.cpp \
+    Mouse.cpp \
+    Keyboard.cpp \
+    imageonly.cpp \
+    debugmode.cpp
 
 HEADERS  += mainwindow.h \
     iscissor.h \
     fibheap.h \
     binheap.h \
     helper.h \
-    workstates.h
-
-FORMS    += mainwindow.ui
+    workstates.h \
+    scissor_diag.h \
+    helper.h
+FORMS    += mainwindow.ui \
+    scissor_diag.ui \
+    scissor_config.ui
 
 OPENCVENABLE = 1
 !include(QTFlagsOpenCV.pri) {

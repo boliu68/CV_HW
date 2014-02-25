@@ -170,10 +170,12 @@ void MainWindow::add_mask(int x, int y)
 		while(iter != mask_point.end())
 		{
 			pter->drawEllipse(QPoint(iter->x() * size, iter->y() *size), 20, 20);
+            mask_pt->drawEllipse(QPoint(iter->x() * size, iter->y() *size), 20, 20);
 			iter ++;
 		}
 	}
 	mask_pt->end();
+    mask->save("mask.png");
 
 	ics->setMask(*mask);
 }

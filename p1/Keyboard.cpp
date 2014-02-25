@@ -105,7 +105,7 @@ void MainWindow::keyPressEvent(QKeyEvent * e)
 		{
 			if (chosen_path != -1)
 			{
-				vector<vector<QPoint>>::iterator iter = ex_path.begin() + chosen_path;
+                vector<vector<QPoint> >::iterator iter = ex_path.begin() + chosen_path;
 				ex_path.erase(iter);
 				iter = click_point.begin() + chosen_path;
 				click_point.erase(iter);

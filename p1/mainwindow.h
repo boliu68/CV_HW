@@ -48,9 +48,9 @@ private:
 	QPainter * pter;
 
 	Iscissor * ics; //the iscissor class
-	vector<vector<QPoint>> ex_path;
-	vector<vector<QPoint>> scale_expath;
-	vector<vector<QPoint>> click_point;
+    vector<vector<QPoint> > ex_path;
+    vector<vector<QPoint> > scale_expath;
+    vector<vector<QPoint> > click_point;
 	vector<QPoint> mask_point;
 
 	int path_id; //to indicate the id of path;

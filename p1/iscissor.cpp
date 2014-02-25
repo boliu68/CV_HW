@@ -31,8 +31,10 @@ Iscissor::Iscissor(QImage * image, CostFunction cf)
     for(int i=0;i<img->height();i++)
         for(int j=0;j<img->width();j++)
             pixelnodes[i].push_back(new PixelNode(j,i));
-    mask=image->createHeuristicMask();
-    mask.fill(1);
+    //mask=image->createHeuristicMask();
+    QImage m(img->width(),img->height(),img->format());
+    m.fill(qRgb(255,255,255));
+    mask=m;
     seed=NULL;
     costfunction=cf;
     costFun();
@@ -99,6 +101,7 @@ QImage Iscissor::drawPixelNode()
 }
 void Iscissor::updatePathTree()
 {
+    mask.save("mask.png");
     initializePixelNodes();
     FibHeap heap;
     heap.Insert(seed);

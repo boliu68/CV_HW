@@ -24,8 +24,8 @@ void MainWindow::OpenImage()
 	
 	img->load(filename);
 
-	mask = new QImage(img->width(), img->height(), QImage::Format_Mono);
-	mask->fill(Qt::black);
+    mask = new QImage(img->width(), img->height(), img->format());
+    mask->fill(0);
 
 	//Show the image
 	draw_image();
