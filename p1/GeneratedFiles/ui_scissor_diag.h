@@ -36,12 +36,17 @@ public:
     QPushButton *sc_pixel_node;
     QPushButton *sc_min_path;
     QPushButton *sc_path_tree;
+    QFrame *line_4;
+    QLabel *label_3;
+    QPushButton *sc_brush;
+    QPushButton *sc_snap_on;
 
     void setupUi(QDialog *scissor_diag)
     {
         if (scissor_diag->objectName().isEmpty())
             scissor_diag->setObjectName(QStringLiteral("scissor_diag"));
-        scissor_diag->resize(251, 338);
+        scissor_diag->setEnabled(true);
+        scissor_diag->resize(225, 458);
         label = new QLabel(scissor_diag);
         label->setObjectName(QStringLiteral("label"));
         label->setEnabled(false);
@@ -78,7 +83,7 @@ public:
         line_3->setFrameShadow(QFrame::Sunken);
         sc_OK = new QPushButton(scissor_diag);
         sc_OK->setObjectName(QStringLiteral("sc_OK"));
-        sc_OK->setGeometry(QRect(70, 280, 91, 41));
+        sc_OK->setGeometry(QRect(30, 390, 161, 61));
         sc_cost_graph = new QPushButton(scissor_diag);
         sc_cost_graph->setObjectName(QStringLiteral("sc_cost_graph"));
         sc_cost_graph->setGeometry(QRect(120, 160, 91, 41));
@@ -91,6 +96,21 @@ public:
         sc_path_tree = new QPushButton(scissor_diag);
         sc_path_tree->setObjectName(QStringLiteral("sc_path_tree"));
         sc_path_tree->setGeometry(QRect(10, 210, 91, 41));
+        line_4 = new QFrame(scissor_diag);
+        line_4->setObjectName(QStringLiteral("line_4"));
+        line_4->setGeometry(QRect(0, 370, 251, 16));
+        line_4->setFrameShape(QFrame::HLine);
+        line_4->setFrameShadow(QFrame::Sunken);
+        label_3 = new QLabel(scissor_diag);
+        label_3->setObjectName(QStringLiteral("label_3"));
+        label_3->setEnabled(false);
+        label_3->setGeometry(QRect(10, 270, 54, 12));
+        sc_brush = new QPushButton(scissor_diag);
+        sc_brush->setObjectName(QStringLiteral("sc_brush"));
+        sc_brush->setGeometry(QRect(10, 300, 91, 41));
+        sc_snap_on = new QPushButton(scissor_diag);
+        sc_snap_on->setObjectName(QStringLiteral("sc_snap_on"));
+        sc_snap_on->setGeometry(QRect(120, 300, 91, 41));
 
         retranslateUi(scissor_diag);
         QObject::connect(sc_OK, SIGNAL(clicked()), scissor_diag, SLOT(sc_OK()));
@@ -100,6 +120,8 @@ public:
         QObject::connect(sc_cost_graph, SIGNAL(clicked()), scissor_diag, SLOT(sc_cost_graph()));
         QObject::connect(sc_path_tree, SIGNAL(clicked()), scissor_diag, SLOT(sc_path_tree()));
         QObject::connect(sc_min_path, SIGNAL(clicked()), scissor_diag, SLOT(sc_min_path()));
+        QObject::connect(sc_snap_on, SIGNAL(clicked()), scissor_diag, SLOT(sc_snap()));
+        QObject::connect(sc_brush, SIGNAL(clicked()), scissor_diag, SLOT(sc_brush()));
 
         QMetaObject::connectSlotsByName(scissor_diag);
     } // setupUi
@@ -117,6 +139,9 @@ public:
         sc_pixel_node->setText(QApplication::translate("scissor_diag", "Pixel Nodes", 0));
         sc_min_path->setText(QApplication::translate("scissor_diag", "Minimum Path", 0));
         sc_path_tree->setText(QApplication::translate("scissor_diag", "Path Tree", 0));
+        label_3->setText(QApplication::translate("scissor_diag", "Extra", 0));
+        sc_brush->setText(QApplication::translate("scissor_diag", "Brush ON", 0));
+        sc_snap_on->setText(QApplication::translate("scissor_diag", "Snap Seed OFF", 0));
     } // retranslateUi
 
 };

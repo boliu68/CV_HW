@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	isentr_pressed = false;
 	isback_pressed = false;
 	img_loaded = false;
+	is_snap = false;
 
 	path_id = 0;
 	chosen_path = -1;

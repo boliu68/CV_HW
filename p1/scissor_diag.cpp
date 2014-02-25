@@ -7,6 +7,8 @@ scissor_diag::scissor_diag(QWidget *parent) :
 {
     ui->setupUi(this);
 	workstates = image_only_contour;
+	is_snap = false;
+	is_brush = true;
 }
 
 scissor_diag::~scissor_diag()

@@ -105,14 +105,13 @@
       <x>212</x>
       <y>108</y>
       <width>120</width>
-      <height>96</height>
+      <height>73</height>
      </rect>
     </property>
     <property name="title">
      <string>Tool</string>
     </property>
     <addaction name="scissor"/>
-    <addaction name="brush"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTool"/>
@@ -336,6 +335,5 @@
   <slot>save_contour()</slot>
   <slot>save_mask()</slot>
   <slot>on_scissor()</slot>
-  <slot>on_brush()</slot>
  </slots>
 </ui>
