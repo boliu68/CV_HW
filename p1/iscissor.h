@@ -46,6 +46,9 @@ private:
     double getD(int i, int j, int link);
     void updatePathTree();
     void initializePixelNodes();
+    void deleteAllnodes();
+    void initial(QImage *image);
+    ~Iscissor();
 public:
     Iscissor(QImage *image,CostFunction cf=MODIFIED);//image is the original image
     void setCostFunction(CostFunction cf);
@@ -58,6 +61,7 @@ public:
     QImage drawPathTree();
     void getPath(int column, int row, vector<QPoint> &path);
     //return path from seed to (column,row), pair.first is column, pair.second is row
+    void setImage(QImage *image);//input new image, after that seed is clear, and costfunction will be computed as current costfunction
 };
 
 #endif // ISCISSOR_H
