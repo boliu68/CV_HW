@@ -41,14 +41,13 @@ public:
     QPushButton *sc_brush;
     QPushButton *sc_snap_on;
     QPushButton *sc_cost_function;
-    QPushButton *sc_Blur;
 
     void setupUi(QDialog *scissor_diag)
     {
         if (scissor_diag->objectName().isEmpty())
             scissor_diag->setObjectName(QStringLiteral("scissor_diag"));
         scissor_diag->setEnabled(true);
-        scissor_diag->resize(225, 561);
+        scissor_diag->resize(225, 495);
         label = new QLabel(scissor_diag);
         label->setObjectName(QStringLiteral("label"));
         label->setEnabled(false);
@@ -85,7 +84,7 @@ public:
         line_3->setFrameShadow(QFrame::Sunken);
         sc_OK = new QPushButton(scissor_diag);
         sc_OK->setObjectName(QStringLiteral("sc_OK"));
-        sc_OK->setGeometry(QRect(30, 490, 161, 61));
+        sc_OK->setGeometry(QRect(30, 420, 161, 61));
         sc_cost_graph = new QPushButton(scissor_diag);
         sc_cost_graph->setObjectName(QStringLiteral("sc_cost_graph"));
         sc_cost_graph->setGeometry(QRect(120, 160, 91, 41));
@@ -100,13 +99,14 @@ public:
         sc_path_tree->setGeometry(QRect(10, 210, 91, 41));
         line_4 = new QFrame(scissor_diag);
         line_4->setObjectName(QStringLiteral("line_4"));
-        line_4->setGeometry(QRect(0, 470, 251, 16));
+        line_4->setGeometry(QRect(0, 400, 251, 16));
         line_4->setFrameShape(QFrame::HLine);
         line_4->setFrameShadow(QFrame::Sunken);
         label_3 = new QLabel(scissor_diag);
         label_3->setObjectName(QStringLiteral("label_3"));
         label_3->setEnabled(false);
         label_3->setGeometry(QRect(10, 270, 54, 12));
+        label_3->setFont(font);
         sc_brush = new QPushButton(scissor_diag);
         sc_brush->setObjectName(QStringLiteral("sc_brush"));
         sc_brush->setGeometry(QRect(10, 300, 91, 41));
@@ -115,10 +115,7 @@ public:
         sc_snap_on->setGeometry(QRect(120, 300, 91, 41));
         sc_cost_function = new QPushButton(scissor_diag);
         sc_cost_function->setObjectName(QStringLiteral("sc_cost_function"));
-        sc_cost_function->setGeometry(QRect(10, 360, 91, 41));
-        sc_Blur = new QPushButton(scissor_diag);
-        sc_Blur->setObjectName(QStringLiteral("sc_Blur"));
-        sc_Blur->setGeometry(QRect(120, 360, 91, 41));
+        sc_cost_function->setGeometry(QRect(10, 360, 201, 41));
 
         retranslateUi(scissor_diag);
         QObject::connect(sc_OK, SIGNAL(clicked()), scissor_diag, SLOT(sc_OK()));
@@ -131,7 +128,6 @@ public:
         QObject::connect(sc_snap_on, SIGNAL(clicked()), scissor_diag, SLOT(sc_snap()));
         QObject::connect(sc_brush, SIGNAL(clicked()), scissor_diag, SLOT(sc_brush()));
         QObject::connect(sc_cost_function, SIGNAL(clicked()), scissor_diag, SLOT(cs_cf()));
-        QObject::connect(sc_Blur, SIGNAL(clicked()), scissor_diag, SLOT(sc_change_blur()));
 
         QMetaObject::connectSlotsByName(scissor_diag);
     } // setupUi
@@ -152,8 +148,7 @@ public:
         label_3->setText(QApplication::translate("scissor_diag", "Extra", 0));
         sc_brush->setText(QApplication::translate("scissor_diag", "Brush ON", 0));
         sc_snap_on->setText(QApplication::translate("scissor_diag", "Snap Seed OFF", 0));
-        sc_cost_function->setText(QApplication::translate("scissor_diag", "Cost function", 0));
-        sc_Blur->setText(QApplication::translate("scissor_diag", "Blur", 0));
+        sc_cost_function->setText(QApplication::translate("scissor_diag", "Cost function(Modified)", 0));
     } // retranslateUi
 
 };

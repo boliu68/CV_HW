@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>225</width>
-    <height>561</height>
+    <height>495</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -130,7 +130,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>490</y>
+     <y>420</y>
      <width>161</width>
      <height>61</height>
     </rect>
@@ -195,7 +195,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>470</y>
+     <y>400</y>
      <width>251</width>
      <height>16</height>
     </rect>
@@ -215,6 +215,12 @@
      <width>54</width>
      <height>12</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
    </property>
    <property name="text">
     <string>Extra</string>
@@ -251,25 +257,12 @@
     <rect>
      <x>10</x>
      <y>360</y>
-     <width>91</width>
+     <width>201</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>Cost function</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="sc_Blur">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>360</y>
-     <width>91</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Blur</string>
+    <string>Cost function(Modified)</string>
    </property>
   </widget>
  </widget>
@@ -427,22 +420,6 @@
    <hints>
     <hint type="sourcelabel">
      <x>55</x>
-     <y>380</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>112</x>
-     <y>280</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>sc_Blur</sender>
-   <signal>clicked()</signal>
-   <receiver>scissor_diag</receiver>
-   <slot>sc_change_blur()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>165</x>
      <y>380</y>
     </hint>
     <hint type="destinationlabel">

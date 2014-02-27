@@ -107,9 +107,9 @@ void scissor_diag::sc_change_blur()
 void scissor_diag::cs_cf()
 {
 	if(is_modified)
-		this->ui->sc_cost_function->setText("Basic");
+		this->ui->sc_cost_function->setText("Cost Function(Basic)");
 	else
-		this->ui->sc_cost_function->setText("Modified");
+		this->ui->sc_cost_function->setText("Cost Function(Modified)");
 	is_modified = !is_modified;
 	MainWindow* ptr =(MainWindow*)parentWidget();
 	ptr->change_function();
