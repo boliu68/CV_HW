@@ -37,6 +37,7 @@ public:
 	void on_brush();
 	bool img_loaded;
 	bool is_snap;
+	void change_function();
 
 private:
     Ui::MainWindow *ui;
@@ -65,6 +66,7 @@ private:
 	bool isentr_pressed;
 	bool isback_pressed;
 	bool is_seed; //to record whether the seed point is alread put.
+	bool is_modified;//to record whether the modified cost funtion is used.
 
 	void draw_image();
 	bool click_position(int x, int y, int &x_, int &y_); //obtain the position with respect to the label
@@ -74,6 +76,7 @@ private:
 	void paint_path(bool contain_mask = true);
 	void choose_path(int x, int y);
 	void add_mask(int x, int y);
+	void reset_all();
 
 private slots:
 	void OpenImage();

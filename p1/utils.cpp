@@ -175,8 +175,7 @@ void MainWindow::add_mask(int x, int y)
 		}
 	}
 	mask_pt->end();
-    //mask->save("mask.png");
-
+    //mask->save("mask.png")
 	ics->setMask(*mask);
 }
 
@@ -194,4 +193,39 @@ void MainWindow::on_brush()
 	reset_image();
 	paint_path();
 	draw_image();
+}
+
+void MainWindow::change_function()
+{
+	if(is_modified)
+		ics->setCostFunction(ics->ORIGIN);
+	else
+		ics->setCostFunction(ics->MODIFIED);
+
+	ics->setImage(img);
+	is_modified = !is_modified;
+	reset_all();
+
+	reset_image();
+	paint_path();
+	draw_image();
+}
+
+void MainWindow::reset_all()
+{
+	//reset state
+	isctl_pressed = false;
+	isplus_pressed = false;
+	isminus_pressed = false;
+	isentr_pressed = false;
+	isback_pressed = false;
+	path_id = 0;
+	chosen_path = -1;
+	size = 1;
+	is_seed = false;
+
+	ex_path.clear();
+    scale_expath.clear();
+    click_point.clear();
+	mask_point.clear();
 }

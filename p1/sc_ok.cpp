@@ -98,3 +98,20 @@ void scissor_diag::sc_brush()
 	MainWindow* ptr =(MainWindow*)parentWidget();
 	ptr->on_brush();
 }
+
+void scissor_diag::sc_change_blur()
+{
+	return;
+}
+
+void scissor_diag::cs_cf()
+{
+	if(is_modified)
+		this->ui->sc_cost_function->setText("Basic");
+	else
+		this->ui->sc_cost_function->setText("Modified");
+	is_modified = !is_modified;
+	MainWindow* ptr =(MainWindow*)parentWidget();
+	ptr->change_function();
+	return;
+}
