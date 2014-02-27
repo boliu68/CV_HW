@@ -26,18 +26,8 @@ PixelNode::PixelNode(int c,int r):FibHeapNode()
 
 Iscissor::Iscissor(QImage * image, CostFunction cf)
 {
-    img=image;
-    pixelnodes.resize(img->height());
-    for(int i=0;i<img->height();i++)
-        for(int j=0;j<img->width();j++)
-            pixelnodes[i].push_back(new PixelNode(j,i));
-    //mask=image->createHeuristicMask();
-    QImage m(img->width(),img->height(),img->format());
-    m.fill(qRgb(255,255,255));
-    mask=m;
-    seed=NULL;
-    costfunction=cf;
-    costFun();
+    initial(image);
+    setCostFunction(cf);
 }
 
 void Iscissor::setSeed(int column,int row)
@@ -470,4 +460,47 @@ QPoint Iscissor::snapSeed(int column, int row)
             }
     //setSeed(c,r);
     return QPoint(c,r);
+}
+
+void Iscissor::deleteAllnodes()
+{
+    int h=pixelnodes.size();
+    int w=pixelnodes[0].size();
+    for(int i=0;i<h;i++)
+    {
+        for(int j=0;j<w;j++)
+        {
+            delete pixelnodes[i][j];
+            pixelnodes[i][j]=NULL;
+        }
+        pixelnodes[i].clear();
+    }
+    pixelnodes.clear();
+    seed=NULL;
+}
+
+Iscissor::~Iscissor()
+{
+    deleteAllnodes();
+}
+
+void Iscissor::initial(QImage *image)
+{
+    img=image;
+    pixelnodes.resize(img->height());
+    for(int i=0;i<img->height();i++)
+        for(int j=0;j<img->width();j++)
+            pixelnodes[i].push_back(new PixelNode(j,i));
+    //mask=image->createHeuristicMask();
+    QImage m(img->width(),img->height(),img->format());
+    m.fill(qRgb(255,255,255));
+    mask=m;
+    seed=NULL;
+}
+
+void Iscissor::setImage(QImage *image)
+{
+    deleteAllnodes();
+    initial(image);
+    setCostFunction(costfunction);
 }
