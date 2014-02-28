@@ -158,12 +158,12 @@ void MainWindow::add_mask(int x, int y)
 	paint_path();
 	draw_image();
 
-	mask_pt->setBrush(QBrush(Qt::white, Qt::SolidPattern));
+	mask_pt->setBrush(QBrush(1, Qt::SolidPattern));
 
 	if (mask_point.size() > 0)
 	{
 		mask_pt->setPen(Qt::NoPen);
-		mask_pt->setBrush(QBrush(Qt::white, Qt::SolidPattern));
+		mask_pt->setBrush(QBrush(1, Qt::SolidPattern));
 
 		vector<QPoint>::iterator iter = mask_point.begin();
 		int times = 0;
@@ -178,4 +178,20 @@ void MainWindow::add_mask(int x, int y)
     //mask->save("mask.png");
 
 	ics->setMask(*mask);
+}
+
+
+void MainWindow::on_brush()
+{
+	QImage *tmp = new QImage(*mask);
+	delete mask;
+	mask = new QImage(*store_mask);
+	delete store_mask;
+	store_mask = new QImage(*tmp);
+	delete tmp;
+
+	ics->setMask(*mask);
+	reset_image();
+	paint_path();
+	draw_image();
 }

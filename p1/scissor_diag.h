@@ -6,7 +6,6 @@
 
 namespace Ui {
 	class scissor_diag;
-	class MainWindow;
 }
 
 class scissor_diag : public QDialog
@@ -27,9 +26,12 @@ private slots:
 	void sc_path_tree();
 	void sc_min_path();
 	void sc_OK();
-
+	void sc_snap();
+	void sc_brush();
 private:
     Ui::scissor_diag *ui;
+	bool is_snap;
+	bool is_brush;
 };
 
 #endif // SCISSOR_DIAG_H

@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>scissor_diag</class>
  <widget class="QDialog" name="scissor_diag">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>251</width>
-    <height>338</height>
+    <width>225</width>
+    <height>458</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -126,10 +129,10 @@
   <widget class="QPushButton" name="sc_OK">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>280</y>
-     <width>91</width>
-     <height>41</height>
+     <x>30</x>
+     <y>390</y>
+     <width>161</width>
+     <height>61</height>
     </rect>
    </property>
    <property name="text">
@@ -188,6 +191,61 @@
     <string>Path Tree</string>
    </property>
   </widget>
+  <widget class="Line" name="line_4">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>370</y>
+     <width>251</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>270</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Extra</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sc_brush">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>300</y>
+     <width>91</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Brush ON</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sc_snap_on">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>300</y>
+     <width>91</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Snap Seed OFF</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>
@@ -199,7 +257,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>115</x>
-     <y>300</y>
+     <y>420</y>
     </hint>
     <hint type="destinationlabel">
      <x>125</x>
@@ -303,6 +361,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>sc_snap_on</sender>
+   <signal>clicked()</signal>
+   <receiver>scissor_diag</receiver>
+   <slot>sc_snap()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>320</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>125</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sc_brush</sender>
+   <signal>clicked()</signal>
+   <receiver>scissor_diag</receiver>
+   <slot>sc_brush()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>55</x>
+     <y>320</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>112</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>sc_image_only()</slot>
@@ -312,5 +402,7 @@
   <slot>sc_path_tree()</slot>
   <slot>sc_min_path()</slot>
   <slot>sc_OK()</slot>
+  <slot>sc_snap()</slot>
+  <slot>sc_brush()</slot>
  </slots>
 </ui>

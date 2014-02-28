@@ -18,7 +18,6 @@ using namespace std;
 
 namespace Ui {
 class MainWindow;
-class scissor_diag;
 }
 
 class MainWindow : public QMainWindow
@@ -35,7 +34,9 @@ public:
     void on_cost_graph();
     void on_path_tree();
     void on_min_path();
+	void on_brush();
 	bool img_loaded;
+	bool is_snap;
 
 private:
     Ui::MainWindow *ui;
@@ -45,6 +46,7 @@ private:
 	QImage * pimg;//used for painting;
 	QImage * pathtree;
 	QImage * mask;
+	QImage * store_mask;
 	QPainter * pter;
 
 	Iscissor * ics; //the iscissor class
@@ -86,7 +88,6 @@ private slots:
     void on_path_tree();
     void on_min_path();*/
 	void on_scissor();
-	void on_brush();
 
 protected:
 	//overwrite the track the mouse press event

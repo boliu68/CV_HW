@@ -458,7 +458,7 @@ QPoint Iscissor::snapSeed(int column, int row)
                     r=i;
                 }
             }
-    setSeed(c,r);
+    //setSeed(c,r);
     return QPoint(c,r);
 }
 

@@ -25,6 +25,13 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 
 					//pter = new QPainter(pimg);
 
+					if(is_snap)
+					{
+						QPoint tmp = ics->snapSeed(x, y);
+						x = tmp.x();
+						y = tmp.y();
+					}
+
 					if(is_seed)
 					{
 						//seed already exist, draw the path;

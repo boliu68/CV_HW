@@ -142,7 +142,7 @@ public:
         menuFile->setFont(font5);
         menuTool = new QMenu(menuBar);
         menuTool->setObjectName(QStringLiteral("menuTool"));
-        menuTool->setGeometry(QRect(212, 108, 120, 96));
+        menuTool->setGeometry(QRect(212, 108, 120, 73));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -157,7 +157,6 @@ public:
         menuFile->addSeparator();
         menuFile->addAction(QuitButton);
         menuTool->addAction(scissor);
-        menuTool->addAction(brush);
 
         retranslateUi(MainWindow);
         QObject::connect(Load_Image, SIGNAL(triggered()), MainWindow, SLOT(OpenImage()));
