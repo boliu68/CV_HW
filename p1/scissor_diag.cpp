@@ -9,6 +9,7 @@ scissor_diag::scissor_diag(QWidget *parent) :
 	workstates = image_only_contour;
 	is_snap = false;
 	is_brush = true;
+	is_modified = true;
 }
 
 scissor_diag::~scissor_diag()

@@ -23,7 +23,7 @@ void MainWindow::OpenImage()
 	}
 	
 	img->load(filename);
-
+	
     mask = new QImage(img->width(), img->height(), img->format());
     mask->fill(0);
 	store_mask = new QImage(img->width(), img->height(), img->format());

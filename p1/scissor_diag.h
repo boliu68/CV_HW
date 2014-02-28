@@ -28,10 +28,14 @@ private slots:
 	void sc_OK();
 	void sc_snap();
 	void sc_brush();
+	void cs_cf();
+	void sc_change_blur();
+
 private:
     Ui::scissor_diag *ui;
 	bool is_snap;
 	bool is_brush;
+	bool is_modified;
 };
 
 #endif // SCISSOR_DIAG_H
