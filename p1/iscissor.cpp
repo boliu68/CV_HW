@@ -364,6 +364,7 @@ void Iscissor::setCostFunction(CostFunction cf)
 
 void Iscissor::costFun()
 {
+    if(img==NULL) return;
     if(costfunction==MODIFIED)
         costFunModify();
     else if(costfunction==ORIGIN)
@@ -377,15 +378,19 @@ void Iscissor::costFunOrigin()
     Mat gray(cvimg.rows,cvimg.cols,CV_8U);
     cvtColor(cvimg,gray,CV_RGB2GRAY);
     Mat lap(cvimg.rows,cvimg.cols,CV_64F);
-    Laplacian(cvimg,lap,CV_64F);
+    Laplacian(gray,lap,CV_64F);
+    //visualCVMat(lap,"lap");
     Mat sobx(cvimg.rows,cvimg.cols,CV_64F);
     Mat soby(cvimg.rows,cvimg.cols,CV_64F);
-    Sobel(cvimg,sobx,CV_64F,1,0);
-    Sobel(cvimg,soby,CV_64F,0,1);
+    Sobel(gray,sobx,CV_64F,1,0);
+    Sobel(gray,soby,CV_64F,0,1);
+    //visualCVMat(sobx,"sobx");
+    //visualCVMat(soby,"soby");
     Mat grad(cvimg.rows,cvimg.cols,CV_64F);
     Mat fz(cvimg.rows,cvimg.cols,CV_64F);
     Mat fg(cvimg.rows,cvimg.cols,CV_64F);
-    Mat D(cvimg.rows,cvimg.cols,CV_64FC2);
+    Mat Dx(cvimg.rows,cvimg.cols,CV_64F);
+    Mat Dy(cvimg.rows,cvimg.cols,CV_64F);
     double maxG=0;
     for(int i=0;i<cvimg.rows;i++)
         for(int j=0;j<cvimg.cols;j++)
@@ -396,16 +401,29 @@ void Iscissor::costFunOrigin()
             grad.at<double>(i,j)=g;
             if(maxG<g)
                 maxG=g;
-            D.at<Vec2d>(i,j)=Vec2d(dy/g,-dx/g);
+            if(abs(g)>0.0001)
+            {
+                Dx.at<double>(i,j)=dy/g;
+                Dy.at<double>(i,j)=-dx/g;
+            }
+            else
+            {
+                Dx.at<double>(i,j)=0;
+                Dy.at<double>(i,j)=0;
+            }
         }
+    //visualCVMat(Dx,"Dx");
+    //visualCVMat(Dy,"Dy");
+    //visualCVMat(grad,"grad");
     for(int i=0;i<cvimg.rows;i++)
         for(int j=0;j<cvimg.cols;j++)
         {
-            fz.at<double>(i,j)=abs(lap.at<double>(i,j))<0.01?0:1;
-            fg.at<double>(i,j)=1-grad.at<double>(i,j)/maxG;
+            fz.at<double>(i,j)=abs(lap.at<double>(i,j))<0.0001?0:1;
+            fg.at<double>(i,j)=1.0-grad.at<double>(i,j)/maxG;
 
         }
     double wz=0.43,wd=0.43,wg=0.14;
+    double mmax=DBL_MIN,mmin=DBL_MAX;
     for(int i=0;i<cvimg.rows;i++)
         for(int j=0;j<cvimg.cols;j++)
         {
@@ -416,18 +434,38 @@ void Iscissor::costFunOrigin()
                 pn->Neighbor(k,c,r);
                 if(c>=0&&c<cvimg.cols&&r>=0&&r<cvimg.rows)
                 {
-                    Vec2d l(i-r,j-c);
-                    double dp=l.dot(D.at<double>(i,j));
+                    Vec2d l(c-j,r-i);
+                    Vec2d Dp(Dx.at<double>(i,j),Dy.at<double>(i,j));
+                    Vec2d Dq(Dx.at<double>(r,c),Dy.at<double>(r,c));
+                    if(k%2)
+                        l=l/sqrt(2.0);
+                    double dp=l.dot(Dp);
                     if(dp<0)
                     {
                         l=-l;
                         dp=-dp;
                     }
-                    double dq=l.dot(D.at<double>(r,c));
+                    double dq=l.dot(Dq);
                     double fd=(acos(dp)+acos(dq))/CV_PI;
-                    pn->setLinkCost(k,wz*fz.at<double>(r,c)+wg*fg.at<double>(r,c)+wd*fd);
+                    double v;
+                    if(k%2)
+                        v=wz*fz.at<double>(r,c)+wg*fg.at<double>(r,c)+wd*fd;
+                    else
+                        v=wz*fz.at<double>(r,c)+wg*fg.at<double>(r,c)/sqrt(2.0)+wd*fd;
+                    if(v>mmax)
+                        mmax=v;
+                    if(v<mmin)
+                        mmin=v;
+                    pn->setLinkCost(k,v);
                 }
             }
+        }
+    for(int i=0;i<cvimg.rows;i++)
+        for(int j=0;j<cvimg.cols;j++)
+        {
+            PixelNode *pn=pixelnodes[i][j];
+            for(int k=0;k<8;k++)
+                pn->setLinkCost(k,(pn->LinkCost(k)-mmin)/(mmax-mmin)*170.0);
         }
 }
 

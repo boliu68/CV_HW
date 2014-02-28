@@ -28,6 +28,8 @@ void MainWindow::on_path_tree()
 	workstates = path_tree;
 
 	//obtain the path tree
+    delete pathtree;
+    pathtree = new QImage(ics->drawPathTree());
 	delete pimg;
 	pimg = new QImage(ics->drawPathTree());
 	draw_image();
