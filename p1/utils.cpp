@@ -100,7 +100,7 @@ void MainWindow::paint_path(bool contain_mask)
 		pter->drawPoints(&scale_expath[i][0], scale_expath[i].size());
 	}
 
-	if(contain_mask)
+    if(contain_mask)
 	{
 		if (mask_point.size() > 0)
 		{
@@ -111,7 +111,7 @@ void MainWindow::paint_path(bool contain_mask)
 			int times = 0;
 			while(iter != mask_point.end())
 			{
-				if(times % int(ceil(5.0 / (scale * size))) == 0)
+                //if(times % int(ceil(5.0 / (scale * size))) == 0)
 					pter->drawEllipse(QPoint(iter->x() * scale * size, iter->y() * scale *size), 20, 20);
 
 				times ++;
@@ -155,15 +155,15 @@ void MainWindow::add_mask(int x, int y)
 	
 	QPainter * mask_pt = new QPainter(mask);
 
-	paint_path();
+    paint_path(is_mask);
 	draw_image();
 
 	mask_pt->setBrush(QBrush(1, Qt::SolidPattern));
 
 	if (mask_point.size() > 0)
 	{
-		mask_pt->setPen(Qt::NoPen);
-		mask_pt->setBrush(QBrush(1, Qt::SolidPattern));
+        mask_pt->setPen(Qt::NoPen);
+        mask_pt->setBrush(QBrush(qRgb(255,255,255), Qt::SolidPattern));
 
 		vector<QPoint>::iterator iter = mask_point.begin();
 		int times = 0;
@@ -175,23 +175,33 @@ void MainWindow::add_mask(int x, int y)
 		}
 	}
 	mask_pt->end();
-    //mask->save("mask.png")
+    mask->save("mask.png");
 	ics->setMask(*mask);
 }
 
 
-void MainWindow::on_brush()
+void MainWindow::on_brush(bool isbrush)
 {
-	QImage *tmp = new QImage(*mask);
-	delete mask;
-	mask = new QImage(*store_mask);
-	delete store_mask;
-	store_mask = new QImage(*tmp);
-	delete tmp;
-
+    //QImage *tmp= new QImage(*mask);
+    delete mask;
+    mask = new QImage(img->width(),img->height(),img->format());
+    if(isbrush)
+        mask->fill(qRgb(0,0,0));
+    else
+        mask->fill(qRgb(255,255,255));
+    mask->save("ori.jpg");
+    delete store_mask;
+    store_mask=new QImage(img->width(),img->height(),img->format());
+    if(isbrush)
+        store_mask->fill(qRgb(0,0,0));
+    else
+        store_mask->fill(qRgb(255,255,255));
+    //store_mask = new QImage(*tmp);
+    //delete tmp;
+    is_mask=isbrush;
 	ics->setMask(*mask);
 	reset_image();
-	paint_path();
+    paint_path(isbrush);
 	draw_image();
 }
 
@@ -207,7 +217,7 @@ void MainWindow::change_function()
 	reset_all();
 
 	reset_image();
-	paint_path();
+    paint_path(is_mask);
 	draw_image();
 }
 

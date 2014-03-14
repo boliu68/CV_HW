@@ -4,6 +4,6 @@
 
 void MainWindow::on_scissor()
 {
-	sd = new scissor_diag(this);
+    sd = new Scissor_diag(this);
 	sd->show();
 }

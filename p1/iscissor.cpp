@@ -104,7 +104,7 @@ void Iscissor::updatePathTree()
         for(int i=0;i<8;i++)
         {
             q->Neighbor(i,c,r);
-            if(c>=0&&c<img->width()&&r>=0&&r<img->height()&&mask.pixel(c,r)!=0)
+            if(c>=0&&c<img->width()&&r>=0&&r<img->height()&&mask.pixel(c,r)!=qRgb(0,0,0))
             {
                 PixelNode *pn=pixelnodes[r][c];
                 if(pn->state!=PixelNode::EXPANDED)

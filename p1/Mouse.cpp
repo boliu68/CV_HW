@@ -146,17 +146,17 @@ void MainWindow::mouseMoveEvent(QMouseEvent * e)
 					}
 					pter->end();
 				}*/
-				paint_path();
+                paint_path(is_mask);
 				//draw_image();
 			}
 
 		}
-		else
+        else if(is_mask)
 		{
 			int x, y;
 			if (click_position(e->x(), e->y(), x, y));
 			choose_path(x, y);
-			paint_path();
+            paint_path(is_mask);
 			draw_image();
 
 			if(e->buttons() & Qt::LeftButton)

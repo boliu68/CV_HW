@@ -34,14 +34,16 @@ public:
     void on_cost_graph();
     void on_path_tree();
     void on_min_path();
-	void on_brush();
+    void on_brush(bool isbrush);
 	bool img_loaded;
 	bool is_snap;
+    bool is_mask;
+    bool is_modified;//to record whether the modified cost funtion is used.
 	void change_function();
 
 private:
     Ui::MainWindow *ui;
-	scissor_diag * sd;
+    Scissor_diag * sd;
 
 	QImage * img;
 	QImage * pimg;//used for painting;
@@ -66,7 +68,6 @@ private:
 	bool isentr_pressed;
 	bool isback_pressed;
 	bool is_seed; //to record whether the seed point is alread put.
-	bool is_modified;//to record whether the modified cost funtion is used.
 
 	void draw_image();
 	bool click_position(int x, int y, int &x_, int &y_); //obtain the position with respect to the label

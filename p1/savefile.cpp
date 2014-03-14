@@ -40,7 +40,7 @@ void MainWindow::save_contour()
 	size = size_tmp;
 	workstates = workstates_tmp;
 	reset_image();
-	paint_path();
+	paint_path(is_mask);
 	draw_image();
 }
 

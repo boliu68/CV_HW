@@ -1,18 +1,20 @@
 #include "scissor_diag.h"
 #include "ui_scissor_diag.h"
+#include "mainwindow.h"
 
-scissor_diag::scissor_diag(QWidget *parent) :
+Scissor_diag::Scissor_diag(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::scissor_diag)
 {
+    workstates = image_only_contour;
+    MainWindow *mw=(MainWindow*)parent;
+    is_snap = mw->is_snap;
+    is_brush = mw->is_mask;
+    is_modified = mw->is_modified;
     ui->setupUi(this);
-	workstates = image_only_contour;
-	is_snap = false;
-	is_brush = true;
-	is_modified = true;
 }
 
-scissor_diag::~scissor_diag()
+Scissor_diag::~Scissor_diag()
 {
     delete ui;
 }
