@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	is_seed = false;
 	workstates = image_only_contour;
+    is_mask=false;
 }
 
 MainWindow::~MainWindow()

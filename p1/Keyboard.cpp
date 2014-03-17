@@ -41,7 +41,7 @@ void MainWindow::keyPressEvent(QKeyEvent * e)
 
 		modify_expath(scale);
 		reset_image();
-		paint_path();
+        paint_path(is_mask);
 		draw_image();
 	}
 
@@ -55,7 +55,7 @@ void MainWindow::keyPressEvent(QKeyEvent * e)
 
 		modify_expath(scale);
 		reset_image();
-		paint_path();
+        paint_path(is_mask);
 		draw_image();
 	}
 
@@ -71,7 +71,7 @@ void MainWindow::keyPressEvent(QKeyEvent * e)
 
 			reset_image();
 
-			paint_path();
+            paint_path(is_mask);
 
 			is_seed = false;
 			path_id ++;
@@ -91,7 +91,7 @@ void MainWindow::keyPressEvent(QKeyEvent * e)
 			reset_image();
 			closet_point();
 
-			paint_path();
+            paint_path(is_mask);
 
 			is_seed = false;
 			path_id ++;
@@ -116,7 +116,7 @@ void MainWindow::keyPressEvent(QKeyEvent * e)
 				if (workstates == image_only_contour)modify_expath(1.0);
 				else if(workstates == min_path)modify_expath(3.0);
 				reset_image();
-				paint_path();
+                paint_path(is_mask);
 				draw_image();
 			}
 		}

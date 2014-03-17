@@ -8,14 +8,17 @@ namespace Ui {
 	class scissor_diag;
 }
 
-class scissor_diag : public QDialog
+class Scissor_diag : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit scissor_diag(QWidget *parent = 0);
-	int workstates;
-    ~scissor_diag();
+    explicit Scissor_diag(QWidget *parent = 0);
+    int workstates;
+    bool is_snap;
+    bool is_brush;
+    bool is_modified;
+    ~Scissor_diag();
 	//MainWindow * ptr;
 
 private slots:
@@ -33,9 +36,6 @@ private slots:
 
 private:
     Ui::scissor_diag *ui;
-	bool is_snap;
-	bool is_brush;
-	bool is_modified;
 };
 
 #endif // SCISSOR_DIAG_H
