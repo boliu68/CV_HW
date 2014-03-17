@@ -81,6 +81,7 @@ void scissor_diag::sc_snap()
 
 	is_snap = !is_snap;
 
+	//this->ui->sc_snap_on->setText("Test");
 	MainWindow* ptr =(MainWindow*)parentWidget();
 	ptr->is_snap = this->is_snap;
 }
@@ -95,7 +96,6 @@ void scissor_diag::sc_brush()
 	is_brush = !is_brush;
 
 	MainWindow* ptr =(MainWindow*)parentWidget();
-	//ptr->is_mask = this->is_brush;
 	ptr->on_brush();
 }
 
@@ -113,7 +113,5 @@ void scissor_diag::cs_cf()
 	is_modified = !is_modified;
 	MainWindow* ptr =(MainWindow*)parentWidget();
 	ptr->change_function();
-	//ptr->is_modified = this->ism
-	//ptr->is_modified = !ptr->is_modified;
 	return;
 }

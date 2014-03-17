@@ -13,7 +13,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	isminus_pressed = false;
 	isentr_pressed = false;
 	isback_pressed = false;
-	is_mask = false;
 	img_loaded = false;
 	is_snap = false;
 	is_modified = true;

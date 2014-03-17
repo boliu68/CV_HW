@@ -4,7 +4,6 @@
 
 void MainWindow::on_scissor()
 {
-	//delete sd;
 	sd = new scissor_diag(this);
 	sd->show();
 }
