@@ -37,6 +37,8 @@ public:
 	void on_brush();
 	bool img_loaded;
 	bool is_snap;
+	bool is_mask;
+	bool is_modified;//to record whether the modified cost funtion is used.
 	void change_function();
 
 private:
@@ -66,8 +68,7 @@ private:
 	bool isentr_pressed;
 	bool isback_pressed;
 	bool is_seed; //to record whether the seed point is alread put.
-	bool is_modified;//to record whether the modified cost funtion is used.
-
+	
 	void draw_image();
 	bool click_position(int x, int y, int &x_, int &y_); //obtain the position with respect to the label
 	void modify_expath(float scale);
