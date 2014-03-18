@@ -77,6 +77,10 @@ private:
     cv::Vec3d refLine;
     double refHeight;
     cv::Mat Homography;
+    cv::Mat intrinsic;//K
+    cv::Mat Rot;//R
+    cv::Mat tran;//t, P=K[R|t]
+    cv::Point3d camCenter;
     cv::Vec3d getLine(const cv::Point2d &p1,const cv::Point2d &p2);
     cv::Vec3d getLine(const cv::Point2d &p1,const cv::Point3d &p2);
     cv::Vec3d getLine(const cv::Point3d &p1,const cv::Point2d &p2);
@@ -106,13 +110,15 @@ private:
     cv::Point3d getProjOnPlane(const cv::Point3d &p,const cv::Point3d begin,const cv::Vec3d &n);
     //plane: normal:n, begin on it
     cv::Point2d compute2DCoordinate(const cv::Point3d & p);
+    void getCameraInformation();
+
 public:
     SingleViewModel(QImage *image);
     cv::Point3d computeVanish(const vector<pair<cv::Point2d,cv::Point2d> > &lines,VANISH v);
     //input a set of lines whose end points are pair<cv::Point2d,cv::Point2d>, and v is the enum of vanish
     //you should tell this function which vanish point need to be computed by v
     Vertex* setOrigin(const cv::Point2d &p);
-    //Set origin point in image,return origin vertex information
+    //Set origin point in image,return origin vertex information. If fail, return NULL;
     void setReferencePoints(const cv::Point2d &x,const cv::Point2d &y,const cv::Point2d &z,
                             double xlength,double ylength,double zlength,
                             Vertex* xver,Vertex* yver,Vertex* zver);

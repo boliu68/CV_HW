@@ -259,6 +259,9 @@ void SingleViewModel::initialVertex(Vertex *ver, const Point2d &c2, const Point3
 
 Vertex *SingleViewModel::setOrigin(const cv::Point2d &p)
 {
+    lxy=getLine(vx,vy);
+    double d=abs(p.x*lxy[0]+p.y*lxy[1]+lxy[2])/sqrt(lxy[0]*lxy[0]+lxy[1]*lxy[1]);
+    if(d<0.001) return NULL;
     initialVertex(origin,p,cv::Point3d(0.0,0.0,0.0));
     return origin;
 }
@@ -296,7 +299,6 @@ void SingleViewModel::setReferencePoints(const cv::Point2d &x, const cv::Point2d
     initialVertex(zver,z,cv::Point3d(0.0,0.0,zlength));
     referP=zver;
     refLine=getLine(origin->Coor2d(),referP->Coor2d());
-    lxy=getLine(vx,vy);
     vector<cv::Point2d> src,dst;
     src.push_back(origin->Coor2d());
     src.push_back(x);
@@ -311,6 +313,7 @@ void SingleViewModel::setReferencePoints(const cv::Point2d &x, const cv::Point2d
     Homography=cv::getPerspectiveTransform(src,dst);
     refHeight=zlength;
     refLine=getLine(origin->Coor2d(),z);
+    getCameraInformation();
 }
 
 Vertex* SingleViewModel::findNearestVertex(const cv::Point2d &p)
@@ -875,4 +878,29 @@ SingleViewModel::~SingleViewModel()
     faces.clear();
     origin=NULL;
     referP=NULL;
+}
+
+void SingleViewModel::getCameraInformation()
+{
+    cv::Mat Hinv=Homography.inv();
+    cv::Vec3d p(referP->Coor2d().x,referP->Coor2d().y,1);
+    cv::Vec3d p4(Hinv.at<double>(0,2),Hinv.at<double>(1,2),Hinv.at<double>(2,2));
+    double a=cv::norm(p4.cross(p))/cv::norm(vz.cross(p))/refHeight;
+    if(cv::norm(a*refHeight*p.cross(vz)+p4.cross(p))>0.0001)
+        a=-a;
+    cv::Mat P(3,4,CV_64F);
+    cv::Vec3d P3=a*vz;
+    for(int i=0;i<3;i++)
+    {
+        P.at<double>(i,0)=Hinv.at<double>(i,0);
+        P.at<double>(i,1)=Hinv.at<double>(i,1);
+        P.at<double>(i,2)=P3[i];
+        P.at<double>(i,3)=Hinv.at<double>(i,2);
+    }
+    cv::decomposeProjectionMatrix(P,intrinsic,Rot,tran);
+    cv::Mat C;
+    cv::SVD::solveZ(P,C);
+    camCenter.x=C.at<double>(0)/C.at<double>(3);
+    camCenter.y=C.at<double>(1)/C.at<double>(3);
+    camCenter.z=C.at<double>(2)/C.at<double>(3);
 }
