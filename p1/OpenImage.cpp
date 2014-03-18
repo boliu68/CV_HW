@@ -26,7 +26,11 @@ void MainWindow::OpenImage()
     mask = new QImage(img->width(), img->height(), img->format());
     mask->fill(0);
 	store_mask = new QImage(img->width(), img->height(), img->format());
+<<<<<<< HEAD
+    store_mask->fill(0);
+=======
     store_mask->fill(qRgb(255,255,255));
+>>>>>>> 51150595053c4d3b9a7d395e993fe83a917b5715
 	//mask = store_mask;
 
 	//Show the image

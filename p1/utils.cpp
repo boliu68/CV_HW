@@ -111,7 +111,11 @@ void MainWindow::paint_path(bool contain_mask)
 			int times = 0;
 			while(iter != mask_point.end())
 			{
+<<<<<<< HEAD
+				//if(times % int(ceil(5.0 / (scale * size))) == 0)
+=======
                 //if(times % int(ceil(5.0 / (scale * size))) == 0)
+>>>>>>> 51150595053c4d3b9a7d395e993fe83a917b5715
 					pter->drawEllipse(QPoint(iter->x() * scale * size, iter->y() * scale *size), 20, 20);
 
 				times ++;
@@ -203,6 +207,7 @@ void MainWindow::on_brush(bool isbrush)
 	reset_image();
     paint_path(isbrush);
 	draw_image();
+	is_mask = !is_mask;
 }
 
 void MainWindow::change_function()

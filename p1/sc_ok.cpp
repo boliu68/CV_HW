@@ -81,7 +81,6 @@ void Scissor_diag::sc_snap()
 
 	is_snap = !is_snap;
 
-	//this->ui->sc_snap_on->setText("Test");
 	MainWindow* ptr =(MainWindow*)parentWidget();
 	ptr->is_snap = this->is_snap;
 }
@@ -96,9 +95,14 @@ void Scissor_diag::sc_brush()
 	is_brush = !is_brush;
 
 	MainWindow* ptr =(MainWindow*)parentWidget();
+<<<<<<< HEAD
+	//ptr->is_mask = this->is_brush;
+	ptr->on_brush();
+=======
     ptr->is_mask=is_brush;
 
     ptr->on_brush(is_brush);
+>>>>>>> 51150595053c4d3b9a7d395e993fe83a917b5715
 }
 
 void Scissor_diag::sc_change_blur()
@@ -115,5 +119,7 @@ void Scissor_diag::cs_cf()
 	is_modified = !is_modified;
 	MainWindow* ptr =(MainWindow*)parentWidget();
 	ptr->change_function();
+	//ptr->is_modified = this->ism
+	//ptr->is_modified = !ptr->is_modified;
 	return;
 }
