@@ -333,9 +333,11 @@ Face* SingleViewModel::findFace(const cv::Point2d &p)
 {
     int index=-1;
     double m=DBL_MAX;
-    for(int i=0;i<groundplanes.size();i++)
+    for(int i=0;i<faces.size();i++)
     {
-        Face* f=groundplanes[i];
+        Face* f=faces[i];
+        if(!f->paraToGround())
+            continue;
         if(f->inFace(p)&&f->Area()<m)
         {
             m=f->Area();
@@ -344,7 +346,7 @@ Face* SingleViewModel::findFace(const cv::Point2d &p)
     }
     if(index==-1)
         return NULL;
-    return groundplanes[index];
+    return faces[index];
 }
 
 double SingleViewModel::getHeightOnRefLine(const cv::Point2d &p)
@@ -503,8 +505,6 @@ Face* SingleViewModel::generateFace(const vector<Vertex *> &vers)
         face=new Face(vers);
     getFaceTexture(face);
     faces.push_back(face);
-    if(face->paraToGround())
-        groundplanes.push_back(face);
     return face;
 }
 
@@ -785,7 +785,7 @@ cv::Point2d SingleViewModel::compute2DCoordinate(const Point3d &p)
         cv::Point2d Vz(vz.x/vz.z,vz.y/vz.z);
         vzr=norm(Vz-referP->Coor2d());
         vzb=norm(Vz-origin->Coor2d());
-        t=p.z*rb*vzb/(refHeight*vzb+p.z*rb);
+        t=p.z*rb*vzb/(refHeight*vzr+p.z*rb);
     }
     pl2d=origin->Coor2d()+t/rb*(referP->Coor2d()-origin->Coor2d());
     cv::Vec3d l=getLine(v,pl2d);
@@ -838,3 +838,41 @@ bool SingleViewModel::inRegion(const cv::Point2d &p1, const cv::Point2d &p2,
         return false;
     return true;
 }*/
+
+Vertex::~Vertex()
+{
+    bottom=NULL;
+}
+
+Face::~Face()
+{
+    for(int i=0;i<4;i++)
+        vertexs[i]=NULL;
+    vertexs.clear();
+    delete texture;
+    texture=NULL;
+}
+
+SingleViewModel::~SingleViewModel()
+{
+    for(int i=0;i<vertexs.size();i++)
+    {
+        delete vertexs[i];
+        vertexs[i]=NULL;
+    }
+    vertexs.clear();
+    for(int i=0;i<virtualVers.size();i++)
+    {
+        delete virtualVers[i];
+        virtualVers[i]=NULL;
+    }
+    virtualVers.clear();
+    for(int i=0;i<faces.size();i++)
+    {
+        delete faces[i];
+        faces[i]=NULL;
+    }
+    faces.clear();
+    origin=NULL;
+    referP=NULL;
+}
