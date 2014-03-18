@@ -29,6 +29,8 @@ void MainWindow::draw_pimg()
 	pimg = new QImage(*img);
 	delete tmp_img;
 
+	draw_text();
+
 	QPainter pter(pimg);
 	pter.setFont(QFont("Courier", 8, QFont::Bold, true));
 
@@ -78,4 +80,34 @@ void MainWindow::draw_pimg()
 	tmp_img = pimg;
 	pimg = new QImage(tmp_img->scaled(tmp_img->width() * size, tmp_img->height() * size));
 	delete tmp_img;
+}
+
+
+void MainWindow::draw_text()
+{
+	QPainter pter(pimg);
+	pter.setFont(QFont("Courier", 8, QFont::Bold, true));
+	pter.setPen(QPen(Qt::white, 4 * size));
+
+	switch(is_vanished)
+	{
+	case z_done:
+		{
+			pter.drawPoint(QPoint(vanish_pt[2].x,vanish_pt[2].y));
+			pter.drawText(QPoint(vanish_pt[2].x,vanish_pt[2].y), "Z");
+		}
+	case y_done:
+		{
+			pter.drawPoint(QPoint(vanish_pt[1].x,vanish_pt[1].y));
+			pter.drawText(QPoint(vanish_pt[1].x,vanish_pt[1].y), "Y");
+		}
+	case x_done:
+		{
+			pter.drawPoint(QPoint(vanish_pt[0].x,vanish_pt[0].y));
+			pter.drawText(QPoint(vanish_pt[0].x,vanish_pt[0].y), "X");
+		}
+	default: break;
+	}
+
+	pter.end();
 }

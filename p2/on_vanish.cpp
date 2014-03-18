@@ -6,22 +6,23 @@ void MainWindow::on_vanish()
 	//to point the vanish points
 	if(is_vanished == no_done)
 	{
-		this->ui->Vanish_Point->setText("Y axis");
-		this->ui->infobox->setText("Please assign the Y axis now.");
-		is_vanished = x_done;
+		QString vp_str = "Y axis";
+		QString info_str = "Please assign the Y axis now.";
+		change_vanish(vp_str, info_str, is_vanished);
 	}
 	else if(is_vanished == x_done)
 	{
-		this->ui->Vanish_Point->setText("Z axis");
-		this->ui->infobox->setText("Please assign the Z axis now.");
-		is_vanished = y_done;
+		QString vp_str = "Z axis";
+		QString info_str = "Please assign the Y axis now.";
+		change_vanish(vp_str, info_str, is_vanished);
 	}
 	else if(is_vanished == y_done)
 	{
 		//this->ui->Vanish_Point->setText("Z axis");
 		this->ui->Vanish_Point->setEnabled(false);
-		this->ui->infobox->setText("Please assign the origin point.");
-		is_vanished = z_done;
+		QString vp_str = "Origin";
+		QString info_str = "Please assign the origin point.";
+		change_vanish(vp_str, info_str, is_vanished);
 	}
 	//Input the scale for 3 axis.
 	else if(is_vanished >= x_scale)
@@ -58,4 +59,37 @@ void MainWindow::on_vanish()
 	}
 
 	draw_image();
+}
+
+
+void MainWindow::change_vanish(QString vp_str, QString info_str, int xyz)
+{
+	this->ui->Vanish_Point->setText(vp_str);
+	this->ui->infobox->setText(info_str);
+
+	std::vector<QPoint>::iterator iter;
+	std::vector<std::pair<cv::Point2d,cv::Point2d>> lines;
+	for(iter  = vanish_lines[xyz].begin(); iter < vanish_lines[xyz].end() && (iter + 1) < vanish_lines[xyz].end(); iter += 2)
+	{
+		std::pair<cv::Point2d,cv::Point2d> one_line;
+		one_line.first = cv::Point2d(iter->x(), iter->y());
+		one_line.second = cv::Point2d((iter+1)->x(), (iter+1)->y());
+		lines.push_back(one_line);
+	}
+
+	switch(xyz)
+	{
+	case no_done:
+		vanish_pt[0] = mod->computeVanish(lines,mod->Xv);
+		is_vanished = x_done;
+		break;
+	case x_done:
+		vanish_pt[1] = mod->computeVanish(lines,mod->Yv);
+		is_vanished = y_done;
+		break;
+	case y_done:
+		vanish_pt[2] = mod->computeVanish(lines,mod->Zv);
+		is_vanished = z_done;
+		break;
+	}
 }

@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-/*#include "singleviewmodel.h"
-=======
 #include "singleviewmodel.h"
 #include "helper.h"
->>>>>>> 717134c1aa21780c8f7f2f026efaa5ede6fad6b4
 
 cv::Point2d Vertex::Coor2d()
 {
@@ -356,9 +352,7 @@ Face* SingleViewModel::findFace(const cv::Point2d &p)
     return faces[index];
 }
 
-<<<<<<< HEAD
-*/
-=======
+
 double SingleViewModel::getHeightOnRefLine(const cv::Point2d &p)
 {
     double tb,vr,rb,vt;
@@ -911,4 +905,3 @@ void SingleViewModel::getCameraInformation()
     camCenter.y=C.at<double>(1)/C.at<double>(3);
     camCenter.z=C.at<double>(2)/C.at<double>(3);
 }
->>>>>>> 717134c1aa21780c8f7f2f026efaa5ede6fad6b4

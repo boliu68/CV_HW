@@ -22,6 +22,7 @@ void MainWindow::onLoadImage()
 	
 	img->load(filename);
 	img_loaded = true;
+	mod = new SingleViewModel(img);
 	draw_image();
 
 	//QMessageBox::information(this,

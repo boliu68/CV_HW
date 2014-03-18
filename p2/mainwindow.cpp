@@ -6,6 +6,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 	//initialize
+	mod = NULL;
+
 	img_loaded = false;
 	is_vanished  = no_done;
 	is_origin = false;

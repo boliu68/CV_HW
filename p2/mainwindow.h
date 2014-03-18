@@ -14,6 +14,7 @@
 #include "states.h"
 #include <QFont>
 #include <QRegExp>
+#include <singleviewmodel.h>
 
 
 namespace Ui {
@@ -32,6 +33,8 @@ private:
     Ui::MainWindow *ui;
 	QImage* img;
 	QImage* pimg;
+
+	SingleViewModel* mod;
 	
 	bool img_loaded;
 	int is_vanished;//the line segment for calculate vanish point is not yet assigned.
@@ -46,11 +49,15 @@ private:
 	double size;
 	double axis_scale[3];
 	std::vector<QPoint> vanish_lines[3];
+	cv::Point3d vanish_pt[3];
 	QPoint origin_pt;
 
+
 	void draw_image();
+	void draw_text();
 	void draw_pimg();
 	void resize_widget();
+	void change_vanish(QString vp_str, QString info_str, int xyz);
 
 	bool click_position(int x, int y, int& x_, int& y_);
 

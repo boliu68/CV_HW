@@ -1,4 +1,4 @@
-/*#ifndef SINGLEVIEWMODEL_H
+#ifndef SINGLEVIEWMODEL_H
 #define SINGLEVIEWMODEL_H
 #include<iostream>
 #include<vector>
@@ -86,19 +86,6 @@ private:
     cv::Vec3d getLine(const cv::Point3d &p1,const cv::Point2d &p2);
     cv::Vec3d getLine(const cv::Point3d &p1,const cv::Point3d &p2);
     cv::Point3d Normalize(const cv::Point2d &p);
-<<<<<<< HEAD
-    cv::Point2d Denormalize(const cv::Point3d &p);
-    cv::Point2d getOneVanish(const vector<pair<cv::Point2d,cv::Point2d> > &lines);
-    void initialVertex(Vertex *ver,const cv::Point2d &c2,const cv::Point &c3,Vertex::LOC loc);
-    Face* findFace(const cv::Point2d &p);
-public:
-    SingleViewModel(QImage *image);
-    cv::Point2d computeVanish(const vector<pair<cv::Point2d,cv::Point2d> > &lines,VANISH v);
-    //input a set of lines whose end points are pair<cv::Point2d,cv::Point2d>
-    QImage getTextureMap(const vector<cv::Point2d> &quadrangle);
-    //input 4 corner points of quadrangle
-    void setOrigin(const cv::Point2d &p);
-=======
     cv::Point3d Denormalize(const cv::Point3d &p);
     cv::Point3d getOneVanish(const vector<pair<cv::Point2d,cv::Point2d> > &lines);
     void initialVertex(Vertex *ver,const cv::Point2d &c2,const cv::Point3d &c3,Vertex *bottom=NULL);
@@ -132,7 +119,6 @@ public:
     //you should tell this function which vanish point need to be computed by v
     Vertex* setOrigin(const cv::Point2d &p);
     //Set origin point in image,return origin vertex information. If fail, return NULL;
->>>>>>> 717134c1aa21780c8f7f2f026efaa5ede6fad6b4
     void setReferencePoints(const cv::Point2d &x,const cv::Point2d &y,const cv::Point2d &z,
                             double xlength,double ylength,double zlength,
                             Vertex* xver,Vertex* yver,Vertex* zver);
@@ -157,4 +143,4 @@ public:
 };
 
 #endif // SINGLEVIEWMODEL_H
-*/
+
