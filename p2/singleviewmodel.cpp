@@ -1,6 +1,6 @@
-#include "singleviewmodel.h"
+/*#include "singleviewmodel.h"
 
-cv::poin2d Vertex::Coor2d()
+cv::Point2d Vertex::Coor2d()
 {
     return coor2d;
 }
@@ -237,10 +237,10 @@ void SingleViewModel::setReferencePoints(const cv::Point2d &x, const cv::Point2d
     cv::Vec3d yline=getLine(x,vy);
     cv::Vec3d p=xline.cross(yline);
     src.push_back(cv::Point2d(p[0]/p[2],p[1]/p[2]));
-    dst.push_back(cv::POint2d(0.0,0.0));
-    dst.push_back(cv::POint2d(xlength,0.0));
-    dst.push_back(cv::POint2d(xlength,ylength));
-    dst.push_back(cv::POint2d(0.0,ylength));
+    dst.push_back(cv::Point2d(0.0,0.0));
+    dst.push_back(cv::Point2d(xlength,0.0));
+    dst.push_back(cv::Point2d(xlength,ylength));
+    dst.push_back(cv::Point2d(0.0,ylength));
     Homography=cv::getPerspectiveTransform(src,dst);
     refHeight=zlength;
 }
@@ -278,3 +278,5 @@ Face* SingleViewModel::findFace(const cv::Point2d &p)
         return NULL;
     return faces[index];
 }
+
+*/

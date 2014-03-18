@@ -1,4 +1,4 @@
-#ifndef SINGLEVIEWMODEL_H
+/*#ifndef SINGLEVIEWMODEL_H
 #define SINGLEVIEWMODEL_H
 #include<iostream>
 #include<vector>
@@ -68,13 +68,13 @@ private:
     cv::Point3d Normalize(const cv::Point2d &p);
     cv::Point2d Denormalize(const cv::Point3d &p);
     cv::Point2d getOneVanish(const vector<pair<cv::Point2d,cv::Point2d> > &lines);
-    void initialVertex(Vertex *ver,const cv::Point2 &c2,const cv::Point &c3,Vertex::LOC loc);
+    void initialVertex(Vertex *ver,const cv::Point2d &c2,const cv::Point &c3,Vertex::LOC loc);
     Face* findFace(const cv::Point2d &p);
 public:
     SingleViewModel(QImage *image);
     cv::Point2d computeVanish(const vector<pair<cv::Point2d,cv::Point2d> > &lines,VANISH v);
     //input a set of lines whose end points are pair<cv::Point2d,cv::Point2d>
-    QImage getTextureMap(const vecotr<cv::Point2d> &quadrangle);
+    QImage getTextureMap(const vector<cv::Point2d> &quadrangle);
     //input 4 corner points of quadrangle
     void setOrigin(const cv::Point2d &p);
     void setReferencePoints(const cv::Point2d &x,const cv::Point2d &y,const cv::Point2d &z,
@@ -88,3 +88,4 @@ public:
 };
 
 #endif // SINGLEVIEWMODEL_H
+*/
