@@ -45,6 +45,9 @@ private:
 	bool isminus_pressed;
 	bool isentr_pressed;
 	bool isback_pressed;
+	bool is_3d;
+	bool is_bottom;
+	bool is_texture;
 
 	double size;
 	std::vector<QPoint> vanish_lines[3];
@@ -52,9 +55,22 @@ private:
 	cv::Point2d scale_pt;
 	cv::Point3d vanish_pt[3];
 	cv::Point2d proj_pt;
+	
+	//for 3d measurement
+	cv::Point2d bottom;
+	Vertex * vbottom;
+	Vertex * vtop;
+	cv::Point2d top;
+	std::vector<Vertex *> store_vertex;
+	cv::Point2d d3_select_pt; 
+
 	cv::Point2d ref_pt[3];
 	double ref_length[3];
 	Vertex *ref_vpt[3];
+
+	vector<Vertex*> polygon_vertex;
+	vector<cv::Point2d> polygon_point;
+	vector<Face*> gen_face;
 
 	void draw_image();
 	void draw_text();
@@ -73,6 +89,8 @@ protected:
 private slots:
 	void onLoadImage();
 	void on_vanish();
+	void on_3d();
+	void on_texture();
 };
 
 #endif // MAINWINDOW_H

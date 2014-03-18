@@ -300,9 +300,10 @@ void SingleViewModel::setReferencePoints(const cv::Point2d &x, const cv::Point2d
     zver=initialVertex(z,cv::Point3d(0.0,0.0,zlength));
     referP=zver;
     refLine=getLine(origin->Coor2d(),referP->Coor2d());
-    vector<cv::Point2d> src,dst;
+    /*vector<cv::Point2d> src,dst;
     src.push_back(origin->Coor2d());
     src.push_back(x);
+	src.push_back(y);
     cv::Vec3d xline=getLine(y,vx);
     cv::Vec3d yline=getLine(x,vy);
     cv::Vec3d p=xline.cross(yline);
@@ -310,7 +311,19 @@ void SingleViewModel::setReferencePoints(const cv::Point2d &x, const cv::Point2d
     dst.push_back(cv::Point2d(0.0,0.0));
     dst.push_back(cv::Point2d(xlength,0.0));
     dst.push_back(cv::Point2d(xlength,ylength));
-    dst.push_back(cv::Point2d(0.0,ylength));
+    dst.push_back(cv::Point2d(0.0,ylength));*/
+	cv::Point2f src[4],dst[4];
+    src[0]=origin->Coor2d();
+    src[1]=x;
+    cv::Vec3d xline=getLine(y,vx);
+    cv::Vec3d yline=getLine(x,vy);
+    cv::Vec3d p=xline.cross(yline);
+    src[2].x=p[0]/p[2];src[2].y=p[1]/p[2];
+    src[3]=y;
+    dst[0].x=0;dst[0].y=0;
+    dst[1].x=xlength;dst[1].y=0.0;
+    dst[2].x=xlength;dst[2].y=ylength;
+    dst[3].x=0;dst[3].y=ylength;
     Homography=cv::getPerspectiveTransform(src,dst);
     refHeight=zlength;
     refLine=getLine(origin->Coor2d(),z);

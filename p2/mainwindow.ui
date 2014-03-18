@@ -60,9 +60,9 @@
     <property name="geometry">
      <rect>
       <x>490</x>
-      <y>270</y>
+      <y>170</y>
       <width>321</width>
-      <height>200</height>
+      <height>311</height>
      </rect>
     </property>
     <property name="font">
@@ -99,6 +99,70 @@
     </property>
     <property name="plainText">
      <string>Insert Scale</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="D3">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>100</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>3D Position</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="texture">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>100</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Texture Map</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="vrml">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>150</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>VRML</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="quit">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>150</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Quit</string>
     </property>
    </widget>
   </widget>
@@ -160,11 +224,75 @@
    <slot>on_vanish()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>607</x>
-     <y>74</y>
+     <x>564</x>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
      <x>380</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>D3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_3d()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>527</x>
+     <y>144</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>413</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>texture</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_texture()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>637</x>
+     <y>144</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>413</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>vrml</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_vrml()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>747</x>
+     <y>144</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>413</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>quit</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>637</x>
+     <y>194</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>413</x>
      <y>269</y>
     </hint>
    </hints>
@@ -173,5 +301,8 @@
  <slots>
   <slot>onLoadImage()</slot>
   <slot>on_vanish()</slot>
+  <slot>on_3d()</slot>
+  <slot>on_texture()</slot>
+  <slot>on_vrml()</slot>
  </slots>
 </ui>

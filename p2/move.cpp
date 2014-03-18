@@ -9,30 +9,39 @@ void MainWindow::mouseMoveEvent(QMouseEvent * e)
 		int x, y;
 		if(click_position(e->x(), e->y(), x, y))
 		{
-			switch(is_vanished)
+			if(is_3d)
 			{
-			case x_scale:
+				if(!is_bottom)
 				{
-					proj_pt = mod->findPointOnDirection(cv::Point2d(x, y), mod->Xv);
-					break;
+					d3_select_pt = mod->findPointOnDirection(cv::Point2d(x, y), bottom);
 				}
-			case y_scale:
-				{
-					int x, y;
-					click_position(e->x(), e->y(), x, y);
-					proj_pt = mod->findPointOnDirection(cv::Point2d(x, y), mod->Yv);
-					break;
-				}
-			case z_scale:
-				{
-					int x, y;
-					click_position(e->x(), e->y(), x, y);
-					proj_pt = mod->findPointOnDirection(cv::Point2d(x, y), mod->Zv);
-					break;
-				}
-			default: break;
 			}
-
+			else
+			{
+				switch(is_vanished)
+				{
+				case x_scale:
+					{
+						proj_pt = mod->findPointOnDirection(cv::Point2d(x, y), mod->Xv);
+						break;
+					}
+				case y_scale:
+					{
+						int x, y;
+						click_position(e->x(), e->y(), x, y);
+						proj_pt = mod->findPointOnDirection(cv::Point2d(x, y), mod->Yv);
+						break;
+					}
+				case z_scale:
+					{
+						int x, y;
+						click_position(e->x(), e->y(), x, y);
+						proj_pt = mod->findPointOnDirection(cv::Point2d(x, y), mod->Zv);
+						break;
+					}
+				default: break;
+				}
+			}
 			draw_image();
 		}
 	}
