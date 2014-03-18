@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     singleviewmodel.cpp
 
 HEADERS  += mainwindow.h \
-    singleviewmodel.h
+    singleviewmodel.h \
+    helper.h
 
 FORMS    += mainwindow.ui
 
