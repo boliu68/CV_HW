@@ -248,13 +248,14 @@ cv::Point3d SingleViewModel::computeVanish(const vector<pair<cv::Point2d,cv::Poi
     return vanish;
 }
 
-void SingleViewModel::initialVertex(Vertex *ver, const Point2d &c2, const Point3d &c3, Vertex *bottom)
+Vertex* SingleViewModel::initialVertex(const Point2d &c2, const Point3d &c3, Vertex *bottom)
 {
-    ver=new Vertex(c2);
+    Vertex* ver=new Vertex(c2);
     ver->setCoor3d(c3);
     ver->setBottom(bottom);
     vertexs.push_back(ver);
     ver->setID(vertexs.size()-1);
+    return ver;
 }
 
 Vertex *SingleViewModel::setOrigin(const cv::Point2d &p)
@@ -262,7 +263,7 @@ Vertex *SingleViewModel::setOrigin(const cv::Point2d &p)
     lxy=getLine(vx,vy);
     double d=abs(p.x*lxy[0]+p.y*lxy[1]+lxy[2])/sqrt(lxy[0]*lxy[0]+lxy[1]*lxy[1]);
     if(d<0.001) return NULL;
-    initialVertex(origin,p,cv::Point3d(0.0,0.0,0.0));
+    origin=initialVertex(p,cv::Point3d(0.0,0.0,0.0));
     return origin;
 }
 
@@ -292,11 +293,11 @@ cv::Point2d SingleViewModel::findPointOnDirection(const cv::Point2d &p, const cv
 
 void SingleViewModel::setReferencePoints(const cv::Point2d &x, const cv::Point2d &y, const cv::Point2d &z,
                                          double xlength, double ylength, double zlength,
-                                         Vertex *xver, Vertex *yver, Vertex *zver)
+                                         Vertex *&xver, Vertex *&yver, Vertex *&zver)
 {
-    initialVertex(xver,x,cv::Point3d(xlength,0.0,0.0));
-    initialVertex(yver,y,cv::Point3d(0.0,ylength,0.0));
-    initialVertex(zver,z,cv::Point3d(0.0,0.0,zlength));
+    xver=initialVertex(x,cv::Point3d(xlength,0.0,0.0));
+    yver=initialVertex(y,cv::Point3d(0.0,ylength,0.0));
+    zver=initialVertex(z,cv::Point3d(0.0,0.0,zlength));
     referP=zver;
     refLine=getLine(origin->Coor2d(),referP->Coor2d());
     vector<cv::Point2d> src,dst;
@@ -420,13 +421,12 @@ Vertex* SingleViewModel::compute3DCoordinate(Vertex *bottom, cv::Point2d &top)
     double h=getHeightOnRefLine(topInref);
     cv::Point3d coor3d=bottom->Coor3d();
     coor3d.z=h;
-    Vertex* newVer;
-    initialVertex(newVer,top,coor3d,realBot);
+    Vertex* newVer=initialVertex(top,coor3d,realBot);
     return newVer;
 }
 
 void SingleViewModel::compute3DCoordinate(const cv::Point2d &bottom, const cv::Point2d &top,
-                                          Vertex *vbottom, Vertex *vtop)
+                                          Vertex *&vbottom, Vertex *&vtop)
 {
     Face* gp=findFace(bottom);
     cv::Point2d realBot=bottom;
@@ -443,14 +443,14 @@ void SingleViewModel::compute3DCoordinate(const cv::Point2d &bottom, const cv::P
         realBotVer->setID(-(virtualVers.size()-1)-1);
         bottom3d.z=gp->Height();
     }
-    initialVertex(vbottom,bottom,bottom3d);
+    vbottom=initialVertex(bottom,bottom3d);
     if(gp!=NULL)
         vbottom->setBottom(realBotVer);
     cv::Point2d topInref=getPointOnRefLine(realBot,top);
     double h=getHeightOnRefLine(topInref);
     cv::Point3d top3d=realBot3d;
     top3d.z=h;
-    initialVertex(vtop,top,top3d,realBotVer);
+    vtop=initialVertex(top,top3d,realBotVer);
 }
 
 cv::Point3d SingleViewModel::get3DPointOnRefPlane(const cv::Point2d &p)
@@ -540,13 +540,13 @@ Face* SingleViewModel::generateFaceFrom3Points(const vector<Vertex *> &vers)
         newBotVer->setCoor3d(pb3d);
         virtualVers.push_back(newBotVer);
         newBotVer->setID(-(virtualVers.size()-1)-1);
-        initialVertex(pVer,p2d,p3d,newBotVer);
+        pVer=initialVertex(p2d,p3d,newBotVer);
     }
     else
     {
         cv::Point3d hp2d=getPointOnImage(pb3d);
         cv::Point2d p2d(hp2d.x/hp2d.z,hp2d.y/hp2d.z);
-        initialVertex(pVer,p2d,pb3d);
+        pVer=initialVertex(p2d,pb3d);
     }
     vector<Vertex*> facevers=vers;
     facevers.push_back(pVer);
