@@ -32,26 +32,43 @@ void MainWindow::on_vanish()
 		input.toDouble(&test);
 		if(test)
 		{
-			axis_scale[is_vanished - x_scale] = input.toDouble();	
+			ref_length[is_vanished - x_scale] = input.toDouble();
+			ref_pt[is_vanished - x_scale] = scale_pt;
+			scale_pt.x = -1;
+			scale_pt.y = -1;
 			ui->int_scale->clear();
+
+			ui->int_scale->setEnabled(false);
+			ui->Vanish_Point->setEnabled(false);
 
 			switch(is_vanished)
 			{
 			case x_scale:
 				{
-					ui->infobox->setText("Please insert the scale for Y axis.");
+					ui->infobox->setText("Please insert the scale for Y reference point.");
 					is_vanished = y_scale;
 					break;
 				}
 			case y_scale:
 				{
-					ui->infobox->setText("Please insert the scale for Z axis.");
+					ui->infobox->setText("Please insert the distance for Z reference point.");
 					is_vanished = z_scale;
 					break;
 				}
 			case z_scale:
 				{
 					ui->infobox->setText("Done.");
+					mod->setReferencePoints(ref_pt[0],ref_pt[1],ref_pt[2],
+                            ref_length[0], ref_length[1], ref_length[2],
+                            ref_vpt[0], ref_vpt[1], ref_vpt[2]);
+
+					//Output the refvpt information
+					QString info = "Selected point information\n";
+					QString tmp;
+					for (int i = 0; i < 3; i++)
+						info += tmp.sprintf("X:%f,%f,%f\n", ref_vpt[i]->Coor3d().x,  ref_vpt[i]->Coor3d().y,  ref_vpt[i]->Coor3d().z);
+					ui->infobox->setText(info);
+
 					break;
 				}
 			}

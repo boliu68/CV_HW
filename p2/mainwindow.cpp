@@ -18,6 +18,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	isentr_pressed = false;
 	isback_pressed = false;
 
+	for(int i = 0; i < 3; i++)
+		ref_vpt[i] = NULL;
+
 	size = 0.5;
 
     ui->setupUi(this);

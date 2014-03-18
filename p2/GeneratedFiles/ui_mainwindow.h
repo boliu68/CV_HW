@@ -46,7 +46,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(761, 539);
+        MainWindow->resize(828, 539);
         Load_Image = new QAction(MainWindow);
         Load_Image->setObjectName(QStringLiteral("Load_Image"));
         centralWidget = new QWidget(MainWindow);
@@ -65,7 +65,7 @@ public:
         Vanish_Point->setGeometry(QRect(490, 30, 75, 23));
         infobox = new QLabel(centralWidget);
         infobox->setObjectName(QStringLiteral("infobox"));
-        infobox->setGeometry(QRect(490, 270, 250, 200));
+        infobox->setGeometry(QRect(490, 270, 321, 200));
         QFont font;
         font.setFamily(QStringLiteral("Courier"));
         font.setPointSize(14);
@@ -83,7 +83,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 761, 21));
+        menuBar->setGeometry(QRect(0, 0, 828, 21));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         MainWindow->setMenuBar(menuBar);

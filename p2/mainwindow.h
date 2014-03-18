@@ -47,11 +47,14 @@ private:
 	bool isback_pressed;
 
 	double size;
-	double axis_scale[3];
 	std::vector<QPoint> vanish_lines[3];
-	cv::Point3d vanish_pt[3];
 	QPoint origin_pt;
-
+	cv::Point2d scale_pt;
+	cv::Point3d vanish_pt[3];
+	cv::Point2d proj_pt;
+	cv::Point2d ref_pt[3];
+	double ref_length[3];
+	Vertex *ref_vpt[3];
 
 	void draw_image();
 	void draw_text();
@@ -62,9 +65,10 @@ private:
 	bool click_position(int x, int y, int& x_, int& y_);
 
 protected:
+	void mouseMoveEvent(QMouseEvent* e);
 	void mousePressEvent(QMouseEvent * e);
-	void MainWindow::keyPressEvent(QKeyEvent * e);
-	void MainWindow::keyReleaseEvent(QKeyEvent * e);
+	void keyPressEvent(QKeyEvent * e);
+	void keyReleaseEvent(QKeyEvent * e);
 
 private slots:
 	void onLoadImage();

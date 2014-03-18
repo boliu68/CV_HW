@@ -63,17 +63,22 @@ void MainWindow::draw_pimg()
 				pter.drawLine(*iter, *(iter + 1));
 			}
 		}
+	case x_scale:
+	case y_scale:
+	case z_scale:
+		{
+			pter.setPen(QPen(Qt::yellow, 4 * size));
+			//draw the line between origin and vanish point.
+			pter.drawLine(origin_pt, QPoint(vanish_pt[is_vanished - x_scale].x / vanish_pt[is_vanished - x_scale].z, vanish_pt[is_vanished - x_scale].y / vanish_pt[is_vanished - x_scale].z));
+			pter.setPen(QPen(Qt::red, 20 * size));
+			pter.drawPoint(QPoint(proj_pt.x, proj_pt.y));
+			pter.setPen(QPen(Qt::green, 30 * size));
+			pter.drawPoint(QPoint(scale_pt.x, scale_pt.y));
+			pter.drawText(QPoint(scale_pt.x, scale_pt.y), "Select Point");
+		}
 	default: break;
 	}
 
-	if(is_origin)
-	{
-		//draw the origin point.
-		pter.setPen(QPen(Qt::red, 10 * size));
-		pter.drawPoint(origin_pt);
-		pter.setPen(QPen(Qt::white, 4 * size));
-		pter.drawText(origin_pt, "0");
-	}
 
 	pter.end();
 
@@ -91,22 +96,35 @@ void MainWindow::draw_text()
 
 	switch(is_vanished)
 	{
+	case x_scale:
+	case y_scale:
+	case z_scale:
 	case z_done:
 		{
-			pter.drawPoint(QPoint(vanish_pt[2].x,vanish_pt[2].y));
-			pter.drawText(QPoint(vanish_pt[2].x,vanish_pt[2].y), "Z");
+			pter.drawPoint(QPoint(vanish_pt[2].x / vanish_pt[2].z,vanish_pt[2].y  / vanish_pt[2].z));
+			pter.drawText(QPoint(vanish_pt[2].x  / vanish_pt[2].z,vanish_pt[2].y  / vanish_pt[2].z), "Z");
 		}
 	case y_done:
 		{
-			pter.drawPoint(QPoint(vanish_pt[1].x,vanish_pt[1].y));
-			pter.drawText(QPoint(vanish_pt[1].x,vanish_pt[1].y), "Y");
+			pter.drawPoint(QPoint(vanish_pt[1].x  / vanish_pt[1].z,vanish_pt[1].y  / vanish_pt[1].z));
+			pter.drawText(QPoint(vanish_pt[1].x  / vanish_pt[1].z,vanish_pt[1].y  / vanish_pt[1].z), "Y");
 		}
 	case x_done:
 		{
-			pter.drawPoint(QPoint(vanish_pt[0].x,vanish_pt[0].y));
-			pter.drawText(QPoint(vanish_pt[0].x,vanish_pt[0].y), "X");
+			pter.drawPoint(QPoint(vanish_pt[0].x  / vanish_pt[0].z,vanish_pt[0].y  / vanish_pt[0].z));
+			pter.drawText(QPoint(vanish_pt[0].x  / vanish_pt[0].z,vanish_pt[0].y  / vanish_pt[0].z), "X");
 		}
 	default: break;
+	}
+
+	
+	if(is_origin)
+	{
+		//draw the origin point.
+		pter.setPen(QPen(Qt::red, 10 * size));
+		pter.drawPoint(origin_pt);
+		pter.setPen(QPen(Qt::white, 4 * size));
+		pter.drawText(origin_pt, "0");
 	}
 
 	pter.end();
