@@ -88,7 +88,7 @@ private:
     cv::Point3d Normalize(const cv::Point2d &p);
     cv::Point3d Denormalize(const cv::Point3d &p);
     cv::Point3d getOneVanish(const vector<pair<cv::Point2d,cv::Point2d> > &lines);
-    void initialVertex(Vertex *ver,const cv::Point2d &c2,const cv::Point3d &c3,Vertex *bottom=NULL);
+    Vertex *initialVertex(const cv::Point2d &c2, const cv::Point3d &c3, Vertex *bottom=NULL);
     double getHeightOnRefLine(const cv::Point2d &p);
     cv::Point2d getPointOnRefLine(const cv::Point2d &bottom,const cv::Point2d &top);
     cv::Point2d getPointOnRefPlane(const cv::Point2d &p, Face *groundplane);
@@ -121,7 +121,7 @@ public:
     //Set origin point in image,return origin vertex information. If fail, return NULL;
     void setReferencePoints(const cv::Point2d &x,const cv::Point2d &y,const cv::Point2d &z,
                             double xlength,double ylength,double zlength,
-                            Vertex* xver,Vertex* yver,Vertex* zver);
+                            Vertex* &xver,Vertex* &yver,Vertex* &zver);
     //Set 3 reference points, and tell the length between origin point to them,
     //vertex information are returned in xver,yver,zver
     cv::Point2d findPointOnDirection(const cv::Point2d &p,VANISH v);
@@ -130,15 +130,16 @@ public:
     //find the projection of p in line from bottom to vanish point v in z direction
     Vertex* findNearestVertex(const cv::Point2d &p);
     //find vertex which has been computed and is nearest to p in image space
-    Vertex* compute3DCoordinate(Vertex* bottom,cv::Point2d &top);
+    Vertex* compute3DCoordinate(Vertex *bottom, cv::Point2d &top);
     //compute vertex top's 3d coordinate by bottom which has been computed
     Face* findFace(const cv::Point2d &p);
     //find the face which has been generated and contains p, if no face, return null
     void compute3DCoordinate(const cv::Point2d &bottom,const cv::Point2d &top,
-                             Vertex* vbottom,Vertex* vtop);
+                             Vertex* &vbottom,Vertex* &vtop);
     //compute vertex bottom and top' 3d coordinate, return vertex information in vbottom,vtop
     Face* generateFace(const vector<Vertex*> &vers);
     //input vertexs in clock order, generate a new face. If fail ,return NULL
+    void generateVRMLCode(const string &fname);
     ~SingleViewModel();
 };
 
