@@ -65,9 +65,18 @@ void MainWindow::on_vanish()
 					//Output the refvpt information
 					QString info = "Selected point information\n";
 					QString tmp;
+					char coord[3] = {'X', 'Y', 'Z'};
 					for (int i = 0; i < 3; i++)
-						info += tmp.sprintf("X:%f,%f,%f\n", ref_vpt[i]->Coor3d().x,  ref_vpt[i]->Coor3d().y,  ref_vpt[i]->Coor3d().z);
+					{
+						info += tmp.sprintf("%c:%f,%f,%f\n", coord[i], ref_vpt[i]->Coor3d().x,  ref_vpt[i]->Coor3d().y,  ref_vpt[i]->Coor3d().z);
+						store_vertex.push_back(ref_vpt[i]);
+					}
 					ui->infobox->setText(info);
+					is_vanished = all_done;
+
+					ui->D3->setEnabled(true);
+					ui->texture->setEnabled(true);
+					ui->vrml->setEnabled(true);
 
 					break;
 				}
@@ -85,7 +94,7 @@ void MainWindow::change_vanish(QString vp_str, QString info_str, int xyz)
 	this->ui->infobox->setText(info_str);
 
 	std::vector<QPoint>::iterator iter;
-	std::vector<std::pair<cv::Point2d,cv::Point2d>> lines;
+    std::vector<std::pair<cv::Point2d,cv::Point2d> > lines;
 	for(iter  = vanish_lines[xyz].begin(); iter < vanish_lines[xyz].end() && (iter + 1) < vanish_lines[xyz].end(); iter += 2)
 	{
 		std::pair<cv::Point2d,cv::Point2d> one_line;

@@ -17,6 +17,15 @@ MainWindow::MainWindow(QWidget *parent) :
 	isminus_pressed = false;
 	isentr_pressed = false;
 	isback_pressed = false;
+	is_3d = false;
+	is_texture = false;
+	is_bottom = false;
+
+	vbottom = NULL;
+	vtop = NULL;
+
+	bottom.x = -1;
+	bottom.y = -1;
 
 	for(int i = 0; i < 3; i++)
 		ref_vpt[i] = NULL;

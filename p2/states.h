@@ -9,5 +9,6 @@
 #define x_scale 4
 #define y_scale 5
 #define z_scale 6
+#define all_done -1
 
 #endif

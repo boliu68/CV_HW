@@ -14,11 +14,21 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    singleviewmodel.cpp
+    singleviewmodel.cpp \
+    utils.cpp \
+    texture.cpp \
+    on_vanish.cpp \
+    move.cpp \
+    loadimage.cpp \
+    keyboard.cpp \
+    draw_img.cpp \
+    click.cpp \
+    3d.cpp
 
 HEADERS  += mainwindow.h \
     singleviewmodel.h \
-    helper.h
+    helper.h \
+    states.h
 
 FORMS    += mainwindow.ui
 
