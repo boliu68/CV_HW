@@ -365,6 +365,7 @@ Face* SingleViewModel::findFace(const cv::Point2d &p)
     return faces[index];
 }
 
+
 double SingleViewModel::getHeightOnRefLine(const cv::Point2d &p)
 {
     double tb,vr,rb,vt;

@@ -5,6 +5,24 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+	//initialize
+	mod = NULL;
+
+	img_loaded = false;
+	is_vanished  = no_done;
+	is_origin = false;
+	
+	isctl_pressed = false;//to record whether the control buttion is pressed
+	isplus_pressed = false;
+	isminus_pressed = false;
+	isentr_pressed = false;
+	isback_pressed = false;
+
+	for(int i = 0; i < 3; i++)
+		ref_vpt[i] = NULL;
+
+	size = 0.5;
+
     ui->setupUi(this);
 }
 
