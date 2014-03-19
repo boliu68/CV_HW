@@ -425,7 +425,7 @@ bool SingleViewModel::inSameLine(const cv::Point2d &p1, const cv::Point2d &p2, c
     return false;
 }
 
-Vertex* SingleViewModel::compute3DCoordinate(Vertex *bottom, cv::Point2d &top)
+Vertex* SingleViewModel::compute3DCoordinate(Vertex *bottom, const cv::Point2d &top)
 {
     cv::Point2d topInref=top;
     Vertex* realBot=bottom;
@@ -440,8 +440,7 @@ Vertex* SingleViewModel::compute3DCoordinate(Vertex *bottom, cv::Point2d &top)
     return newVer;
 }
 
-void SingleViewModel::compute3DCoordinate(const cv::Point2d &bottom, const cv::Point2d &top,
-                                          Vertex *&vbottom, Vertex *&vtop)
+Vertex* SingleViewModel::compute3DCoordinateofBottom(const Point2d &bottom)
 {
     Face* gp=findFace(bottom);
     cv::Point2d realBot=bottom;
@@ -458,14 +457,17 @@ void SingleViewModel::compute3DCoordinate(const cv::Point2d &bottom, const cv::P
         realBotVer->setID(-(virtualVers.size()-1)-1);
         bottom3d.z=gp->Height();
     }
-    vbottom=initialVertex(bottom,bottom3d);
+    Vertex* vbottom=initialVertex(bottom,bottom3d);
     if(gp!=NULL)
         vbottom->setBottom(realBotVer);
-    cv::Point2d topInref=getPointOnRefLine(realBot,top);
-    double h=getHeightOnRefLine(topInref);
-    cv::Point3d top3d=realBot3d;
-    top3d.z=h;
-    vtop=initialVertex(top,top3d,realBotVer);
+    return vbottom;
+}
+
+void SingleViewModel::compute3DCoordinate(const cv::Point2d &bottom, const cv::Point2d &top,
+                                          Vertex *&vbottom, Vertex *&vtop)
+{
+    vbottom=compute3DCoordinateofBottom(bottom);
+    vtop=compute3DCoordinate(vbottom,top);
 }
 
 cv::Point3d SingleViewModel::get3DPointOnRefPlane(const cv::Point2d &p)
