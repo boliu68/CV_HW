@@ -1,5 +1,6 @@
 #include "singleviewmodel.h"
 #include "helper.h"
+#include <fstream>
 
 cv::Point2d Vertex::Coor2d()
 {
@@ -113,11 +114,21 @@ bool Face::isVerticalLine(Vertex *v1, Vertex *v2)
     return false;
 }
 
-Vertex* Face::getVertex(int ID)
+Vertex* Face::getVertex(int _ID)
 {
-    if(ID>=4) return vertexs[ID%4];
-    else if(ID<0) return vertexs[ID+4];
-    return vertexs[ID];
+    if(_ID>=4) return vertexs[_ID%4];
+    else if(_ID<0) return vertexs[_ID+4];
+    return vertexs[_ID];
+}
+
+string Face::TexFileName()
+{
+    return textureFileName;
+}
+
+int Face::ID()
+{
+    return id;
 }
 
 bool Face::paraToGround()
@@ -300,17 +311,18 @@ void SingleViewModel::setReferencePoints(const cv::Point2d &x, const cv::Point2d
     zver=initialVertex(z,cv::Point3d(0.0,0.0,zlength));
     referP=zver;
     refLine=getLine(origin->Coor2d(),referP->Coor2d());
-    vector<cv::Point2d> src,dst;
-    src.push_back(origin->Coor2d());
-    src.push_back(x);
+    cv::Point2f src[4],dst[4];
+    src[0]=origin->Coor2d();
+    src[1]=x;
     cv::Vec3d xline=getLine(y,vx);
     cv::Vec3d yline=getLine(x,vy);
     cv::Vec3d p=xline.cross(yline);
-    src.push_back(cv::Point2d(p[0]/p[2],p[1]/p[2]));
-    dst.push_back(cv::Point2d(0.0,0.0));
-    dst.push_back(cv::Point2d(xlength,0.0));
-    dst.push_back(cv::Point2d(xlength,ylength));
-    dst.push_back(cv::Point2d(0.0,ylength));
+    src[2].x=p[0]/p[2];src[2].y=p[1]/p[2];
+    src[3]=y;
+    dst[0].x=0;dst[0].y=0;
+    dst[1].x=xlength;dst[1].y=0.0;
+    dst[2].x=xlength;dst[2].y=ylength;
+    dst[3].x=0;dst[3].y=ylength;
     Homography=cv::getPerspectiveTransform(src,dst);
     refHeight=zlength;
     refLine=getLine(origin->Coor2d(),z);
@@ -363,6 +375,8 @@ double SingleViewModel::getHeightOnRefLine(const cv::Point2d &p)
     cv::Point2d Vz(vz.x/vz.z,vz.y/vz.z);
     vr=cv::norm(Vz-referP->Coor2d());
     vt=cv::norm(Vz-p);
+    if((p-origin->Coor2d()).dot(referP->Coor2d()-origin->Coor2d())<0)
+        return -tb*vr/rb/vt*refHeight;
     return tb*vr/rb/vt*refHeight;
 }
 
@@ -508,6 +522,11 @@ Face* SingleViewModel::generateFace(const vector<Vertex *> &vers)
         face=new Face(vers);
     getFaceTexture(face);
     faces.push_back(face);
+    face->id=faces.size()-1;
+    char fname[20];
+    sprintf(fname,"%.3d.jpg",face->ID());
+    face->Texture().save(fname);
+    face->textureFileName=fname;
     return face;
 }
 
@@ -664,16 +683,16 @@ cv::Point2d SingleViewModel::getCorrespond(const QPoint &src, const Mat &H)
 
 void SingleViewModel::computeTexture(Face *face, const vector<Vertex *> &vers)
 {
-    vector<cv::Point2d> src,dst;
+    cv::Point2f src[4],dst[4];
     for(int i=0;i<4;i++)
-        dst.push_back(vers[i]->Coor2d());
+        dst[i]=vers[i]->Coor2d();
     double w,h;
     w=cv::norm(vers[1]->Coor3d()-vers[0]->Coor3d());
     h=cv::norm(vers[3]->Coor3d()-vers[0]->Coor3d());
-    src.push_back(cv::Point2d(0.0,0.0));
-    src.push_back(cv::Point2d(w,0.0));
-    src.push_back(cv::Point2d(w,h));
-    src.push_back(cv::Point2d(0.0,h));
+    src[0].x=0;src[0].y=0;
+    src[1].x=w;src[1].y=0;
+    src[2].x=w;src[2].y=h;
+    src[3].x=0;src[3].y=h;
     cv::Mat H=cv::getPerspectiveTransform(src,dst);
     face->texture=new QImage(w,h,img->format());
     for(int x=0;x<w;x++)
@@ -685,10 +704,10 @@ void SingleViewModel::computeTexture(Face *face, const vector<Vertex *> &vers)
         }
 }
 
-double Face::getAngle(int ID)
+double Face::getAngle(int _ID)
 {
-    cv::Vec3d d1=vertexs[(ID+1)%4]-vertexs[ID];
-    cv::Vec3d d2=vertexs[(ID+3)%4]-vertexs[ID];
+    cv::Vec3d d1=vertexs[(_ID+1)%4]-vertexs[_ID];
+    cv::Vec3d d2=vertexs[(_ID+3)%4]-vertexs[_ID];
     double cosa=d1.dot(d2)/cv::norm(d1)/cv::norm(d2);
     return acos(cosa);
 }
@@ -903,4 +922,34 @@ void SingleViewModel::getCameraInformation()
     camCenter.x=C.at<double>(0)/C.at<double>(3);
     camCenter.y=C.at<double>(1)/C.at<double>(3);
     camCenter.z=C.at<double>(2)/C.at<double>(3);
+}
+
+void SingleViewModel::generateVRMLCode(const string &fname)
+{
+    ofstream ofile(fname.c_str());
+    ofile<<"#VRML  V2.0  utf8"<<endl;
+    for(int i=0;i<faces.size();i++)
+    {
+        Face *face=faces[i];
+        ofile<<"Shape{"<<endl;
+        ofile<<"    appearance  Appearance{"<<endl;
+        ofile<<"        texture  ImageTexture{"<<endl;
+        ofile<<"           url \""<<face->TexFileName()<<"\""<<endl;
+        ofile<<"        }"<<endl;
+        ofile<<"    }"<<endl;
+        ofile<<"    geometry IndexedFaceSet {"<<endl;
+        ofile<<"       coord Coordinate {"<<endl;
+        ofile<<"         point[";
+        for(int j=3;j>0;j--)
+        {
+            cv::Point3d p=face->getVertex(j)->Coor3d();
+            ofile<<p.x<<" "<<p.y<<" "<<p.z<<", ";
+        }
+        cv::Point3d p=face->getVertex(0)->Coor3d();
+        ofile<<p.x<<" "<<p.y<<" "<<p.z<<"]"<<endl;
+        ofile<<"       }"<<endl;
+        ofile<<"       coordIndex [0,1,2,3,-1]"<<endl;
+        ofile<<"    }"<<endl;
+        ofile<<"}"<<endl;
+    }
 }

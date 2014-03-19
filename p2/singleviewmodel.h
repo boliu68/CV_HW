@@ -2,6 +2,7 @@
 #define SINGLEVIEWMODEL_H
 #include<iostream>
 #include<vector>
+#include<string>
 #include<opencv2/opencv.hpp>
 #include<QPoint>
 #include<QImage>
@@ -45,20 +46,24 @@ private:
     double Height();
     double height;
     double Area();
+    double id;
     bool inFace(const cv::Point2d &p);
     double triangleArea(const cv::Point2d &p1,const cv::Point2d &p2,const cv::Point2d &p3);
     QImage* texture;
     bool isVerticalLine(Vertex* v1,Vertex* v2);
-    double getAngle(int ID);
+    double getAngle(int _ID);
     int vertexWithMinAngle();
     double disPoint2Line(const cv::Point3d &p, const cv::Vec3d &d, const cv::Point3d &begin);
     Vertex* farestPoint2Line(const cv::Vec3d &d, const cv::Point3d &begin);
     Vertex* farestPoint2Plane(const cv::Vec3d &d, const cv::Point3d &begin);
     double disPoint2Plane(const cv::Point3d &p, const cv::Vec3d &d, const cv::Point3d &begin);
     Face(const vector<Vertex*> &vs);
+    string textureFileName;
 public:
-    Vertex* getVertex(int ID);//return the IDst vertex, clock order
+    Vertex* getVertex(int _ID);//return the IDst vertex, clock order
     QImage Texture();//return texture image
+    int ID();
+    string TexFileName();
     ~Face();
 };
 
