@@ -58,6 +58,7 @@ double Vertex::getDistance(const cv::Point2d &p)
 
 Face::Face(const vector<Vertex *> &vs)
 {
+    vertexs=vs;
     if(isVerticalLine(vertexs[0],vertexs[1])||isVerticalLine(vertexs[2],vertexs[3]))
     {
         vertical=true;
@@ -250,6 +251,8 @@ cv::Vec3d SingleViewModel::getLine(const cv::Point3d &p1, const cv::Point3d &p2)
 
 cv::Point3d SingleViewModel::computeVanish(const vector<pair<cv::Point2d,cv::Point2d> > &lines,VANISH v)
 {
+    if(lines.size()<2)
+        return cv::Point3d(0,0,0);
     cv::Point3d vanish=getOneVanish(lines);
     if(v==Xv)
         vx=vanish;
@@ -310,6 +313,8 @@ void SingleViewModel::setReferencePoints(const cv::Point2d &x, const cv::Point2d
     yver=initialVertex(y,cv::Point3d(0.0,ylength,0.0));
     zver=initialVertex(z,cv::Point3d(0.0,0.0,zlength));
     referP=zver;
+    referPx=xver;
+    referPy=yver;
     refLine=getLine(origin->Coor2d(),referP->Coor2d());
     cv::Point2f src[4],dst[4];
     src[0]=origin->Coor2d();
@@ -525,6 +530,7 @@ Face* SingleViewModel::generateFace(const vector<Vertex *> &vers)
     getFaceTexture(face);
     faces.push_back(face);
     face->id=faces.size()-1;
+    face->Texture().save("debug.jpg");
     return face;
 }
 
@@ -697,9 +703,13 @@ void SingleViewModel::computeTexture(Face *face, const vector<Vertex *> &vers)
     cv::Point2f src[4],dst[4];
     for(int i=0;i<4;i++)
         dst[i]=vers[i]->Coor2d();
-    int w,h;
-    w=cv::norm(vers[1]->Coor3d()-vers[0]->Coor3d());
-    h=cv::norm(vers[3]->Coor3d()-vers[0]->Coor3d());
+    double w3d,h3d;
+    w3d=cv::norm(vers[1]->Coor3d()-vers[0]->Coor3d());
+    h3d=cv::norm(vers[3]->Coor3d()-vers[0]->Coor3d());
+    double area2d=face->Area();
+    double area3d=w3d*h3d;
+    double scale=sqrt(area2d/area3d);
+    int w=w3d*scale,h=h3d*scale;
     src[0].x=0;src[0].y=0;
     src[1].x=w;src[1].y=0;
     src[2].x=w;src[2].y=h;
@@ -979,4 +989,44 @@ void SingleViewModel::generateVRMLCode(const string &prefix)
         ofile<<"    }"<<endl;
         ofile<<"}"<<endl;
     }
+}
+
+
+bool SingleViewModel::saveCalibration(const string &prefix)
+{
+    string fname=prefix+"_calibration.txt";
+    ofstream ofile(fname.c_str());
+    if(!ofile.is_open())
+        return false;
+    ofile<<vx.x<<" "<<vx.y<<" "<<vx.z<<endl;
+    ofile<<vy.x<<" "<<vy.y<<" "<<vy.z<<endl;
+    ofile<<vz.x<<" "<<vz.y<<" "<<vz.z<<endl;
+    ofile<<origin->Coor2d().x<<" "<<origin->Coor2d().y<<endl;
+    ofile<<referPx->Coor2d().x<<" "<<referPx->Coor2d().y<<" "<<referPx->Coor3d().x<<endl;
+    ofile<<referPy->Coor2d().x<<" "<<referPy->Coor2d().y<<" "<<referPy->Coor3d().y<<endl;
+    ofile<<referP->Coor2d().x<<" "<<referP->Coor2d().y<<" "<<referP->Coor3d().z<<endl;
+    return true;
+}
+
+bool SingleViewModel::loadCalibration(const string &path,Vertex *&origin,
+                                      Vertex *&xver, Vertex *&yver,Vertex *&zver
+                                      ,cv::Point3d &vanishx,cv::Point3d &vanishy,cv::Point3d &vanishz)
+{
+    ifstream ifile(path.c_str());
+    if(!ifile.is_open())
+        return false;
+    ifile>>vx.x>>vx.y>>vx.z;
+    ifile>>vy.x>>vy.y>>vy.z;
+    ifile>>vz.x>>vz.y>>vz.z;
+    lxy=getLine(vx,vy);
+    cv::Point2d o,px,py,p;
+    double xl,yl,zl;
+    ifile>>o.x>>o.y;
+    ifile>>px.x>>px.y>>xl;
+    ifile>>py.x>>py.y>>yl;
+    ifile>>p.x>>p.y>>zl;
+    setOrigin(o);
+    setReferencePoints(px,py,p,xl,yl,zl,xver,yver,zver);
+    vanishx=vx;vanishy=vy;vanishz=vz;
+    return true;
 }

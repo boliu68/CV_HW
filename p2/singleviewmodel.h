@@ -78,7 +78,7 @@ private:
     vector<Vertex*> vertexs;
     vector<Vertex*> virtualVers;
     vector<Face*> faces;
-    Vertex* origin,*referP;
+    Vertex* origin,*referP,*referPx,*referPy;
     cv::Vec3d refLine;
     double refHeight;
     cv::Mat Homography;
@@ -146,6 +146,8 @@ public:
     Face* generateFace(const vector<Vertex*> &vers);
     //input vertexs in clock order, generate a new face. If fail ,return NULL
     void generateVRMLCode(const string &prefix);
+    bool saveCalibration(const string &prefix);
+    bool loadCalibration(const string &path, Vertex *&origin, Vertex *&xver, Vertex *&yver, Vertex *&zver, cv::Point3d &vanishx, cv::Point3d &vanishy, cv::Point3d &vanishz);
     ~SingleViewModel();
 };
 
