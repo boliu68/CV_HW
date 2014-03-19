@@ -4,7 +4,7 @@
 void MainWindow::on_vanish()
 {
 	//to point the vanish points
-	if(is_vanished == no_done)
+    if(is_vanished == no_done)
 	{
 		QString vp_str = "Y axis";
 		QString info_str = "Please assign the Y axis now.";
@@ -13,7 +13,7 @@ void MainWindow::on_vanish()
 	else if(is_vanished == x_done)
 	{
 		QString vp_str = "Z axis";
-		QString info_str = "Please assign the Y axis now.";
+        QString info_str = "Please assign the Z axis now.";
 		change_vanish(vp_str, info_str, is_vanished);
 	}
 	else if(is_vanished == y_done)

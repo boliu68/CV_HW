@@ -144,7 +144,7 @@ public:
     //compute vertex bottom and top' 3d coordinate, return vertex information in vbottom,vtop
     Face* generateFace(const vector<Vertex*> &vers);
     //input vertexs in clock order, generate a new face. If fail ,return NULL
-    void generateVRMLCode(const string &fname);
+    void generateVRMLCode(const string &prefix);
     ~SingleViewModel();
 };
 

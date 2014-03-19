@@ -185,8 +185,8 @@ cv::Point3d SingleViewModel::Normalize(const cv::Point2d &p)
 cv::Point3d SingleViewModel::Denormalize(const cv::Point3d &np)
 {
     cv::Point3d p;
-    p.x=np.x*(img->width()+img->height())/4.0+img->width()/2.0;
-    p.y=np.y*(img->width()+img->height())/4.0+img->height()/2.0;
+    p.x=np.x*(img->width()+img->height())/4.0+img->width()/2.0*np.z;
+    p.y=np.y*(img->width()+img->height())/4.0+img->height()/2.0*np.z;
     p.z=np.z;
     return p;
 }
@@ -335,7 +335,7 @@ Vertex* SingleViewModel::findNearestVertex(const cv::Point2d &p)
     int index=0;
     for(int i=1;i<vertexs.size();i++)
     {
-        double d=vertexs[1]->getDistance(p);
+        double d=vertexs[i]->getDistance(p);
         if(d<m)
         {
             m=d;
@@ -517,17 +517,12 @@ Face* SingleViewModel::generateFace(const vector<Vertex *> &vers)
         }
         if(!check) return NULL;
         face=generateFaceFrom3Points(vers);
-        getFaceTexture(face);
     }
     if(vers.size()==4)
         face=new Face(vers);
     getFaceTexture(face);
     faces.push_back(face);
     face->id=faces.size()-1;
-    char fname[20];
-    sprintf(fname,"%.3d.jpg",face->ID());
-    face->Texture().save(fname);
-    face->textureFileName=fname;
     return face;
 }
 
@@ -536,7 +531,20 @@ Face* SingleViewModel::generateFaceFrom3Points(const vector<Vertex *> &vers)
     cv::Point3d d1=vers[0]->Coor3d()-vers[1]->Coor3d();
     cv::Point3d d2=vers[2]->Coor3d()-vers[1]->Coor3d();
     cv::Point3d p3d=vers[1]->Coor3d()+d1+d2;
-    cv::Point3d pb3d=p3d;
+    cv::Point2d p2d=compute2DCoordinate(p3d);
+    Vertex* pVer=initialVertex(p2d,p3d);
+    if(abs(p3d.z)>0.0001)
+    {
+        cv::Point3d pb3d=p3d;
+        pb3d.z=0;
+        cv::Point2d pb2d=compute2DCoordinate(pb3d);
+        Vertex* newBotVer=new Vertex(pb2d);
+        newBotVer->setCoor3d(pb3d);
+        virtualVers.push_back(newBotVer);
+        newBotVer->setID(-(virtualVers.size()-1)-1);
+        pVer->setBottom(newBotVer);
+    }
+    /*cv::Point3d pb3d=p3d;
     pb3d.z=0;
     Vertex* pVer;
     if(vers[1]->Bottom()!=NULL)
@@ -567,7 +575,7 @@ Face* SingleViewModel::generateFaceFrom3Points(const vector<Vertex *> &vers)
         cv::Point3d hp2d=getPointOnImage(pb3d);
         cv::Point2d p2d(hp2d.x/hp2d.z,hp2d.y/hp2d.z);
         pVer=initialVertex(p2d,pb3d);
-    }
+    }*/
     vector<Vertex*> facevers=vers;
     facevers.push_back(pVer);
     Face *face=new Face(facevers);
@@ -687,7 +695,7 @@ void SingleViewModel::computeTexture(Face *face, const vector<Vertex *> &vers)
     cv::Point2f src[4],dst[4];
     for(int i=0;i<4;i++)
         dst[i]=vers[i]->Coor2d();
-    double w,h;
+    int w,h;
     w=cv::norm(vers[1]->Coor3d()-vers[0]->Coor3d());
     h=cv::norm(vers[3]->Coor3d()-vers[0]->Coor3d());
     src[0].x=0;src[0].y=0;
@@ -789,6 +797,11 @@ cv::Point3d SingleViewModel::getProjOnPlane(const Point3d &p, const Point3d begi
 
 cv::Point2d SingleViewModel::compute2DCoordinate(const Point3d &p)
 {
+    if(p.z==0)
+    {
+        cv::Point3d hp2d=getPointOnImage(p);
+        return cv::Point2d(hp2d.x/hp2d.z,hp2d.y/hp2d.z);
+    }
     cv::Point3d pb3d=p;
     pb3d.z=0;
     cv::Point3d hpb2d=getPointOnImage(pb3d);
@@ -925,8 +938,19 @@ void SingleViewModel::getCameraInformation()
     camCenter.z=C.at<double>(2)/C.at<double>(3);
 }
 
-void SingleViewModel::generateVRMLCode(const string &fname)
+void SingleViewModel::generateVRMLCode(const string &prefix)
 {
+    for(int i=0;i<faces.size();i++)
+    {
+        Face *face=faces[i];
+        char fID[20];
+        sprintf(fID,"_%.3d.jpg",face->ID());
+        string fname(fID);
+        fname=prefix+fname;
+        face->Texture().save(fname.c_str());
+        face->textureFileName=fname;
+    }
+    string fname=prefix+".wrl";
     ofstream ofile(fname.c_str());
     ofile<<"#VRML  V2.0  utf8"<<endl;
     for(int i=0;i<faces.size();i++)
