@@ -8,9 +8,6 @@ void MainWindow::draw_image()
 	int corner_x = ui->centralWidget->x() + ui->ShowImage->x();
 	int corner_y = ui->centralWidget->y() + ui->ShowImage->y();
 
-	ui->infobox->setFont(QFont("Courier", 20 * std::min(size, 1.0), QFont::Bold, true));
-	ui->infobox->resize(500 * std::min(size, 1.0), 800 * std::min(size, 1.0));
-
 	ui->ShowImage->resize(pimg->width(), pimg->height());
 	ui->Vanish_Point->move(pimg->width() + 20, 20);
 
@@ -23,6 +20,10 @@ void MainWindow::draw_image()
 	ui->infobox->move(pimg->width() + 20, pimg->height() - ui->infobox->height());
 	ui->line->move(pimg->width() + 10, 0);
 	ui->centralWidget->resize(pimg->width() + corner_x + ui->infobox->width() + 30, pimg->height() + corner_y + 30);
+
+	ui->infobox->setFont(QFont("Courier", 20 * std::min(size, 1.0), QFont::Bold, true));
+	ui->infobox->resize(img->width() * std::min(size, 1.0), img->height() * std::min(size, 1.0));
+
 	this->resize(pimg->width() + corner_x + ui->infobox->width() + 30, pimg->height() + corner_y + 30);
 
 	ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
@@ -98,6 +99,7 @@ void MainWindow::draw_pimg()
 				{
 					pter.drawLine(*iter, *(iter + 1));
 				}
+				break;
 			}
 		case x_scale:
 		case y_scale:

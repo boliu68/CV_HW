@@ -4,16 +4,17 @@
 void MainWindow::on_vanish()
 {
 	//to point the vanish points
+	QString info_str = "X Vanish point:\n";
+
 	if(is_vanished == no_done)
 	{
 		QString vp_str = "Y axis";
-		QString info_str = "Please assign the Y axis now.";
 		change_vanish(vp_str, info_str, is_vanished);
+		
 	}
 	else if(is_vanished == x_done)
 	{
 		QString vp_str = "Z axis";
-		QString info_str = "Please assign the Y axis now.";
 		change_vanish(vp_str, info_str, is_vanished);
 	}
 	else if(is_vanished == y_done)
@@ -21,7 +22,6 @@ void MainWindow::on_vanish()
 		//this->ui->Vanish_Point->setText("Z axis");
 		this->ui->Vanish_Point->setEnabled(false);
 		QString vp_str = "Origin";
-		QString info_str = "Please assign the origin point.";
 		change_vanish(vp_str, info_str, is_vanished);
 	}
 	//Input the scale for 3 axis.
@@ -90,9 +90,6 @@ void MainWindow::on_vanish()
 
 void MainWindow::change_vanish(QString vp_str, QString info_str, int xyz)
 {
-	this->ui->Vanish_Point->setText(vp_str);
-	this->ui->infobox->setText(info_str);
-
 	std::vector<QPoint>::iterator iter;
     std::vector<std::pair<cv::Point2d,cv::Point2d> > lines;
 	for(iter  = vanish_lines[xyz].begin(); iter < vanish_lines[xyz].end() && (iter + 1) < vanish_lines[xyz].end(); iter += 2)
@@ -102,20 +99,33 @@ void MainWindow::change_vanish(QString vp_str, QString info_str, int xyz)
 		one_line.second = cv::Point2d((iter+1)->x(), (iter+1)->y());
 		lines.push_back(one_line);
 	}
-
+	QString tmp;
 	switch(xyz)
 	{
 	case no_done:
 		vanish_pt[0] = mod->computeVanish(lines,mod->Xv);
+		info_str += tmp.sprintf("X:(%f,%f,%f)\n", vanish_pt[0].x, vanish_pt[0].y, vanish_pt[0].z);
+		if(std::abs(vanish_pt[0].z) < 0.1)
+			vanish_pt[0].z = 1;
 		is_vanished = x_done;
 		break;
 	case x_done:
 		vanish_pt[1] = mod->computeVanish(lines,mod->Yv);
+		info_str += tmp.sprintf("X:(%f,%f,%f)\n", vanish_pt[0].x, vanish_pt[0].y, vanish_pt[0].z);
+		info_str += tmp.sprintf("Y:(%f,%f,%f)\n", vanish_pt[1].x, vanish_pt[1].y, vanish_pt[1].z);
+		if(std::abs(vanish_pt[1].z) < 0.1)
+			vanish_pt[1].z = 1;
 		is_vanished = y_done;
 		break;
 	case y_done:
 		vanish_pt[2] = mod->computeVanish(lines,mod->Zv);
 		is_vanished = z_done;
+		info_str += tmp.sprintf("X:(%f,%f,%f)\n", vanish_pt[0].x, vanish_pt[0].y, vanish_pt[0].z);
+		info_str += tmp.sprintf("Y:(%f,%f,%f)\n", vanish_pt[1].x, vanish_pt[1].y, vanish_pt[1].z);
+		info_str += tmp.sprintf("Z:(%f,%f,%f)\n", vanish_pt[2].x, vanish_pt[2].y, vanish_pt[2].z);
 		break;
 	}
+
+	this->ui->Vanish_Point->setText(vp_str);
+	this->ui->infobox->setText(info_str);
 }
