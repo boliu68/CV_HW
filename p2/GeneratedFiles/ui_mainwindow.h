@@ -21,6 +21,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
@@ -31,16 +32,20 @@ class Ui_MainWindow
 {
 public:
     QAction *Load_Image;
+    QAction *savecfg;
+    QAction *loadcfg;
     QWidget *centralWidget;
     QLabel *ShowImage;
     QFrame *line;
     QPushButton *Vanish_Point;
     QLabel *infobox;
     QPlainTextEdit *int_scale;
-    QPushButton *D3;
-    QPushButton *texture;
     QPushButton *vrml;
     QPushButton *quit;
+    QRadioButton *cal_bot;
+    QRadioButton *cal_top;
+    QRadioButton *cal_face;
+    QPushButton *texture2;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QToolBar *mainToolBar;
@@ -53,6 +58,11 @@ public:
         MainWindow->resize(828, 539);
         Load_Image = new QAction(MainWindow);
         Load_Image->setObjectName(QStringLiteral("Load_Image"));
+        savecfg = new QAction(MainWindow);
+        savecfg->setObjectName(QStringLiteral("savecfg"));
+        savecfg->setEnabled(false);
+        loadcfg = new QAction(MainWindow);
+        loadcfg->setObjectName(QStringLiteral("loadcfg"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         ShowImage = new QLabel(centralWidget);
@@ -80,26 +90,34 @@ public:
         int_scale = new QPlainTextEdit(centralWidget);
         int_scale->setObjectName(QStringLiteral("int_scale"));
         int_scale->setEnabled(false);
-        int_scale->setGeometry(QRect(590, 30, 104, 31));
+        int_scale->setGeometry(QRect(620, 20, 104, 31));
         QFont font1;
         font1.setItalic(true);
         int_scale->setFont(font1);
-        D3 = new QPushButton(centralWidget);
-        D3->setObjectName(QStringLiteral("D3"));
-        D3->setEnabled(false);
-        D3->setGeometry(QRect(490, 100, 75, 23));
-        texture = new QPushButton(centralWidget);
-        texture->setObjectName(QStringLiteral("texture"));
-        texture->setEnabled(false);
-        texture->setGeometry(QRect(600, 100, 75, 23));
         vrml = new QPushButton(centralWidget);
         vrml->setObjectName(QStringLiteral("vrml"));
         vrml->setEnabled(false);
-        vrml->setGeometry(QRect(490, 150, 75, 23));
+        vrml->setGeometry(QRect(490, 180, 75, 23));
         quit = new QPushButton(centralWidget);
         quit->setObjectName(QStringLiteral("quit"));
         quit->setEnabled(true);
-        quit->setGeometry(QRect(600, 150, 75, 23));
+        quit->setGeometry(QRect(640, 180, 75, 23));
+        cal_bot = new QRadioButton(centralWidget);
+        cal_bot->setObjectName(QStringLiteral("cal_bot"));
+        cal_bot->setEnabled(false);
+        cal_bot->setGeometry(QRect(490, 80, 131, 16));
+        cal_top = new QRadioButton(centralWidget);
+        cal_top->setObjectName(QStringLiteral("cal_top"));
+        cal_top->setEnabled(false);
+        cal_top->setGeometry(QRect(490, 110, 121, 16));
+        cal_face = new QRadioButton(centralWidget);
+        cal_face->setObjectName(QStringLiteral("cal_face"));
+        cal_face->setEnabled(false);
+        cal_face->setGeometry(QRect(490, 140, 101, 16));
+        texture2 = new QPushButton(centralWidget);
+        texture2->setObjectName(QStringLiteral("texture2"));
+        texture2->setEnabled(false);
+        texture2->setGeometry(QRect(630, 100, 91, 31));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -116,14 +134,21 @@ public:
 
         menuBar->addAction(menuFile->menuAction());
         menuFile->addAction(Load_Image);
+        menuFile->addSeparator();
+        menuFile->addAction(savecfg);
+        menuFile->addAction(loadcfg);
 
         retranslateUi(MainWindow);
         QObject::connect(Load_Image, SIGNAL(triggered()), MainWindow, SLOT(onLoadImage()));
         QObject::connect(Vanish_Point, SIGNAL(clicked()), MainWindow, SLOT(on_vanish()));
-        QObject::connect(D3, SIGNAL(clicked()), MainWindow, SLOT(on_3d()));
-        QObject::connect(texture, SIGNAL(clicked()), MainWindow, SLOT(on_texture()));
         QObject::connect(vrml, SIGNAL(clicked()), MainWindow, SLOT(on_vrml()));
         QObject::connect(quit, SIGNAL(clicked()), MainWindow, SLOT(close()));
+        QObject::connect(cal_bot, SIGNAL(clicked()), MainWindow, SLOT(on_bot()));
+        QObject::connect(cal_top, SIGNAL(clicked()), MainWindow, SLOT(on_top()));
+        QObject::connect(cal_face, SIGNAL(clicked()), MainWindow, SLOT(on_face()));
+        QObject::connect(texture2, SIGNAL(clicked()), MainWindow, SLOT(on_texture()));
+        QObject::connect(savecfg, SIGNAL(triggered()), MainWindow, SLOT(save_config()));
+        QObject::connect(loadcfg, SIGNAL(triggered()), MainWindow, SLOT(load_config()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -132,14 +157,19 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
         Load_Image->setText(QApplication::translate("MainWindow", "Load Image", 0));
+        savecfg->setText(QApplication::translate("MainWindow", "Save Config", 0));
+        loadcfg->setText(QApplication::translate("MainWindow", "Load Config", 0));
         ShowImage->setText(QString());
         Vanish_Point->setText(QApplication::translate("MainWindow", "X axis", 0));
         infobox->setText(QApplication::translate("MainWindow", "Welcome!", 0));
-        int_scale->setPlainText(QApplication::translate("MainWindow", "Insert Scale", 0));
-        D3->setText(QApplication::translate("MainWindow", "3D Position", 0));
-        texture->setText(QApplication::translate("MainWindow", "Texture Map", 0));
+        int_scale->setPlainText(QString());
         vrml->setText(QApplication::translate("MainWindow", "VRML", 0));
         quit->setText(QApplication::translate("MainWindow", "Quit", 0));
+        cal_bot->setText(QApplication::translate("MainWindow", "Calculate Bottom", 0));
+        cal_top->setText(QApplication::translate("MainWindow", "Calculate Top", 0));
+        cal_face->setText(QApplication::translate("MainWindow", "Choose Face", 0));
+        texture2->setText(QApplication::translate("MainWindow", "Calculate \n"
+"Texture", 0));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0));
     } // retranslateUi
 

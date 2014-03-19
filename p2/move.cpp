@@ -9,7 +9,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent * e)
 		int x, y;
 		if(click_position(e->x(), e->y(), x, y))
 		{
-			if(is_3d)
+			if(d3_states == top_bottom)
 			{
 				if(!is_bottom)
 				{

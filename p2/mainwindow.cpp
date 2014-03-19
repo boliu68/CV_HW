@@ -17,9 +17,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	isminus_pressed = false;
 	isentr_pressed = false;
 	isback_pressed = false;
-	is_3d = false;
+	d3_states = no_done;
 	is_texture = false;
 	is_bottom = false;
+	is_exist_texture = false;
 
 	vbottom = NULL;
 	vtop = NULL;

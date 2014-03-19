@@ -8,3 +8,4 @@ bool MainWindow::click_position(int x, int y, int& x_, int& y_)
 
 	return (x_ >=0 && y_ >=0 && x_ < img->width() && y_ < img->height());
 }
+

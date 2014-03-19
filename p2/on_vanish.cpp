@@ -4,13 +4,9 @@
 void MainWindow::on_vanish()
 {
 	//to point the vanish points
-<<<<<<< HEAD
 	QString info_str = "X Vanish point:\n";
 
 	if(is_vanished == no_done)
-=======
-    if(is_vanished == no_done)
->>>>>>> 51373df5a5fc6cebd07d7e7ef9c7e71a1c172ffb
 	{
 		QString vp_str = "Y axis";
 		change_vanish(vp_str, info_str, is_vanished);
@@ -19,10 +15,6 @@ void MainWindow::on_vanish()
 	else if(is_vanished == x_done)
 	{
 		QString vp_str = "Z axis";
-<<<<<<< HEAD
-=======
-        QString info_str = "Please assign the Z axis now.";
->>>>>>> 51373df5a5fc6cebd07d7e7ef9c7e71a1c172ffb
 		change_vanish(vp_str, info_str, is_vanished);
 	}
 	else if(is_vanished == y_done)
@@ -82,10 +74,11 @@ void MainWindow::on_vanish()
 					ui->infobox->setText(info);
 					is_vanished = all_done;
 
-					ui->D3->setEnabled(true);
-					ui->texture->setEnabled(true);
+					ui->cal_bot->setEnabled(true);
+					ui->cal_face->setEnabled(true);
+					ui->cal_top->setEnabled(true);
 					ui->vrml->setEnabled(true);
-
+					ui->savecfg->setEnabled(true);
 					break;
 				}
 			}
@@ -112,25 +105,54 @@ void MainWindow::change_vanish(QString vp_str, QString info_str, int xyz)
 	{
 	case no_done:
 		vanish_pt[0] = mod->computeVanish(lines,mod->Xv);
-		info_str += tmp.sprintf("X:(%f,%f,%f)\n", vanish_pt[0].x, vanish_pt[0].y, vanish_pt[0].z);
-		if(std::abs(vanish_pt[0].z) < 0.1)
-			vanish_pt[0].z = 1;
-		is_vanished = x_done;
+		if(vanish_pt[0].x == 0 && vanish_pt[0].y == 0 && vanish_pt[0].z == 0)
+		{
+			QMessageBox::information(this,
+                                     tr("Calculating vanishing point error."),
+                                     tr("Calculating vanishing point error"));
+		}
+		else
+		{
+			info_str += tmp.sprintf("X:(%f,%f,%f)\n", vanish_pt[0].x, vanish_pt[0].y, vanish_pt[0].z);
+			if(std::abs(vanish_pt[0].z) < 0.01)
+				vanish_pt[0].z = 1;
+			is_vanished = x_done;
+		}
 		break;
 	case x_done:
 		vanish_pt[1] = mod->computeVanish(lines,mod->Yv);
-		info_str += tmp.sprintf("X:(%f,%f,%f)\n", vanish_pt[0].x, vanish_pt[0].y, vanish_pt[0].z);
-		info_str += tmp.sprintf("Y:(%f,%f,%f)\n", vanish_pt[1].x, vanish_pt[1].y, vanish_pt[1].z);
-		if(std::abs(vanish_pt[1].z) < 0.1)
-			vanish_pt[1].z = 1;
-		is_vanished = y_done;
+		if(vanish_pt[1].x == 0 && vanish_pt[1].y == 0 && vanish_pt[1].z == 0)
+		{
+			QMessageBox::information(this,
+				tr("Calculating vanishing point error."),
+				tr("Calculating vanishing point error"));
+		}
+		else
+		{
+			info_str += tmp.sprintf("X:(%f,%f,%f)\n", vanish_pt[0].x, vanish_pt[0].y, vanish_pt[0].z);
+			info_str += tmp.sprintf("Y:(%f,%f,%f)\n", vanish_pt[1].x, vanish_pt[1].y, vanish_pt[1].z);
+			if(std::abs(vanish_pt[1].z) < 0.01)
+				vanish_pt[1].z = 1;
+			is_vanished = y_done;
+		}
 		break;
 	case y_done:
 		vanish_pt[2] = mod->computeVanish(lines,mod->Zv);
-		is_vanished = z_done;
-		info_str += tmp.sprintf("X:(%f,%f,%f)\n", vanish_pt[0].x, vanish_pt[0].y, vanish_pt[0].z);
-		info_str += tmp.sprintf("Y:(%f,%f,%f)\n", vanish_pt[1].x, vanish_pt[1].y, vanish_pt[1].z);
-		info_str += tmp.sprintf("Z:(%f,%f,%f)\n", vanish_pt[2].x, vanish_pt[2].y, vanish_pt[2].z);
+		if(vanish_pt[2].x == 0 && vanish_pt[2].y == 0 && vanish_pt[2].z == 0)
+		{
+			QMessageBox::information(this,
+				tr("Calculating vanishing point error."),
+				tr("Calculating vanishing point error"));
+		}
+		else
+		{
+			is_vanished = z_done;
+			if(std::abs(vanish_pt[2].z) < 0.01)
+				vanish_pt[2].z = 1;
+			info_str += tmp.sprintf("X:(%f,%f,%f)\n", vanish_pt[0].x, vanish_pt[0].y, vanish_pt[0].z);
+			info_str += tmp.sprintf("Y:(%f,%f,%f)\n", vanish_pt[1].x, vanish_pt[1].y, vanish_pt[1].z);
+			info_str += tmp.sprintf("Z:(%f,%f,%f)\n", vanish_pt[2].x, vanish_pt[2].y, vanish_pt[2].z);
+		}
 		break;
 	}
 

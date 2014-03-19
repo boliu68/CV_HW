@@ -15,6 +15,7 @@
 #include <QFont>
 #include <QRegExp>
 #include <singleviewmodel.h>
+#include "show_texture.h"
 
 
 namespace Ui {
@@ -45,9 +46,10 @@ private:
 	bool isminus_pressed;
 	bool isentr_pressed;
 	bool isback_pressed;
-	bool is_3d;
+	int d3_states;
 	bool is_bottom;
 	bool is_texture;
+	bool is_exist_texture;
 
 	double size;
 	std::vector<QPoint> vanish_lines[3];
@@ -70,13 +72,15 @@ private:
 
 	vector<Vertex*> polygon_vertex;
 	vector<cv::Point2d> polygon_point;
-	vector<Face*> gen_face;
+	Face* gen_face;
 
 	void draw_image();
 	void draw_text();
 	void draw_pimg();
 	void resize_widget();
 	void change_vanish(QString vp_str, QString info_str, int xyz);
+	void draw_line_cross(QPainter* pter, double x1, double y1, double x2, double y2);
+	void restart();
 
 	bool click_position(int x, int y, int& x_, int& y_);
 
@@ -89,8 +93,14 @@ protected:
 private slots:
 	void onLoadImage();
 	void on_vanish();
-	void on_3d();
+	//void on_3d();
+	void on_top();
+	void on_bot();
+	void on_face();
 	void on_texture();
+	void save_config();
+	void load_config();
+	void on_vrml();
 };
 
 #endif // MAINWINDOW_H

@@ -10,11 +10,14 @@ void MainWindow::draw_image()
 
 	ui->ShowImage->resize(pimg->width(), pimg->height());
 	ui->Vanish_Point->move(pimg->width() + 20, 20);
+	
+	ui->cal_bot->move(pimg->width() + 20, ui->Vanish_Point->y() + ui->cal_bot->height() + 30);
+	ui->cal_top->move(pimg->width() + 20, ui->cal_bot->y() + ui->cal_top->height() + 30);
+	ui->cal_face->move(pimg->width() + 20, ui->cal_top->y() + ui->cal_face->height() + 30);
 
-	ui->D3->move(pimg->width() + 20, ui->Vanish_Point->y() + ui->D3->height() + 20);
-	ui->texture->move(pimg->width() + 50 + ui->texture->width(), ui->Vanish_Point->y() + ui->D3->height() + 20);
-	ui->vrml->move(pimg->width() + 20, ui->D3->y() + ui->vrml->height() + 20);
-	ui->quit->move(pimg->width() + 50 + ui->vrml->width(), ui->D3->y() + ui->vrml->height() + 20);
+	ui->texture2->move(ui->cal_face->x() + ui->cal_face->width() + 20, ui->cal_face->y() - 5);
+	ui->vrml->move(pimg->width() + 20, ui->cal_face->y() + ui->vrml->height() + 20);
+	ui->quit->move(pimg->width() + 50 + ui->vrml->width(), ui->cal_face->y() + ui->vrml->height() + 20);
 
 	ui->int_scale->move(pimg->width() + 20 + ui->int_scale->width(), 20);
 	ui->infobox->move(pimg->width() + 20, pimg->height() - ui->infobox->height());
@@ -22,7 +25,7 @@ void MainWindow::draw_image()
 	ui->centralWidget->resize(pimg->width() + corner_x + ui->infobox->width() + 30, pimg->height() + corner_y + 30);
 
 	ui->infobox->setFont(QFont("Courier", 20 * std::min(size, 1.0), QFont::Bold, true));
-	ui->infobox->resize(img->width() * std::min(size, 1.0), img->height() * std::min(size, 1.0));
+	ui->infobox->resize(img->width() * 0.5 * std::min(size, 1.0), img->height() * 0.5 * std::min(size, 1.0));
 
 	this->resize(pimg->width() + corner_x + ui->infobox->width() + 30, pimg->height() + corner_y + 30);
 
@@ -41,7 +44,7 @@ void MainWindow::draw_pimg()
 	QPainter pter(pimg);
 	pter.setFont(QFont("Courier", 8, QFont::Bold, true));
 
-	if(is_texture)
+	if(d3_states == point_face)
 	{
 		pter.setPen(QPen(Qt::green, 4 * size));
 		
@@ -56,15 +59,16 @@ void MainWindow::draw_pimg()
 			}
 		}
 	}
-	else if(is_3d)
+	else if(d3_states == top_bottom)
 	{
-
 		if(!is_bottom)
 		{
 			//draw the z axis line
 			pter.setPen(QPen(Qt::white, 4 * size));
-			if(vbottom == NULL) pter.drawText(QPoint(bottom.x, bottom.y), "Bottom"); //write "bottom"
-			pter.drawLine(QPoint(bottom.x, bottom.y), QPoint(vanish_pt[2].x / vanish_pt[2].z, vanish_pt[2].y / vanish_pt[2].z));
+			//if(vbottom == NULL) 
+			pter.drawText(QPoint(bottom.x, bottom.y), "Bottom"); //write "bottom"
+			
+			draw_line_cross(&pter, bottom.x, bottom.y, vanish_pt[2].x / vanish_pt[2].z, vanish_pt[2].y / vanish_pt[2].z);
 		}
 
 		pter.setPen(QPen(Qt::green, 20 * size));
@@ -105,9 +109,10 @@ void MainWindow::draw_pimg()
 		case y_scale:
 		case z_scale:
 			{
-				pter.setPen(QPen(Qt::yellow, 4 * size));
 				//draw the line between origin and vanish point.
-				pter.drawLine(origin_pt, QPoint(vanish_pt[is_vanished - x_scale].x / vanish_pt[is_vanished - x_scale].z, vanish_pt[is_vanished - x_scale].y / vanish_pt[is_vanished - x_scale].z));
+				pter.setPen(QPen(Qt::white, 4 * size));
+				draw_line_cross(&pter, origin_pt.x(), origin_pt.y(), vanish_pt[is_vanished - x_scale].x / vanish_pt[is_vanished - x_scale].z, vanish_pt[is_vanished - x_scale].y / vanish_pt[is_vanished - x_scale].z);
+				
 				pter.setPen(QPen(Qt::red, 20 * size));
 				pter.drawPoint(QPoint(proj_pt.x, proj_pt.y));
 				pter.setPen(QPen(Qt::green, 30 * size));
@@ -169,11 +174,11 @@ void MainWindow::draw_pimg()
 	}
 
 
-	if(vtop != NULL)
-	{//end of the 3d
-		vtop = NULL;
-		vbottom = NULL;
-	}
+	//if(vtop != NULL)
+	//{//end of the 3d
+		//vtop = NULL;
+		//vbottom = NULL;
+	//}
 
 	pter.end();
 
@@ -223,4 +228,12 @@ void MainWindow::draw_text()
 	}
 
 	pter.end();
+}
+
+void MainWindow::draw_line_cross(QPainter* pter, double x1, double y1, double x2, double y2)
+{
+	double ex_y1 = (0 - x1) / (x2 - x1) * (y2 - y1) + y1;
+	double ex_y2 = (img->width() - x1) / (x2 - x1) * (y2 - y1) + y1;
+	
+	pter->drawLine(0, ex_y1, img->width(), ex_y2);
 }

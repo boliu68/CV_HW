@@ -86,8 +86,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>590</x>
-      <y>30</y>
+      <x>620</x>
+      <y>20</y>
       <width>104</width>
       <height>31</height>
      </rect>
@@ -98,39 +98,7 @@
      </font>
     </property>
     <property name="plainText">
-     <string>Insert Scale</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="D3">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>490</x>
-      <y>100</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>3D Position</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="texture">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>600</x>
-      <y>100</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Texture Map</string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="vrml">
@@ -140,7 +108,7 @@
     <property name="geometry">
      <rect>
       <x>490</x>
-      <y>150</y>
+      <y>180</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -155,14 +123,79 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>150</y>
+      <x>640</x>
+      <y>180</y>
       <width>75</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
      <string>Quit</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="cal_bot">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>80</y>
+      <width>131</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Calculate Bottom</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="cal_top">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>110</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Calculate Top</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="cal_face">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>140</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Choose Face</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="texture2">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>100</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Calculate 
+Texture</string>
     </property>
    </widget>
   </widget>
@@ -172,7 +205,7 @@
      <x>0</x>
      <y>0</y>
      <width>828</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -180,6 +213,9 @@
      <string>File</string>
     </property>
     <addaction name="Load_Image"/>
+    <addaction name="separator"/>
+    <addaction name="savecfg"/>
+    <addaction name="loadcfg"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -195,6 +231,19 @@
   <action name="Load_Image">
    <property name="text">
     <string>Load Image</string>
+   </property>
+  </action>
+  <action name="savecfg">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Save Config</string>
+   </property>
+  </action>
+  <action name="loadcfg">
+   <property name="text">
+    <string>Load Config</string>
    </property>
   </action>
  </widget>
@@ -234,38 +283,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>D3</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_3d()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>527</x>
-     <y>144</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>413</x>
-     <y>269</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>texture</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_texture()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>637</x>
-     <y>144</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>413</x>
-     <y>269</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>vrml</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
@@ -273,7 +290,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>564</x>
-     <y>189</y>
+     <y>235</y>
     </hint>
     <hint type="destinationlabel">
      <x>413</x>
@@ -288,8 +305,104 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>637</x>
-     <y>194</y>
+     <x>640</x>
+     <y>235</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>413</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cal_bot</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_bot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>527</x>
+     <y>128</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>650</x>
+     <y>162</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cal_top</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_top()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>530</x>
+     <y>158</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>723</x>
+     <y>187</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cal_face</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_face()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>532</x>
+     <y>188</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>740</x>
+     <y>124</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>texture2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_texture()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>630</x>
+     <y>163</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>746</x>
+     <y>80</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>savecfg</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>save_config()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>413</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>loadcfg</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>load_config()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>413</x>
@@ -301,8 +414,12 @@
  <slots>
   <slot>onLoadImage()</slot>
   <slot>on_vanish()</slot>
-  <slot>on_3d()</slot>
   <slot>on_texture()</slot>
   <slot>on_vrml()</slot>
+  <slot>on_bot()</slot>
+  <slot>on_top()</slot>
+  <slot>on_face()</slot>
+  <slot>save_config()</slot>
+  <slot>load_config()</slot>
  </slots>
 </ui>

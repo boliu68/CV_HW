@@ -23,14 +23,17 @@ SOURCES += main.cpp\
     keyboard.cpp \
     draw_img.cpp \
     click.cpp \
-    3d.cpp
+    3d.cpp \
+    show_texture.cpp
 
 HEADERS  += mainwindow.h \
     singleviewmodel.h \
     helper.h \
-    states.h
+    states.h \
+    show_texture.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    show_texture.ui
 
 OPENCVENABLE = 1
 !include(QTFlagsOpenCV.pri) {

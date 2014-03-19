@@ -11,4 +11,8 @@
 #define z_scale 6
 #define all_done -1
 
+#define only_bottom 7
+#define top_bottom 8
+#define point_face 9
+
 #endif
