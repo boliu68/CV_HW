@@ -1008,7 +1008,7 @@ bool SingleViewModel::saveCalibration(const string &prefix)
     return true;
 }
 
-bool SingleViewModel::loadCalibration(const string &path,Vertex *&origin,
+bool SingleViewModel::loadCalibration(const string &path,Vertex *&_origin,
                                       Vertex *&xver, Vertex *&yver,Vertex *&zver
                                       ,cv::Point3d &vanishx,cv::Point3d &vanishy,cv::Point3d &vanishz)
 {
@@ -1028,5 +1028,6 @@ bool SingleViewModel::loadCalibration(const string &path,Vertex *&origin,
     setOrigin(o);
     setReferencePoints(px,py,p,xl,yl,zl,xver,yver,zver);
     vanishx=vx;vanishy=vy;vanishz=vz;
+    _origin=origin;
     return true;
 }
