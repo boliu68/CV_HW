@@ -172,7 +172,7 @@
      <x>0</x>
      <y>0</y>
      <width>828</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -228,7 +228,7 @@
      <y>85</y>
     </hint>
     <hint type="destinationlabel">
-     <x>380</x>
+     <x>413</x>
      <y>269</y>
     </hint>
    </hints>
@@ -272,8 +272,8 @@
    <slot>on_vrml()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>747</x>
-     <y>144</y>
+     <x>564</x>
+     <y>189</y>
     </hint>
     <hint type="destinationlabel">
      <x>413</x>

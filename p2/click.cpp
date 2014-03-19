@@ -132,8 +132,8 @@ void MainWindow::mousePressEvent(QMouseEvent * e)
 			{				
 				if(is_texture)
 				{
-					//Vertex * nearest = mod->findNearestVertex(cv::Point2d(x,y));
-					Vertex* nearest = store_vertex[polygon_vertex.size()];
+                    Vertex * nearest = mod->findNearestVertex(cv::Point2d(x,y));
+                    //Vertex* nearest = store_vertex[polygon_vertex.size()];
 					vector<Vertex *>::iterator iter= polygon_vertex.begin();
 					while(iter != polygon_vertex.end())
 					{

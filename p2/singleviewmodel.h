@@ -78,7 +78,7 @@ private:
     vector<Vertex*> vertexs;
     vector<Vertex*> virtualVers;
     vector<Face*> faces;
-    Vertex* origin,*referP;
+    Vertex* origin,*referP,*referPx,*referPy;
     cv::Vec3d refLine;
     double refHeight;
     cv::Mat Homography;
@@ -135,16 +135,19 @@ public:
     //find the projection of p in line from bottom to vanish point v in z direction
     Vertex* findNearestVertex(const cv::Point2d &p);
     //find vertex which has been computed and is nearest to p in image space
-    Vertex* compute3DCoordinate(Vertex *bottom, cv::Point2d &top);
+    Vertex* compute3DCoordinate(Vertex *bottom, const cv::Point2d &top);
     //compute vertex top's 3d coordinate by bottom which has been computed
     Face* findFace(const cv::Point2d &p);
     //find the face which has been generated and contains p, if no face, return null
     void compute3DCoordinate(const cv::Point2d &bottom,const cv::Point2d &top,
                              Vertex* &vbottom,Vertex* &vtop);
+    Vertex* compute3DCoordinateofBottom(const cv::Point2d &bottom);
     //compute vertex bottom and top' 3d coordinate, return vertex information in vbottom,vtop
     Face* generateFace(const vector<Vertex*> &vers);
     //input vertexs in clock order, generate a new face. If fail ,return NULL
-    void generateVRMLCode(const string &fname);
+    void generateVRMLCode(const string &prefix);
+    bool saveCalibration(const string &prefix);
+    bool loadCalibration(const string &path, Vertex *&origin, Vertex *&xver, Vertex *&yver, Vertex *&zver, cv::Point3d &vanishx, cv::Point3d &vanishy, cv::Point3d &vanishz);
     ~SingleViewModel();
 };
 
