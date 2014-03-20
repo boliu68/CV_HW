@@ -12,7 +12,7 @@ void transQColorFormat(QRgb qrgb, int color[3])
     color[1]=qGreen(qrgb);
     color[2]=qBlue(qrgb);
 }
-void transQColorFormat(QRgb qrgb, cv::Vec3d color)
+void transQColorFormat(QRgb qrgb, cv::Vec3d &color)
 {
     color[0]=qRed(qrgb);
     color[1]=qGreen(qrgb);

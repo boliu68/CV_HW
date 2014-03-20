@@ -38,6 +38,7 @@ class Face
 friend class SingleViewModel;
 private:
     vector<Vertex*> vertexs;
+    vector<Vertex*> realvertexs;
     double area;
     bool ground;
     bool vertical;
@@ -59,6 +60,9 @@ private:
     double disPoint2Plane(const cv::Point3d &p, const cv::Vec3d &d, const cv::Point3d &begin);
     Face(const vector<Vertex*> &vs);
     string textureFileName;
+    void computeArea();
+    void setRealVertexs(const vector<Vertex*> &vs);
+    double RealArea();
 public:
     Vertex* getVertex(int _ID);//return the IDst vertex, clock order
     QImage Texture();//return texture image
@@ -97,7 +101,7 @@ private:
     double getHeightOnRefLine(const cv::Point2d &p);
     cv::Point2d getPointOnRefLine(const cv::Point2d &bottom,const cv::Point2d &top);
     cv::Point2d getPointOnRefPlane(const cv::Point2d &p, Face *groundplane);
-    cv::Point3d getPointOnImage(const cv::Point3d &p);
+    cv::Point2d getPointOnImage(const cv::Point2d &p);
     bool inSameLine(const cv::Point2d &p1,const cv::Point2d &p2,const cv::Point2d &p3);
     cv::Point3d get3DPointOnRefPlane(const cv::Point2d &p);
     //cv::Vec3d selectVanishLine(const cv::Point2d &p1,const cv::Point2d &p2);
@@ -107,7 +111,7 @@ private:
     Face* generateFaceFrom3Points(const vector<Vertex*> &vers);
     //require clock order
     void getFaceTexture(Face *face);
-    void computeTexture(Face *face,const vector<Vertex*> &vers);
+    void computeTexture(Face *face);
     cv::Point2d getCorrespond(const QPoint &src,const cv::Mat &H);
     QRgb interpolate(const cv::Point2d &p);
     cv::Point3d getProjOnLine(const cv::Point3d &p,const cv::Point3d begin,const cv::Vec3d &d);

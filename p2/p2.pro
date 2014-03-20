@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     draw_img.cpp \
     click.cpp \
     3d.cpp \
-    show_texture.cpp
+    show_texture.cpp \
+    config.cpp
 
 HEADERS  += mainwindow.h \
     singleviewmodel.h \
