@@ -90,13 +90,8 @@ Face::Face(const vector<Vertex *> &vs)
         for(int i=0;i<4;i++)
             height+=vertexs[i]->Coor3d().z;
         height/=4.0;
-    }
-    cv::Vec2d d1=vertexs[1]->Coor2d()-vertexs[0]->Coor2d();
-    cv::Vec2d d2=vertexs[3]->Coor2d()-vertexs[0]->Coor2d();
-    cv::Vec3d D1(d1[0],d1[1],0);
-    cv::Vec3d D2(d2[0],d2[1],0);
-    cv::Vec3d d3=D1.cross(D2);
-    area=cv::norm(d3);
+    }  
+    computeArea();
 }
 
 bool Face::Vertical()
@@ -145,6 +140,37 @@ double Face::Height()
 double Face::Area()
 {
     return area;
+}
+
+void Face::computeArea()
+{
+    cv::Vec2d d1=vertexs[1]->Coor2d()-vertexs[0]->Coor2d();
+    cv::Vec2d d2=vertexs[3]->Coor2d()-vertexs[0]->Coor2d();
+    cv::Vec2d d3=vertexs[1]->Coor2d()-vertexs[2]->Coor2d();
+    cv::Vec2d d4=vertexs[3]->Coor2d()-vertexs[2]->Coor2d();
+    cv::Vec3d D1(d1[0],d1[1],0);
+    cv::Vec3d D2(d2[0],d2[1],0);
+    cv::Vec3d D3(d3[0],d3[1],0);
+    cv::Vec3d D4(d4[0],d4[1],0);
+    area=(cv::norm(D1.cross(D2))+cv::norm(D3.cross(D4)))/2;
+}
+
+double Face::RealArea()
+{
+    cv::Vec2d d1=realvertexs[1]->Coor2d()-realvertexs[0]->Coor2d();
+    cv::Vec2d d2=realvertexs[3]->Coor2d()-realvertexs[0]->Coor2d();
+    cv::Vec2d d3=realvertexs[1]->Coor2d()-realvertexs[2]->Coor2d();
+    cv::Vec2d d4=realvertexs[3]->Coor2d()-realvertexs[2]->Coor2d();
+    cv::Vec3d D1(d1[0],d1[1],0);
+    cv::Vec3d D2(d2[0],d2[1],0);
+    cv::Vec3d D3(d3[0],d3[1],0);
+    cv::Vec3d D4(d4[0],d4[1],0);
+    return (cv::norm(D1.cross(D2))+cv::norm(D3.cross(D4)))/2;
+}
+
+void Face::setRealVertexs(const vector<Vertex *> &vs)
+{
+    realvertexs=vs;
 }
 
 double Face::triangleArea(const cv::Point2d &p1, const cv::Point2d &p2, const cv::Point2d &p3)
@@ -487,15 +513,14 @@ cv::Point3d SingleViewModel::get3DPointOnRefPlane(const cv::Point2d &p)
     return result;
 }
 
-cv::Point3d SingleViewModel::getPointOnImage(const cv::Point3d &p)
+cv::Point2d SingleViewModel::getPointOnImage(const cv::Point2d &p)
 {
     cv::Mat hpRef(3,1,CV_64F);
-    hpRef.at<double>(0)=p.x;hpRef.at<double>(1)=p.y;hpRef.at<double>(2)=p.z;
+    hpRef.at<double>(0)=p.x;hpRef.at<double>(1)=p.y;hpRef.at<double>(2)=1;
     cv::Mat hp=Homography.inv()*hpRef;
-    cv::Point3d result;
-    result.x=hp.at<double>(0);
-    result.y=hp.at<double>(1);
-    result.z=hp.at<double>(2);
+    cv::Point2d result;
+    result.x=hp.at<double>(0)/hp.at<double>(2);
+    result.y=hp.at<double>(1)/hp.at<double>(2);
     return result;
 }
 
@@ -613,11 +638,13 @@ void SingleViewModel::getFaceTexture(Face *face)
             cv::Point2d p32d(hp32d[0]/hp32d[2],hp32d[1]/hp32d[2]);*/
             cv::Point2d p02d=compute2DCoordinate(p03d);
             cv::Point2d p32d=compute2DCoordinate(p33d);
-            Vertex ver0(p02d);ver0.setCoor3d(p03d);
-            Vertex ver3(p32d);ver3.setCoor3d(p33d);
-            vers.push_back(&ver0);vers.push_back(face->getVertex(1));
-            vers.push_back(face->getVertex(2));vers.push_back(&ver3);
-            computeTexture(face,vers);
+            Vertex *ver0=new Vertex(p02d);ver0->setCoor3d(p03d);
+            Vertex *ver3=new Vertex(p32d);ver3->setCoor3d(p33d);
+            vers.push_back(ver0);vers.push_back(face->getVertex(1));
+            vers.push_back(face->getVertex(2));vers.push_back(ver3);
+            face->setRealVertexs(vers);
+            virtualVers.push_back(ver0);ver0->setID(-(virtualVers.size()+1));
+            virtualVers.push_back(ver3);ver3->setID(-(virtualVers.size()+1));
         }
         else
         {
@@ -635,11 +662,12 @@ void SingleViewModel::getFaceTexture(Face *face)
             cv::Point2d p22d(hp22d[0]/hp22d[2],hp22d[1]/hp22d[2]);*/
             cv::Point2d p12d=compute2DCoordinate(p13d);
             cv::Point2d p22d=compute2DCoordinate(p23d);
-            Vertex ver1(p12d);ver1.setCoor3d(p13d);
-            Vertex ver2(p22d);ver2.setCoor3d(p23d);
-            vers.push_back(face->getVertex(0));vers.push_back(&ver1);
-            vers.push_back(&ver2);vers.push_back(face->getVertex(3));
-            computeTexture(face,vers);
+            Vertex *ver1=new Vertex(p12d);ver1->setCoor3d(p13d);
+            Vertex *ver2=new Vertex(p22d);ver2->setCoor3d(p23d);
+            vers.push_back(face->getVertex(0));vers.push_back(ver1);
+            vers.push_back(ver2);vers.push_back(face->getVertex(3));
+            virtualVers.push_back(ver1);ver1->setID(-(virtualVers.size()+1));
+            virtualVers.push_back(ver2);ver2->setID(-(virtualVers.size()+1));
         }
     }
     else
@@ -663,12 +691,18 @@ void SingleViewModel::getFaceTexture(Face *face)
         cv::Point2d p02d=compute2DCoordinate(p03d);
         cv::Point2d p22d=compute2DCoordinate(p23d);
         cv::Point2d p32d=compute2DCoordinate(p33d);
-        Vertex ver0(p02d),ver2(p22d),ver3(p32d);
-        ver0.setCoor3d(p03d);ver2.setCoor3d(p23d);ver3.setCoor3d(p33d);
-        vers.push_back(&ver0);vers.push_back(ver1);
-        vers.push_back(&ver2);vers.push_back(&ver3);
-        computeTexture(face,vers);
+        Vertex *ver0=new Vertex(p02d);
+        Vertex *ver2=new Vertex(p22d);
+        Vertex *ver3=new Vertex(p32d);
+        ver0->setCoor3d(p03d);ver2->setCoor3d(p23d);ver3->setCoor3d(p33d);
+        vers.push_back(ver0);vers.push_back(ver1);
+        vers.push_back(ver2);vers.push_back(ver3);
+        virtualVers.push_back(ver0);ver0->setID(-(virtualVers.size()+1));
+        virtualVers.push_back(ver2);ver2->setID(-(virtualVers.size()+1));
+        virtualVers.push_back(ver3);ver3->setID(-(virtualVers.size()+1));
     }
+    face->setRealVertexs(vers);
+    computeTexture(face);
 }
 
 QRgb SingleViewModel::interpolate(const cv::Point2d &p)
@@ -698,15 +732,15 @@ cv::Point2d SingleViewModel::getCorrespond(const QPoint &src, const Mat &H)
     return cv::Point2d(dstp.at<double>(0)/dstp.at<double>(2),dstp.at<double>(1)/dstp.at<double>(2));
 }
 
-void SingleViewModel::computeTexture(Face *face, const vector<Vertex *> &vers)
+void SingleViewModel::computeTexture(Face *face)
 {
     cv::Point2f src[4],dst[4];
     for(int i=0;i<4;i++)
-        dst[i]=vers[i]->Coor2d();
+        dst[i]=face->realvertexs[i]->Coor2d();
     double w3d,h3d;
-    w3d=cv::norm(vers[1]->Coor3d()-vers[0]->Coor3d());
-    h3d=cv::norm(vers[3]->Coor3d()-vers[0]->Coor3d());
-    double area2d=face->Area();
+    w3d=cv::norm(face->realvertexs[1]->Coor3d()-face->realvertexs[0]->Coor3d());
+    h3d=cv::norm(face->realvertexs[3]->Coor3d()-face->realvertexs[0]->Coor3d());
+    double area2d=face->RealArea();
     double area3d=w3d*h3d;
     double scale=sqrt(area2d/area3d);
     int w=w3d*scale,h=h3d*scale;
@@ -811,13 +845,13 @@ cv::Point2d SingleViewModel::compute2DCoordinate(const Point3d &p)
 {
     if(p.z==0)
     {
-        cv::Point3d hp2d=getPointOnImage(p);
-        return cv::Point2d(hp2d.x/hp2d.z,hp2d.y/hp2d.z);
+        cv::Point2d p2d=getPointOnImage(cv::Point2d(p.x,p.y));
+        return p2d;
     }
     cv::Point3d pb3d=p;
     pb3d.z=0;
-    cv::Point3d hpb2d=getPointOnImage(pb3d);
-    cv::Vec3d lb=getLine(hpb2d,origin->Coor2d());
+    cv::Point2d pb2d=getPointOnImage(cv::Point2d(pb3d.x,pb3d.y));
+    cv::Vec3d lb=getLine(pb2d,origin->Coor2d());
     cv::Vec3d v=lb.cross(lxy);
     double rb,t;
     rb=norm(referP->Coor2d()-origin->Coor2d());
@@ -837,7 +871,7 @@ cv::Point2d SingleViewModel::compute2DCoordinate(const Point3d &p)
     }
     pl2d=origin->Coor2d()+t/rb*(referP->Coor2d()-origin->Coor2d());
     cv::Vec3d l=getLine(v,pl2d);
-    cv::Vec3d lver=getLine(vz,hpb2d);
+    cv::Vec3d lver=getLine(vz,pb2d);
     cv::Vec3d hp2d=l.cross(lver);
     return cv::Point2d(hp2d[0]/hp2d[2],hp2d[1]/hp2d[2]);
 }
@@ -964,7 +998,7 @@ void SingleViewModel::generateVRMLCode(const string &prefix)
     }
     string fname=prefix+".wrl";
     ofstream ofile(fname.c_str());
-    ofile<<"#VRML  V2.0  utf8"<<endl;
+    ofile<<"#VRML V2.0 utf8"<<endl;
     for(int i=0;i<faces.size();i++)
     {
         Face *face=faces[i];
@@ -979,10 +1013,10 @@ void SingleViewModel::generateVRMLCode(const string &prefix)
         ofile<<"         point[";
         for(int j=3;j>0;j--)
         {
-            cv::Point3d p=face->getVertex(j)->Coor3d();
+            cv::Point3d p=face->realvertexs[j]->Coor3d();
             ofile<<p.x<<" "<<p.y<<" "<<p.z<<", ";
         }
-        cv::Point3d p=face->getVertex(0)->Coor3d();
+        cv::Point3d p=face->realvertexs[0]->Coor3d();
         ofile<<p.x<<" "<<p.y<<" "<<p.z<<"]"<<endl;
         ofile<<"       }"<<endl;
         ofile<<"       coordIndex [0,1,2,3,-1]"<<endl;
