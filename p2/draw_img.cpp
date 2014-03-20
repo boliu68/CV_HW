@@ -18,16 +18,15 @@ void MainWindow::draw_image()
 	ui->texture2->move(ui->cal_face->x() + ui->cal_face->width() + 20, ui->cal_face->y() - 5);
 	ui->vrml->move(pimg->width() + 20, ui->cal_face->y() + ui->vrml->height() + 20);
 	ui->quit->move(pimg->width() + 50 + ui->vrml->width(), ui->cal_face->y() + ui->vrml->height() + 20);
-
-	ui->int_scale->move(pimg->width() + 20 + ui->int_scale->width(), 20);
-	ui->infobox->move(pimg->width() + 20, pimg->height() - ui->infobox->height());
-	ui->line->move(pimg->width() + 10, 0);
-	ui->centralWidget->resize(pimg->width() + corner_x + ui->infobox->width() + 30, pimg->height() + corner_y + 30);
-
+	ui->infobox->move(pimg->width() + 20, ui->quit->y() + 20);
 	ui->infobox->setFont(QFont("Courier", 20 * std::min(size, 1.0), QFont::Bold, true));
-	ui->infobox->resize(img->width() * 0.5 * std::min(size, 1.0), img->height() * 0.5 * std::min(size, 1.0));
+	ui->infobox->resize(img->width() * std::min(size, 1.0), img->height() * 0.5 * std::min(size, 1.0));
+	ui->int_scale->move(pimg->width() + 20 + ui->int_scale->width(), 20);
+	//ui->infobox->move(pimg->width() + 20, pimg->height() - ui->infobox->height());
+	ui->line->move(pimg->width() + 10, 0);
 
-	this->resize(pimg->width() + corner_x + ui->infobox->width() + 30, pimg->height() + corner_y + 30);
+	ui->centralWidget->resize(pimg->width() + corner_x + ui->infobox->width() + 30, std::max(pimg->height(), ui->infobox->y() + ui->infobox->height()) + corner_y + 30);
+	this->resize(pimg->width() + corner_x + ui->infobox->width() + 30, std::max(pimg->height(), ui->infobox->y() + ui->infobox->height()) + corner_y + 30);
 
 	ui->ShowImage->setPixmap(QPixmap::fromImage(*pimg));
 }

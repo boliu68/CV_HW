@@ -20,6 +20,7 @@ void MainWindow::onLoadImage()
 		 return;
 	}
 	
+	restart();
 	img->load(filename);
 	img_loaded = true;
 	mod = new SingleViewModel(img);
@@ -29,7 +30,7 @@ void MainWindow::onLoadImage()
                                      //tr("Please insert the line segment for x, y and z axis."),
                                      //tr("Please insert the line segment for x, y and z axis!"));
 	
-	this->ui->infobox->setText("Please assign the X axis now.");
+	this->ui->infobox->setText("Please select lines in x direction.");
 }
 
 
@@ -38,7 +39,6 @@ void MainWindow::restart()
 		//initialize
 	mod = NULL;
 
-	img_loaded = false;
 	is_vanished  = no_done;
 	is_origin = false;
 	

@@ -39,9 +39,20 @@ void MainWindow::load_config()
 		store_vertex.push_back(xver);
 		store_vertex.push_back(yver);
 		store_vertex.push_back(zver);
+
+		QString info = "Selected point information\n";
+		QString tmp;
+		char coord[3] = {'X', 'Y', 'Z'};
+		for (int i = 0; i < 3; i++)
+		{
+			info += tmp.sprintf("%c:%f,%f,%f\n", coord[i], store_vertex[i+1]->Coor3d().x,  store_vertex[i+1]->Coor3d().y,  store_vertex[i+1]->Coor3d().z);
+		}
+
+		ui->infobox->setText(info);
+
 		for (int i =0;i<3;i++)
 		{
-			if(std::abs(vanish_pt[i].z) < 0.01)
+			if(std::abs(vanish_pt[i].z) < 0.0001)
 				vanish_pt[i].z = 1;
 		}
 		ui->cal_bot->setEnabled(true);
