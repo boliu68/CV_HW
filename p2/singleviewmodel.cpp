@@ -990,7 +990,7 @@ void SingleViewModel::generateVRMLCode(const string &prefix)
     {
         Face *face=faces[i];
         char fID[20];
-        sprintf(fID,"_%.3d.jpg",face->ID());
+        sprintf(fID,"_%.3d.png",face->ID());
         string fname(fID);
         fname=prefix+fname;
         face->Texture().save(fname.c_str());
