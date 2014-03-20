@@ -81,7 +81,7 @@ Face::Face(const vector<Vertex *> &vs)
         {
             cv::Point3d p1=vertexs[i]->Coor3d();
             cv::Point3d p2=vertexs[j]->Coor3d();
-            if(abs(p1.z-p2.z)>0.001)
+            if(abs(p1.z-p2.z)>0.1)
                 ground=false;
         }
     if(ground)
@@ -337,7 +337,7 @@ void SingleViewModel::setReferencePoints(const cv::Point2d &x, const cv::Point2d
 {
     xver=initialVertex(x,cv::Point3d(xlength,0.0,0.0));
     yver=initialVertex(y,cv::Point3d(0.0,ylength,0.0));
-    zver=initialVertex(z,cv::Point3d(0.0,0.0,zlength));
+    zver=initialVertex(z,cv::Point3d(0.0,0.0,zlength),origin);
     referP=zver;
     referPx=xver;
     referPy=yver;
@@ -543,7 +543,7 @@ Face* SingleViewModel::generateFace(const vector<Vertex *> &vers)
         {
             check=true;
             for(int i=0;i<3;i++)
-                for(int j=i+1;j<3;i++)
+                for(int j=i+1;j<3;j++)
                     if(vers[i]->Bottom()==vers[j]->Bottom())
                         check=false;
         }
@@ -1020,6 +1020,12 @@ void SingleViewModel::generateVRMLCode(const string &prefix)
         ofile<<p.x<<" "<<p.y<<" "<<p.z<<"]"<<endl;
         ofile<<"       }"<<endl;
         ofile<<"       coordIndex [0,1,2,3,-1]"<<endl;
+        ofile<<"       ccw TRUE"<<endl;
+        ofile<<"       solid FALSE"<<endl;
+        ofile<<"       texCoord TextureCoordinate {"<<endl;
+        ofile<<"       point [0  0, 1  0, 1  1, 0  1]"<<endl;
+        ofile<<"       }"<<endl;
+        ofile<<"       texCoordIndex[0 1 2 3 -1]"<<endl;
         ofile<<"    }"<<endl;
         ofile<<"}"<<endl;
     }
