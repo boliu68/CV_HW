@@ -965,7 +965,7 @@ void SingleViewModel::getCameraInformation()
     cv::Vec3d p(referP->Coor2d().x,referP->Coor2d().y,1);
     cv::Vec3d p4(Hinv.at<double>(0,2),Hinv.at<double>(1,2),Hinv.at<double>(2,2));
     double a=cv::norm(p4.cross(p))/cv::norm(vz.cross(p))/refHeight;
-    if(cv::norm(a*refHeight*p.cross(vz)+p4.cross(p))>0.0001)
+    if(cv::norm(a*refHeight*p.cross(vz)+p.cross(p4))>0.0001)
         a=-a;
     cv::Mat P(3,4,CV_64F);
     cv::Vec3d P3=a*vz;
@@ -999,6 +999,16 @@ void SingleViewModel::generateVRMLCode(const string &prefix)
     string fname=prefix+".wrl";
     ofstream ofile(fname.c_str());
     ofile<<"#VRML V2.0 utf8"<<endl;
+    ofile<<"Transform {"<<endl;
+    ofile<<"  translation "<<camCenter.x<<" "<<camCenter.y<<" "<<camCenter.z<<endl;
+    ofile<<"  children ["<<endl;
+    ofile<<"    Shape {"<<endl;
+    ofile<<"      geometry Sphere {"<<endl;
+    ofile<<"        radius 0.15"<<endl;
+    ofile<<"      }"<<endl;
+    ofile<<"    }"<<endl;
+    ofile<<"  ]"<<endl;
+    ofile<<"}"<<endl;
     for(int i=0;i<faces.size();i++)
     {
         Face *face=faces[i];
