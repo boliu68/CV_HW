@@ -22,9 +22,10 @@ void MainWindow::on_texture()
 		return;
 	}
 
-	QString info = "Face Info:\n";
+	QString info = "Face ";
 	QString tmp;
-	
+	info += tmp.sprintf("(id:%d) Info:\n",new_face->ID());
+
 	for(int i = 0; i<polygon_vertex.size(); i++)
 	{
 		 Vertex* face_vertex = new_face->getVertex(i);
@@ -33,7 +34,11 @@ void MainWindow::on_texture()
 	}
 
 	ui->infobox->setText(info);
-	
+
+	is_exist_texture = false;
+	polygon_vertex.clear();
+	draw_image();
+
 	show_texture* show = new show_texture();
 	QImage img_tmp = (new_face->Texture());
 	show->set_image(&img_tmp);

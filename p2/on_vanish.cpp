@@ -114,7 +114,7 @@ void MainWindow::change_vanish(QString vp_str, QString info_str, int xyz)
 		else
 		{
 			info_str += tmp.sprintf("X:(%f,%f,%f)\n", vanish_pt[0].x, vanish_pt[0].y, vanish_pt[0].z);
-			if(std::abs(vanish_pt[0].z) < 0.01)
+			if(std::abs(vanish_pt[0].z) < 0.0001)
 				vanish_pt[0].z = 1;
 			is_vanished = x_done;
 		}
@@ -131,7 +131,7 @@ void MainWindow::change_vanish(QString vp_str, QString info_str, int xyz)
 		{
 			info_str += tmp.sprintf("X:(%f,%f,%f)\n", vanish_pt[0].x, vanish_pt[0].y, vanish_pt[0].z);
 			info_str += tmp.sprintf("Y:(%f,%f,%f)\n", vanish_pt[1].x, vanish_pt[1].y, vanish_pt[1].z);
-			if(std::abs(vanish_pt[1].z) < 0.01)
+			if(std::abs(vanish_pt[1].z) < 0.0001)
 				vanish_pt[1].z = 1;
 			is_vanished = y_done;
 		}
@@ -147,7 +147,7 @@ void MainWindow::change_vanish(QString vp_str, QString info_str, int xyz)
 		else
 		{
 			is_vanished = z_done;
-			if(std::abs(vanish_pt[2].z) < 0.01)
+			if(std::abs(vanish_pt[2].z) < 0.0001)
 				vanish_pt[2].z = 1;
 			info_str += tmp.sprintf("X:(%f,%f,%f)\n", vanish_pt[0].x, vanish_pt[0].y, vanish_pt[0].z);
 			info_str += tmp.sprintf("Y:(%f,%f,%f)\n", vanish_pt[1].x, vanish_pt[1].y, vanish_pt[1].z);

@@ -18,6 +18,7 @@ void MainWindow::on_bot()
 	bottom.y = -1;
 	ui->texture2->setEnabled(false);
 	polygon_vertex.clear();
+	draw_image();
 }
 
 void MainWindow::on_top()
@@ -32,6 +33,7 @@ void MainWindow::on_top()
 	is_bottom = true;
 	ui->texture2->setEnabled(false);
 	polygon_vertex.clear();
+	draw_image();
 }
 
 void MainWindow::on_face()
@@ -42,4 +44,5 @@ void MainWindow::on_face()
 	is_exist_texture = false;
 	vbottom = NULL;
 	vtop = NULL;
+	draw_image();
 }

@@ -42,6 +42,7 @@ void MainWindow::mousePressEvent(QMouseEvent * e)
 						//bottom is a new point
 						bottom.x = x;
 						bottom.y = y;
+						vbottom = NULL;
 						is_bottom = false;
 					}
 					else
@@ -51,12 +52,14 @@ void MainWindow::mousePressEvent(QMouseEvent * e)
 						top.y = d3_select_pt.y;
 
 						//get the 3d coordinate of top point;
-						//if(vbottom == NULL)
-						//{
-						mod->compute3DCoordinate(bottom, top,
-                        vbottom, vtop);
-						store_vertex.push_back(vbottom);
-						//vtop = mod->compute3DCoordinate(vbottom, top);
+						if(vbottom == NULL)
+						{
+							mod->compute3DCoordinate(bottom, top,
+							vbottom, vtop);
+							store_vertex.push_back(vbottom);
+						}
+						else
+							vtop = mod->compute3DCoordinate(vbottom, top);
 							
 						store_vertex.push_back(vtop);
 
