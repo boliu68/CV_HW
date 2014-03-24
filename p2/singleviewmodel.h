@@ -120,6 +120,8 @@ private:
     //plane: normal:n, begin on it
     cv::Point2d compute2DCoordinate(const cv::Point3d & p);
     void getCameraInformation();
+    cv::Mat computeHomography(const vector<cv::Point2d> &src,const vector<cv::Point2d> &dst);
+    cv::Mat getNormalizeTransformation(const vector<cv::Point2d> &src);
 
 public:
     SingleViewModel(QImage *image);

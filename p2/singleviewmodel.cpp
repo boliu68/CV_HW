@@ -342,7 +342,7 @@ void SingleViewModel::setReferencePoints(const cv::Point2d &x, const cv::Point2d
     referPx=xver;
     referPy=yver;
     refLine=getLine(origin->Coor2d(),referP->Coor2d());
-    cv::Point2f src[4],dst[4];
+    /*cv::Point2f src[4],dst[4];
     src[0]=origin->Coor2d();
     src[1]=x;
     cv::Vec3d xline=getLine(y,vx);
@@ -354,7 +354,20 @@ void SingleViewModel::setReferencePoints(const cv::Point2d &x, const cv::Point2d
     dst[1].x=xlength;dst[1].y=0.0;
     dst[2].x=xlength;dst[2].y=ylength;
     dst[3].x=0;dst[3].y=ylength;
-    Homography=cv::getPerspectiveTransform(src,dst);
+    Homography=cv::getPerspectiveTransform(src,dst);*/
+    vector<cv::Point2d> src,dst;
+    src.push_back(origin->Coor2d());
+    src.push_back(x);
+    cv::Vec3d xline=getLine(y,vx);
+    cv::Vec3d yline=getLine(x,vy);
+    cv::Vec3d p=xline.cross(yline);
+    src.push_back(cv::Point2d(p[0]/p[2],p[1]/p[2]));
+    src.push_back(y);
+    dst.push_back(cv::Point2d(0,0));
+    dst.push_back(cv::Point2d(xlength,0));
+    dst.push_back(cv::Point2d(xlength,ylength));
+    dst.push_back(cv::Point2d(0,ylength));
+    Homography=computeHomography(src,dst);
     refHeight=zlength;
     refLine=getLine(origin->Coor2d(),z);
     getCameraInformation();
@@ -734,9 +747,10 @@ cv::Point2d SingleViewModel::getCorrespond(const QPoint &src, const Mat &H)
 
 void SingleViewModel::computeTexture(Face *face)
 {
-    cv::Point2f src[4],dst[4];
+    //cv::Point2f src[4],dst[4];
+    vector<cv::Point2d> src,dst;
     for(int i=0;i<4;i++)
-        dst[i]=face->realvertexs[i]->Coor2d();
+        dst.push_back(face->realvertexs[i]->Coor2d());
     double w3d,h3d;
     w3d=cv::norm(face->realvertexs[1]->Coor3d()-face->realvertexs[0]->Coor3d());
     h3d=cv::norm(face->realvertexs[3]->Coor3d()-face->realvertexs[0]->Coor3d());
@@ -744,11 +758,16 @@ void SingleViewModel::computeTexture(Face *face)
     double area3d=w3d*h3d;
     double scale=sqrt(area2d/area3d);
     int w=w3d*scale,h=h3d*scale;
-    src[0].x=0;src[0].y=0;
+    src.push_back(cv::Point2d(0,0));
+    src.push_back(cv::Point2d(w,0));
+    src.push_back(cv::Point2d(w,h));
+    src.push_back(cv::Point2d(0,h));
+    /*src[0].x=0;src[0].y=0;
     src[1].x=w;src[1].y=0;
     src[2].x=w;src[2].y=h;
     src[3].x=0;src[3].y=h;
-    cv::Mat H=cv::getPerspectiveTransform(src,dst);
+    cv::Mat H=cv::getPerspectiveTransform(src,dst);*/
+    cv::Mat H=computeHomography(src,dst);
     face->texture=new QImage(w,h,img->format());
     for(int x=0;x<w;x++)
         for(int y=0;y<h;y++)
@@ -1102,3 +1121,68 @@ void SingleViewModel::compute3DCoordinateInPlane(Vertex *refer, const Point2d &t
     vtop=initialVertex(top,p3d,vbottom);
 }
 
+cv::Mat SingleViewModel::computeHomography(const vector<cv::Point2d> &src,const vector<cv::Point2d> &dst)
+{
+    cv::Mat Tsrc=getNormalizeTransformation(src);
+    cv::Mat Tdst=getNormalizeTransformation(dst);
+    vector<cv::Mat> nsrc,ndst;
+    for(int i=0;i<src.size();i++)
+    {
+        cv::Mat hs(3,1,CV_64F);
+        hs.at<double>(0)=src[i].x;
+        hs.at<double>(1)=src[i].y;
+        hs.at<double>(2)=1;
+        nsrc.push_back(Tsrc*hs);
+    }
+    for(int i=0;i<dst.size();i++)
+    {
+        cv::Mat hs(3,1,CV_64F);
+        hs.at<double>(0)=dst[i].x;
+        hs.at<double>(1)=dst[i].y;
+        hs.at<double>(2)=1;
+        ndst.push_back(Tdst*hs);
+    }
+    cv::Mat A=cv::Mat::zeros(8,9,CV_64F),h(9,1,CV_64F);
+    for(int i=0;i<src.size();i++)
+    {
+        A.at<double>(i*2,0)=nsrc[i].at<double>(0);
+        A.at<double>(i*2,1)=nsrc[i].at<double>(1);
+        A.at<double>(i*2,2)=1;
+        A.at<double>(i*2,6)=-ndst[i].at<double>(0)*nsrc[i].at<double>(0);
+        A.at<double>(i*2,7)=-ndst[i].at<double>(0)*nsrc[i].at<double>(1);
+        A.at<double>(i*2,8)=-ndst[i].at<double>(0);
+
+        A.at<double>(i*2+1,3)=nsrc[i].at<double>(0);
+        A.at<double>(i*2+1,4)=nsrc[i].at<double>(1);
+        A.at<double>(i*2+1,5)=1;
+        A.at<double>(i*2+1,6)=-ndst[i].at<double>(1)*nsrc[i].at<double>(0);
+        A.at<double>(i*2+1,7)=-ndst[i].at<double>(1)*nsrc[i].at<double>(1);
+        A.at<double>(i*2+1,8)=-ndst[i].at<double>(1);
+    }
+    cv::SVD::solveZ(A,h);
+    cv::Mat H(3,3,CV_64F);
+    for(int i=0;i<9;i++)
+        H.at<double>(i/3,i%3)=h.at<double>(i);
+    return Tdst.inv()*H*Tsrc;
+}
+
+cv::Mat SingleViewModel::getNormalizeTransformation(const vector<Point2d> &src)
+{
+    cv::Point2d center(0,0);
+    for(int i=0;i<src.size();i++)
+        center=center+src[i];
+    double sx=0,sy=0;
+    for(int i=0;i<src.size();i++)
+    {
+        sx+=(src[i].x-center.x)*(src[i].x-center.x);
+        sy+=(src[i].y-center.y)*(src[i].y-center.y);
+    }
+    sx=sqrt(sx/src.size());
+    sy=sqrt(sy/src.size());
+    cv::Mat H=cv::Mat::eye(3,3,CV_64F);
+    H.at<double>(0,0)=1.0/sx;
+    H.at<double>(1,1)=1.0/sy;
+    H.at<double>(0,2)=-center.x/sx;
+    H.at<double>(1,2)=-center.y/sy;
+    return H;
+}
