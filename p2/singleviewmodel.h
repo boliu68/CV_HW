@@ -145,6 +145,8 @@ public:
     //find the face which has been generated and contains p, if no face, return null
     void compute3DCoordinate(const cv::Point2d &bottom,const cv::Point2d &top,
                              Vertex* &vbottom,Vertex* &vtop);
+    void compute3DCoordinateInPlane(Vertex* refer,const cv::Point2d &top,
+                             Vertex* &vbottom,Vertex* &vtop);
     Vertex* compute3DCoordinateofBottom(const cv::Point2d &bottom);
     //compute vertex bottom and top' 3d coordinate, return vertex information in vbottom,vtop
     Face* generateFace(const vector<Vertex*> &vers);

@@ -1081,3 +1081,24 @@ bool SingleViewModel::loadCalibration(const string &path,Vertex *&_origin,
     _origin=origin;
     return true;
 }
+
+void SingleViewModel::compute3DCoordinateInPlane(Vertex *refer, const Point2d &top, Vertex *&vbottom, Vertex *&vtop)
+{
+    if(refer->isBottom())
+    {
+        vtop=compute3DCoordinateofBottom(top);
+        vbottom=NULL;
+        return;
+    }
+    cv::Vec3d ltvz=getLine(top,vz);
+    cv::Vec3d lrt=getLine(refer->Coor2d(),top);
+    cv::Vec3d v=lrt.cross(lxy);
+    cv::Vec3d lvb=getLine(v,refer->Bottom()->Coor2d());
+    cv::Vec3d hpb=lvb.cross(ltvz);
+    cv::Point2d pb2d(hpb[0]/hpb[2],hpb[1]/hpb[2]);
+    cv::Point3d pb3d=get3DPointOnRefPlane(pb2d);
+    cv::Point3d p3d(pb3d.x,pb3d.y,refer->Coor3d().z);
+    vbottom=initialVertex(pb2d,pb3d);
+    vtop=initialVertex(top,p3d,vbottom);
+}
+
