@@ -1,0 +1,277 @@
+#VRML V2.0 utf8
+Transform {
+  translation -14.8206 -12.5029 -7.16101
+  children [
+    Shape {
+      geometry Sphere {
+        radius 0.15
+      }
+    }
+  ]
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW/p2/1_000.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[1.83152 -1.49656 0.818479, 1.30394 -2.00094 0.823971, 0.270077 -0.91911 0.860655, 0.797656 -0.414736 0.855162]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW/p2/1_001.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[0.270077 -0.91911 0, 1.30394 -2.00094 0, 1.30394 -2.00094 0.860655, 0.270077 -0.91911 0.860655]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW/p2/1_002.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[0.712095 -0.325206 0, 0.270077 -0.91911 0, 0.270077 -0.91911 0.860655, 0.712095 -0.325206 0.860655]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW/p2/1_003.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[2.21885 -1.80947 0, 2.77013 -2.41483 0, 2.77013 -2.41483 1.23907, 2.21885 -1.80947 1.23907]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW/p2/1_004.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[3.01746 -3.7939 0, -1.74472 0.919398 0, 4.80184 7.53385 0, 9.56402 2.82055 0]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW/p2/1_005.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[-0.908132 1.80977 0, 0 1 0, 0.0150406 1.03317 9.25216, -0.908132 1.80977 9.25216]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW/p2/1_006.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[-0.110447 1.29816 0, 1.36832 0.977052 0, 1.36832 0.977052 7.84413, -0.110447 1.29816 7.84413]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW/p2/1_007.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[4.22292 1.91231 0, 5.10128 -0.0944229 0, 5.10128 -0.0944229 6.46494, 4.22292 1.91231 6.46494]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW/p2/1_008.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[5.10128 -0.0944229 0, 3.06118 -3.74973 0, 3.06118 -3.74973 6.39108, 5.10128 -0.0944229 6.39108]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW/p2/1_009.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[4.80184 7.53385 0, 8.09589 2.84352 0, 8.09589 2.84352 14.2956, 4.80184 7.53385 14.2956]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW/p2/1_010.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[10.6162 7.2344 0, 11.2969 6.8688 0, 11.2969 6.8688 9.88275, 10.6162 7.2344 9.88275]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW/p2/1_011.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[12.6439 10.1677 0, 12.9039 8.99489 0, 12.9039 8.99489 5.83577, 12.6439 10.1677 5.83577]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW/p2/1_012.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[13.8732 11.6651 0, 14.6058 11.4492 0, 14.6058 11.4492 8.63654, 13.8732 11.6651 8.63654]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW/p2/1_013.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[10.6296 7.17501 9.66937, 11.2199 6.7621 9.72722, 14.6058 11.4492 8.63654, 14.0156 11.8621 8.5787]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}

@@ -1,0 +1,372 @@
+#VRML V2.0 utf8
+Transform {
+  translation -7.59423 -7.6963 -3.61689
+  children [
+    Shape {
+      geometry Sphere {
+        radius 0.15
+      }
+    }
+  ]
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_000.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[-0.57721 18.9722 0, 0 0 0, 0 0 14, -0.57721 18.9722 14]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_001.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[0 0 0, 1 0 0, 1 0 14, 0 0 14]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_002.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[1 0 0, 1.06857 -2.07833 0, 1.06857 -2.07833 14.9224, 1 0 14.9224]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_003.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[1.06857 -2.07833 0, 5.46011 -2.35242 0, 5.46011 -2.35242 14.9224, 1.06857 -2.07833 14.9224]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_004.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[1.45205 -2.23923 0, 1.446 -4.98693 0, 1.446 -4.98693 5.34427, 1.45205 -2.23923 5.34427]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_005.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[1.446 -4.98693 0, 9.39092 -5.35562 0, 9.39092 -5.35562 5.30538, 1.446 -4.98693 5.30538]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_006.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[-0.558776 8.48602 0, -0.520992 8.19525 0, -0.520992 8.19525 5.61573, -0.558776 8.48602 5.61573]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_007.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[-0.520992 8.19525 0, -0.388378 7.82015 0, -0.388378 7.82015 5.61573, -0.520992 8.19525 5.61573]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_008.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[-0.747844 4.095 5.59594, 0 4 5.59594, 0 4 6.44898, -0.747844 4.095 6.44898]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_009.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[-0.57721 18.9722 5.5029, -0.747844 4.095 5.5029, -0.747844 4.095 6.53321, -0.57721 18.9722 6.53321]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_010.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[0 4 5.56014, -0.748832 4.00882 5.59648, -0.57721 18.9722 5.5029, 0.171622 18.9634 5.46655]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_011.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[-0.57721 18.9722 0, 4.16077 23.417 0, 4.16077 23.417 5.8992, -0.57721 18.9722 5.8992]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_012.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[-0.747844 4.095 5.59594, 3.93857 4.04391 6.02036, 4.16077 23.417 5.8992, -0.525644 23.4681 5.47478]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_013.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[-0.520992 8.19525 6.27064, 0.12996 7.96878 6.27064, 0.12996 7.96878 11.5541, -0.520992 8.19525 11.5541]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_014.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[-0.558776 8.48602 6.27064, -0.520992 8.19525 6.27064, -0.520992 8.19525 11.5541, -0.558776 8.48602 11.5541]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_015.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[0.12996 7.96878 11.3574, -0.507501 7.94646 11.5685, -0.900746 15.1981 11.148, -0.263284 15.2204 10.9368]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_016.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[7.00618 -6.60206 0, 8.0729 -13.3293 0, 8.0729 -13.3293 15.4741, 7.00618 -6.60206 15.4741]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_017.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[2.17618 -7.83025 0, 2.17724 -11.284 0, 2.17724 -11.284 8.43639, 2.17618 -7.83025 8.43639]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}
+Shape{
+    appearance  Appearance{
+        texture  ImageTexture{
+           url "D:/vgcode/CV_HW_p2_Release/release/outdoor_018.png"
+        }
+    }
+    geometry IndexedFaceSet {
+       coord Coordinate {
+         point[2.80342 -37.7576 0, 50.8957 -30.0296 0, 21.5406 152.65 0, -26.5516 144.922 0]
+       }
+       coordIndex [0,1,2,3,-1]
+       ccw TRUE
+       solid FALSE
+       texCoord TextureCoordinate {
+       point [0  0, 1  0, 1  1, 0  1]
+       }
+       texCoordIndex[0 1 2 3 -1]
+    }
+}

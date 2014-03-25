@@ -5,6 +5,42 @@ void MainWindow::mousePressEvent(QMouseEvent * e)
 {
 	if(img_loaded)
 	{
+		if(e->button() == Qt::MiddleButton)
+		{
+				if(d3_states == only_bottom)
+				{
+					int x,y;
+					if(click_position(e->x(), e->y(), x, y) && vbottom != NULL)
+					{
+						bottom.x = x;
+						bottom.y = y;
+
+						Vertex * tmp_bottom;
+						Vertex * tmp_top;
+
+						mod->compute3DCoordinateInPlane(vbottom, bottom,
+                             tmp_bottom, tmp_top);
+						
+						QString info = "Bottom coordinate:\n";
+						QString tmp;
+						info += tmp.sprintf("%d:(%f,%f,%f)\n", vbottom->ID(), vbottom->Coor3d().x, vbottom->Coor3d().y, vbottom->Coor3d().z);
+
+						if(tmp_bottom != NULL)
+						{
+							vbottom = tmp_bottom;
+							store_vertex.push_back(tmp_bottom);
+						}
+						
+						vtop = tmp_top;
+						store_vertex.push_back(vtop);
+						info += "Top coordinate:\n";
+						info += tmp.sprintf("%d:(%f,%f,%f)\n", vtop->ID(), vtop->Coor3d().x, vtop->Coor3d().y, vtop->Coor3d().z);
+						ui->infobox->setText(info);
+					}
+				
+				}
+				draw_image();
+		}
 		if(e->button() == Qt::LeftButton)
 		{
 			int x, y;
