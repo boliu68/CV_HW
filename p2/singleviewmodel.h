@@ -42,11 +42,13 @@ private:
     double area;
     bool ground;
     bool vertical;
+    cv::Mat Homography;
     bool paraToGround();
     bool Vertical();
     double Height();
     double height;
     double Area();
+    int texWidth,texHeight;
     double id;
     bool inFace(const cv::Point2d &p);
     double triangleArea(const cv::Point2d &p1,const cv::Point2d &p2,const cv::Point2d &p3);
@@ -63,6 +65,7 @@ private:
     void computeArea();
     void setRealVertexs(const vector<Vertex*> &vs);
     double RealArea();
+    cv::Point3d compute3DCoordinateinFace(const cv::Point2d &p);
 public:
     Vertex* getVertex(int _ID);//return the IDst vertex, clock order
     QImage Texture();//return texture image

@@ -56,7 +56,7 @@ void MainWindow::mousePressEvent(QMouseEvent * e)
 						polygon_point.clear();
 						gen_face = near_face;
 						int i = 0;
-						while(true)
+                        while(i<4)
 						{
 							Vertex * vertex_by_id = gen_face->getVertex(i);
 							if(vertex_by_id == NULL) 

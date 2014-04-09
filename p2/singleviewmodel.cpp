@@ -59,13 +59,13 @@ double Vertex::getDistance(const cv::Point2d &p)
 Face::Face(const vector<Vertex *> &vs)
 {
     vertexs=vs;
-    if(isVerticalLine(vertexs[0],vertexs[1])||isVerticalLine(vertexs[2],vertexs[3]))
+    if(isVerticalLine(vertexs[0],vertexs[1])&&isVerticalLine(vertexs[2],vertexs[3]))
     {
         vertical=true;
         for(int i=1;i<5;i++)
             vertexs.push_back(vs[i%4]);
     }
-    else if(isVerticalLine(vertexs[0],vertexs[3])||isVerticalLine(vertexs[1],vertexs[2]))
+    else if(isVerticalLine(vertexs[0],vertexs[3])&&isVerticalLine(vertexs[1],vertexs[2]))
     {
         vertical=true;
         vertexs=vs;
@@ -396,8 +396,8 @@ Face* SingleViewModel::findFace(const cv::Point2d &p)
     for(int i=0;i<faces.size();i++)
     {
         Face* f=faces[i];
-        if(!f->paraToGround())
-            continue;
+        //if(!f->paraToGround())
+        //    continue;
         if(f->inFace(p)&&f->Area()<m)
         {
             m=f->Area();
@@ -487,7 +487,8 @@ Vertex* SingleViewModel::compute3DCoordinate(Vertex *bottom, const cv::Point2d &
 Vertex* SingleViewModel::compute3DCoordinateofBottom(const Point2d &bottom)
 {
     Face* gp=findFace(bottom);
-    cv::Point2d realBot=bottom;
+    cv::Point3d bottom3d;
+    /*cv::Point2d realBot=bottom;
     if(gp!=NULL)
         realBot=getPointOnRefPlane(bottom,gp);
     cv::Point3d realBot3d=get3DPointOnRefPlane(realBot);
@@ -504,7 +505,26 @@ Vertex* SingleViewModel::compute3DCoordinateofBottom(const Point2d &bottom)
     Vertex* vbottom=initialVertex(bottom,bottom3d);
     if(gp!=NULL)
         vbottom->setBottom(realBotVer);
-    return vbottom;
+    return vbottom;*/
+    if(gp==NULL)
+    {
+        bottom3d=get3DPointOnRefPlane(bottom);
+        return initialVertex(bottom,bottom3d);
+    }
+    bottom3d=gp->compute3DCoordinateinFace(bottom);
+    if(abs(bottom3d.z)>0.0001)
+    {
+        cv::Point3d realBot3d=bottom3d;
+        realBot3d.z=0;
+        cv::Point2d realBot=getPointOnImage(cv::Point2d(realBot3d.x,realBot3d.y));
+        Vertex *realBotVer=new Vertex(realBot);
+        realBotVer->setCoor3d(realBot3d);
+        virtualVers.push_back(realBotVer);
+        realBotVer->setID(-(virtualVers.size()-1)-1);
+        return initialVertex(bottom,bottom3d,realBotVer);
+    }
+    bottom3d.z=0;
+    return initialVertex(bottom,bottom3d);
 }
 
 void SingleViewModel::compute3DCoordinate(const cv::Point2d &bottom, const cv::Point2d &top,
@@ -549,7 +569,7 @@ Face* SingleViewModel::generateFace(const vector<Vertex *> &vers)
     Face *face;
     if(vers.size()==3)
     {
-        bool check=false;
+        /*bool check=false;
         if(vers[0]->Bottom()==NULL&&vers[1]->Bottom()==NULL&&vers[2]->Bottom()==NULL)
             check=true;
         if(vers[0]->Bottom()!=NULL&&vers[1]->Bottom()!=NULL&&vers[2]->Bottom()!=NULL)
@@ -560,7 +580,7 @@ Face* SingleViewModel::generateFace(const vector<Vertex *> &vers)
                     if(vers[i]->Bottom()==vers[j]->Bottom())
                         check=false;
         }
-        if(!check) return NULL;
+        if(!check) return NULL;*/
         face=generateFaceFrom3Points(vers);
     }
     if(vers.size()==4)
@@ -776,12 +796,15 @@ void SingleViewModel::computeTexture(Face *face)
             cv::Point2d dstp=getCorrespond(p,H);
             face->texture->setPixel(p,interpolate(dstp));
         }
+    face->Homography=H;
+    face->texWidth=w;
+    face->texHeight=h;
 }
 
 double Face::getAngle(int _ID)
 {
-    cv::Vec3d d1=vertexs[(_ID+1)%4]-vertexs[_ID];
-    cv::Vec3d d2=vertexs[(_ID+3)%4]-vertexs[_ID];
+    cv::Vec3d d1=vertexs[(_ID+1)%4]->Coor3d()-vertexs[_ID]->Coor3d();
+    cv::Vec3d d2=vertexs[(_ID+3)%4]->Coor3d()-vertexs[_ID]->Coor3d();
     double cosa=d1.dot(d2)/cv::norm(d1)/cv::norm(d2);
     return acos(cosa);
 }
@@ -886,7 +909,10 @@ cv::Point2d SingleViewModel::compute2DCoordinate(const Point3d &p)
         cv::Point2d Vz(vz.x/vz.z,vz.y/vz.z);
         vzr=norm(Vz-referP->Coor2d());
         vzb=norm(Vz-origin->Coor2d());
-        t=p.z*rb*vzb/(refHeight*vzr+p.z*rb);
+        if((referP->Coor2d()-origin->Coor2d()).dot(Vz-origin->Coor2d())>0)
+            t=p.z*rb*vzb/(refHeight*vzr+p.z*rb);
+        else
+            t=p.z*rb*vzb/(refHeight*vzr-p.z*rb);
     }
     pl2d=origin->Coor2d()+t/rb*(referP->Coor2d()-origin->Coor2d());
     cv::Vec3d l=getLine(v,pl2d);
@@ -1185,4 +1211,15 @@ cv::Mat SingleViewModel::getNormalizeTransformation(const vector<Point2d> &src)
     H.at<double>(0,2)=-center.x/sx;
     H.at<double>(1,2)=-center.y/sy;
     return H;
+}
+
+cv::Point3d Face::compute3DCoordinateinFace(const Point2d &p)
+{
+    cv::Mat hp(3,1,CV_64F);
+    hp.at<double>(0)=p.x;hp.at<double>(1)=p.y;hp.at<double>(2)=1;
+    cv::Mat hpface=Homography.inv()*hp;
+    double ws=hpface.at<double>(0)/hpface.at<double>(2)/texWidth;
+    double hs=hpface.at<double>(1)/hpface.at<double>(2)/texHeight;
+    return realvertexs[0]->Coor3d()+ws*(realvertexs[1]->Coor3d()-realvertexs[0]->Coor3d())
+            +hs*(realvertexs[3]->Coor3d()-realvertexs[0]->Coor3d());
 }
