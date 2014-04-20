@@ -8,4 +8,6 @@
 #include<queue>
 using namespace std;
 using namespace cv;
+class Pixel;
+class MVM;
 #endif // DEFINE_H

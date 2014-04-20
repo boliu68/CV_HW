@@ -3,7 +3,11 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    maxflow.cpp \
+    graph.cpp \
+    pixel.cpp \
+    mvm.cpp
 
 OPENCVENABLE = 1
 !include(QTFlagsOpenCV.pri) {
@@ -16,4 +20,9 @@ OTHER_FILES += \
 
 HEADERS += \
     sampling.h \
-    define.h
+    define.h \
+    graph.h \
+    block.h \
+    pixel.h \
+    mvm.h \
+    instances.inc
