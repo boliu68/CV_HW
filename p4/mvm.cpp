@@ -1,5 +1,4 @@
 #include "mvm.h"
-#include "sampling.h"
 #include "graph.h"
 #include "define.h"
 
@@ -15,6 +14,20 @@ MVM::MVM()
 void MVM::initialNormal(int NSAMPLE)
 {
     //LIU BO
+	bool is_readfile = this->normal.read_file("data02");
+	
+	if(!is_readfile)
+		return;
+
+	normal.uniform_division(1);
+	normal.find_denominator(0.7, 0.9);
+	normal.get_normal();
+
+	this->width = normal.norm_width;
+	this->height = normal.norm_height;
+	this->pixels = normal.pixels;
+
+	this->outPutNormal("TestOutput");
 }
 
 void MVM::Refinement(int NSAMPLE, double sigma, double lamda)
@@ -163,26 +176,36 @@ void MVM::outPutNormal(const string &prefix)
 {
     string slname=prefix+"_slant.txt";
     string tiname=prefix+"_tilt.txt";
+	string zname = prefix +"_z.txt";
     ofstream slf(slname.c_str());
     ofstream tif(tiname.c_str());
+	ofstream zif(zname.c_str());
+
     for(int i=0;i<height;i++)
     {
         for(int j=0;j<width;j++)
         {
             Vec3d normal=pixels[i][j].Normal();
-            double cossl=abs(normal[2]);
-            if(cossl>1.0) cossl=1.0;
-            double slant=acos(cossl);
-            slf<<slant<<" ";
-            double costi=normal[0]/sqrt(normal[0]*normal[0]+normal[1]*normal[1]);
-            if(costi>1.0) costi=1.0;
-            if(costi<-1.0) costi=-1.0;
-            double tilt=acos(costi);
-            if(normal[1]<0)
-                tilt=CV_PI*2-tilt;
+            //double cossl=abs(normal[2]);
+            //if(cossl>1.0) cossl=1.0;
+            //double slant=acos(cossl);
+            //double slant = sqrt(normal[0] * normal[0] + normal[1] * normal[1]);
+			//slant = -atan(slant / normal[2]);
+			double slant = normal[0];
+			slf<<slant<<" ";
+            //double costi=normal[0]/sqrt(normal[0]*normal[0]+normal[1]*normal[1]);
+            //if(costi>1.0) costi=1.0;
+            //if(costi<-1.0) costi=-1.0;
+            //double tilt=acos(costi);
+            double tilt = normal[1];
+			//if(normal[1]<0)
+              //  tilt=CV_PI*2-tilt;
             tif<<tilt<<" ";
+
+			zif<<normal[2]<<" ";
         }
         slf<<endl;
         tif<<endl;
+		zif<<endl;
     }
 }

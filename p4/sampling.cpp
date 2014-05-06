@@ -1,9 +1,7 @@
-#ifndef SAMPLING_H
-#define SAMPLING_H
-#include"define.h"
+#include "sampling.h"
 
-void subdivideTriangle(const vector<Vec3d> &tri,int level,vector<Vec3d> &sphereSamples);
-/*{
+void subdivideTriangle(const vector<Vec3d> &tri,int level,vector<Vec3d> &sphereSamples)
+{
     queue<vector<Vec3d> > vertexs;
     //the queue to store subdivided triangles
     queue<bool> check;
@@ -37,10 +35,10 @@ void subdivideTriangle(const vector<Vec3d> &tri,int level,vector<Vec3d> &sphereS
         t4.push_back(mid01);t4.push_back(mid02);t4.push_back(mid12);
         vertexs.push(t4);check.push(false);
     }
-}*/
+}
 
-void generateSphereSamples(int NSAMPLE,vector<Vec3d> &sphereSamples);
-/*{
+void generateSphereSamples(int NSAMPLE,vector<Vec3d> &sphereSamples)
+{
     double t=(1.0+sqrt(double(5)))/2.0;
     double a=sqrt(t)/pow(5.0,0.25);
     double b=1.0/(sqrt(t)*pow(5.0,0.25));
@@ -51,7 +49,7 @@ void generateSphereSamples(int NSAMPLE,vector<Vec3d> &sphereSamples);
     {3,1,8},{9,3,7},{0,2,6},{4,6,10},{1,7,5},
     {7,2,5},{8,10,3},{4,11,8},{9,2,7},{10,6,9},
     {0,11,5},{0,2,5},{8,10,4},{3,9,10},{6,4,0}};//faces with vertexs index
-    double nsamplepertri=NSAMPLE/12.0;//number of samples in per triangle
+    double nsamplepertri=NSAMPLE/20.0;//number of samples in per triangle
     int level=ceil(log(nsamplepertri)/log(4.0));//levels of sampling in per triangle
     for(int i=0;i<20;i++)
     {
@@ -62,7 +60,7 @@ void generateSphereSamples(int NSAMPLE,vector<Vec3d> &sphereSamples);
                 tri[j][k]=vertexs[faces[i][j]][k];
         subdivideTriangle(tri,level,sphereSamples);
     }
-    cout<<"Have Generated Sphere Samples!"<<endl;
+    //cout<<"Have Generated Sphere Samples!"<<endl;
     /*ofstream ofile("sphereSample.vw");
     for(int i=0;i<sphereSamples.size();i++)
     {
@@ -71,6 +69,4 @@ void generateSphereSamples(int NSAMPLE,vector<Vec3d> &sphereSamples);
         ofile<<2<<endl;
     }
     ofile.close();*/
-//}
-
-#endif // SAMPLING_H
+}
