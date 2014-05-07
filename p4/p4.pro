@@ -7,7 +7,10 @@ SOURCES += main.cpp \
     maxflow.cpp \
     graph.cpp \
     pixel.cpp \
-    mvm.cpp
+    mvm.cpp \
+    svdcmp.cpp \
+    stdafx.cpp \
+    normal_func.cpp
 
 OPENCVENABLE = 1
 !include(QTFlagsOpenCV.pri) {
@@ -25,4 +28,7 @@ HEADERS += \
     block.h \
     pixel.h \
     mvm.h \
-    instances.inc
+    instances.inc \
+    svdcmp.h \
+    stdafx.h \
+    normal_class.h

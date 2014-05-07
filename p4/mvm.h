@@ -3,13 +3,14 @@
 #include"define.h"
 #include"pixel.h"
 #include"graph.h"
+#include "normal_class.h"
+#include "sampling.h"
 typedef Graph<double,double,double> GRAPH;
 class MVM
 {
 private:
     vector<vector<Pixel> > pixels;
     void Refinement(int NSAMPLE, double sigma, double lamda);
-    void initialNormal(int NSAMPLE);
     double alphaExpansion(int label, GRAPH &graph, double sigma, double lamda);
     void constructGraph(int label, GRAPH &graph, double sigma, double lamda);
     int width, height;
@@ -20,9 +21,14 @@ private:
     vector<Vec3d> samples;
     void assignTmpLabel(GRAPH &graph, int label);
     void assignLabel();
+
 public:
     MVM();
     void outPutNormal(const string &prefix);
+	void outPutInitialNormal(const string &prefix);
+	//for initial Normal
+	normal_class normal;
+	void initialNormal(int NSAMPLE, const string &folder, const string &outPrefix);
 };
 
 #endif // MVM_H

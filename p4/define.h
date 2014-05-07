@@ -10,4 +10,5 @@ using namespace std;
 using namespace cv;
 class Pixel;
 class MVM;
+class nomral_class;
 #endif // DEFINE_H
