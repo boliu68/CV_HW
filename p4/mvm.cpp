@@ -45,6 +45,9 @@ void MVM::Refinement(int NSAMPLE, double sigma, double lamda)
         else
             break;
     }
+    for(int i=0;i<height;i++)
+        for(int j=0;j<width;j++)
+            pixels[i][j].setNormal(samples[pixels[i][j].label]);
 }
 
 double MVM::alphaExpansion(int label, GRAPH &graph,double sigma,double lamda)
