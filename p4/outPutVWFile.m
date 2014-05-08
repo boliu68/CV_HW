@@ -6,7 +6,7 @@ ny=load(strcat(inprefix,'_y.txt'));
 nz=load(strcat(inprefix,'_z.txt'));
 figure
 needleplotst(slant, tilt,5, 2)
-z= shapeletsurf(slant, tilt,1,1,1);
+z= shapeletsurf(slant, tilt,6,1,2);
 [h,w]=size(slant);
 zmax=max(z(:));
 zmin=min(z(:));
