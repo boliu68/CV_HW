@@ -4,14 +4,15 @@
 class Pixel
 {
 private:
-    Vec2i coord;
-    double depth;
-    Vec3d normal;
+	Vec3d normal;
+	Vec2i coord;
+	double depth;
 public:
-    Pixel(int x,int y);//x: column,y: row
-    Vec2i Coord();
-    double Depth();
-    void setDepth(double d);
+	Pixel(){}
+	Pixel(int x,int y);//x: column,y: row
+	Vec2i Coord();
+	double Depth();
+	void setDepth(double d);
     Vec3d Normal();
     void setNormal(const Vec3d &n);
     int label;

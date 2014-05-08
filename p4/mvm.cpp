@@ -27,34 +27,44 @@ void MVM::initialNormal(int NSAMPLE, const string &folder, const string &outPref
 	this->height = normal.norm_height;
 	this->pixels = normal.pixels;
 
-	this->outPutInitialNormal(outPrefix);
 	this->outPutNormal(outPrefix);
+	this->outPutSlantTilt(outPrefix);
 }
 
-void MVM::Refinement(int NSAMPLE, double sigma, double lamda)
+void MVM::Refinement(int NSAMPLE, double sigma, double lamda,int itermax,double thred)
 {
     generateSphereSamples(NSAMPLE,samples);
+	setInitialLabel();
+	preCompEnergy(sigma,lamda);
     GRAPH graph(2+width*height+(width-1)*height+(height-1)*width,
                 2*width*height+2*((width-1)*height+(height-1)*width),
                 errorInformation);
     int nsample=samples.size();
     double m=DBL_MAX;
-    while(1)
+	int count=0;
+    while(count<itermax)
     {
-        double tmpm=m;
+        cout<<"iteration "<<count++<<": Energy="<<m<<endl;
+		double tmpm=m;
         for(int i=0;i<nsample;i++)
         {
-            double energy=alphaExpansion(i,graph,sigma,lamda);
+            if(i%(nsample/50)==0)
+				cout<<i<<endl;
+			double energy=alphaExpansion(i,graph,sigma,lamda);
             if(energy<tmpm)
             {
                 tmpm=energy;
                 assignTmpLabel(graph,i);
             }
         }
+		double md=m-tmpm;
+		cout<<"decrease="<<md<<", percent="<<md/tmpm<<endl;
         if(tmpm<m)
         {
             m=tmpm;
             assignLabel();
+			if(md/m<thred)
+				break;
         }
         else
             break;
@@ -78,13 +88,13 @@ void MVM::constructGraph(int label, GRAPH &graph,double sigma,double lamda)
     int count=width*height+1;
     for(int i=0;i<height;i++)
         for(int j=0;j<width;j++)
-        {
-            double source=dataEnergy(i,j,label);
+		{
+			double source=DE[i][j][label];
             double sink;
             if(pixels[i][j].label==label)
                 sink=1000000;
             else
-                sink=dataEnergy(i,j);
+				sink=DE[i][j][pixels[i][j].label];
             graph.add_tweights(width*i+j,source,sink);
             if(i+1<height)
             {
@@ -92,16 +102,16 @@ void MVM::constructGraph(int label, GRAPH &graph,double sigma,double lamda)
                 {
                     graph.add_node();
                     count++;
-                    sink=smoothEnergy(i,j,i+1,j,lamda,sigma);
+					sink=SE[pixels[i][j].label][pixels[i+1][j].label];
                     graph.add_tweights(count,0,sink);
-                    double e=smoothEnergy(i,j,label,lamda,sigma);
+                    double e=SE[pixels[i][j].label][label];
                     graph.add_edge(width*i+j,count,e,e);
-                    e=smoothEnergy(i+1,j,label,lamda,sigma);
+                    e=SE[pixels[i+1][j].label][label];
                     graph.add_edge(count,width*(i+1)+j,e,e);
                 }
                 else
                 {
-                    double e=smoothEnergy(i,j,label,lamda,sigma);
+                    double e=SE[pixels[i][j].label][label];
                     graph.add_edge(width*i+j,width*(i+1)+j,e,e);
                 }
             }
@@ -111,16 +121,16 @@ void MVM::constructGraph(int label, GRAPH &graph,double sigma,double lamda)
                 {
                     graph.add_node();
                     count++;
-                    sink=smoothEnergy(i,j,i,j+1,lamda,sigma);
+                    sink=SE[pixels[i][j].label][pixels[i][j+1].label];
                     graph.add_tweights(count,0,sink);
-                    double e=smoothEnergy(i,j,label,lamda,sigma);
+                    double e=SE[pixels[i][j].label][label];
                     graph.add_edge(width*i+j,count,e,e);
-                    e=smoothEnergy(i,j+1,label,lamda,sigma);
+                    e=SE[pixels[i][j+1].label][label];
                     graph.add_edge(count,width*i+j+1,e,e);
                 }
                 else
                 {
-                    double e=smoothEnergy(i,j,label,lamda,sigma);
+                    double e=SE[pixels[i][j].label][label];
                     graph.add_edge(width*i+j,width*i+j+1,e,e);
                 }
             }
@@ -137,15 +147,15 @@ double MVM::dataEnergy(int r, int c)
 
 double MVM::dataEnergy(int r, int c,int label)
 {
-    Vec3d n1=samples[label];
-    Vec3d n2=samples[pixels[r][c].label];
+    Vec3d n1=pixels[r][c].Normal();
+    Vec3d n2=samples[label];
     return cv::norm(n1-n2);
 }
 
 double MVM::smoothEnergy(int r1, int c1, int r2, int c2, double lamda, double sigma)
 {
-    Vec3d n1=pixels[r1][c1].Normal();
-    Vec3d n2=pixels[r2][c2].Normal();
+    Vec3d n1=samples[pixels[r1][c1].label];
+	Vec3d n2=samples[pixels[r2][c2].label];
     double d=cv::norm(n1-n2);
     return lamda*log(1.0+d/2.0/sigma/sigma);
 }
@@ -153,7 +163,7 @@ double MVM::smoothEnergy(int r1, int c1, int r2, int c2, double lamda, double si
 double MVM::smoothEnergy(int r, int c, int label, double lamda, double sigma)
 {
     Vec3d n1=samples[label];
-    Vec3d n2=pixels[r][c].Normal();
+    Vec3d n2=samples[pixels[r][c].label];
     double d=cv::norm(n1-n2);
     return lamda*log(1.0+d/2.0/sigma/sigma);
 }
@@ -163,27 +173,37 @@ void MVM::assignTmpLabel(GRAPH &graph, int label)
     for(int i=0;i<height;i++)
         for(int j=0;j<width;j++)
         {
-            GRAPH::termtype type=graph.what_segment(i*width+j);
-            if(type==GRAPH::SOURCE)
+			GRAPH::termtype type=graph.what_segment(i*width+j);
+            if(type==GRAPH::SINK)
                 pixels[i][j].tmplabel=label;
+			else
+				pixels[i][j].tmplabel=pixels[i][j].label;
         }
 }
 
 void MVM::assignLabel()
 {
-    for(int i=0;i<height;i++)
-        for(int j=0;j<width;j++)
-            pixels[i][j].label=pixels[i][j].tmplabel;
+	for(int i=0;i<height;i++)
+		for(int j=0;j<width;j++)
+		{
+			//if(pixels[i][j].tmplabel<0||pixels[i][j].tmplabel>=samples.size())
+			//	cout<<"bug:"<<i<<" "<<j<<" "<<pixels[i][j].tmplabel<<endl;
+			pixels[i][j].label=pixels[i][j].tmplabel;
+		}
 }
 
-void MVM::outPutInitialNormal(const string &prefix)
+void MVM::outPutNormal(const string &prefix)
 {
     string xname=prefix+"_x.txt";
     string yname=prefix+"_y.txt";
 	string zname = prefix +"_z.txt";
+	string confname=prefix+"_conf.txt";
     ofstream xif(xname.c_str());
     ofstream yif(yname.c_str());
 	ofstream zif(zname.c_str());
+	ofstream conf(confname.c_str());
+	conf<<height<<" "<<width;
+	conf.close();
 
     for(int i=0;i<height;i++)
     {
@@ -218,7 +238,7 @@ void MVM::outPutInitialNormal(const string &prefix)
 }
 
 
-void MVM::outPutNormal(const string &prefix)
+void MVM::outPutSlantTilt(const string &prefix)
 {
     string slname=prefix+"_slant.txt";
     string tiname=prefix+"_tilt.txt";
@@ -252,3 +272,82 @@ void MVM::outPutNormal(const string &prefix)
 	tif.close();
 }
 
+
+bool MVM::readInitialNormal(const string &prefix)
+{
+	string xname=prefix+"_x.txt";
+    string yname=prefix+"_y.txt";
+	string zname = prefix +"_z.txt";
+	string confname=prefix+"_conf.txt";
+    ifstream xif(xname.c_str());
+    ifstream yif(yname.c_str());
+	ifstream zif(zname.c_str());
+	ifstream conf(confname.c_str());
+	if(!conf.is_open()||!xif.is_open()||!yif.is_open()||!zif.is_open())
+		return false;
+	conf>>height>>width;
+	pixels.resize(height);
+	for(int i=0;i<height;i++)
+	{
+		pixels[i].resize(width);
+		for(int j=0;j<width;j++)
+		{
+			Vec3d n;
+			xif>>n[0];
+			yif>>n[1];
+			zif>>n[2];
+			pixels[i][j].setNormal(n);
+		}
+	}
+	return true;
+}
+
+void MVM::setInitialLabel()
+{
+	int i,j,k,m,index;
+	for(i=0;i<height;i++)
+		for(j=0;j<width;j++)
+		{
+			m=cv::norm(pixels[i][j].Normal()-samples[0]);
+			index=0;
+			for(k=1;k<samples.size();k++)
+			{
+				double d=cv::norm(pixels[i][j].Normal()-samples[k]);
+				if(d<m)
+				{
+					m=d;
+					index=k;
+				}
+			}
+			pixels[i][j].label=index;
+			pixels[i][j].tmplabel=index;
+		}
+}
+
+void MVM::preCompEnergy(double sigma,double lamda)
+{
+	int i,j,k,ns=samples.size();
+	DE.resize(height);
+	for(i=0;i<height;i++)
+	{
+		DE[i].resize(width);
+		for(j=0;j<width;j++)
+		{
+			DE[i][j].resize(ns);
+			for(k=0;k<ns;k++)
+				DE[i][j][k]=dataEnergy(i,j,k);
+		}
+	}
+	SE.resize(ns);
+	for(i=0;i<ns;i++)
+	{
+		SE[i].resize(ns);
+		for(j=0;j<ns;j++)
+		{
+			Vec3d n1=samples[i];
+			Vec3d n2=samples[j];
+			double d=cv::norm(n1-n2);
+			SE[i][j]=lamda*log(1.0+d/2.0/sigma/sigma);
+		}
+	}
+}

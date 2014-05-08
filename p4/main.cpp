@@ -20,6 +20,34 @@ int main(int argc, char *argv[])
 	MVM mm;
 	if(methodtype.compare("initial")==0)
 		mm.initialNormal(nsample,input,output);
+	else if(methodtype.compare("refine")==0)
+	{
+		if(argc<9)
+		{
+			cout<<"Bad Input!"<<endl;
+			return 0;
+		}
+		double lamda,sigma,thred;
+		int itermax;
+		sscanf(argv[5],"%lf",&lamda);
+		sscanf(argv[6],"%lf",&sigma);
+		sscanf(argv[7],"%d",&itermax);
+		sscanf(argv[8],"%lf",&thred);
+		if(!mm.readInitialNormal(input))
+		{
+			cout<<"Bad Input!"<<endl;
+			return 0;
+		}
+		mm.Refinement(nsample,sigma,lamda,itermax,thred);
+		mm.outPutNormal(output);
+		mm.outPutSlantTilt(output);
+	}
+	else
+	{
+		cout<<"Bad Input!"<<endl;
+		return 0;
+	}
+
 	return 0;
 }
 
