@@ -19,9 +19,7 @@ int main(int argc, char *argv[])
 
 	MVM mm;
 	if(methodtype.compare("initial")==0)
-	{
 		mm.initialNormal(nsample,input,output);
-	}
 	else if(methodtype.compare("refine")==0)
 	{
 		if(argc<9)

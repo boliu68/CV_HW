@@ -17,9 +17,7 @@ void MVM::initialNormal(int NSAMPLE, const string &folder, const string &outPref
 	bool is_readfile = this->normal.read_file(folder);
 	
 	if(!is_readfile)
-	{
 		return;
-	}
 
     normal.uniform_division(1,NSAMPLE);
 	normal.find_denominator(0.7, 0.9);
@@ -37,11 +35,15 @@ void MVM::Refinement(int NSAMPLE, double sigma, double lamda,int itermax,double 
 {
     generateSphereSamples(NSAMPLE,samples);
 	setInitialLabel();
+	int nsample=samples.size();
+	//double minnd=cv::norm(samples[nsample-1]-samples[nsample-2]);
+	//sigma=sqrt(sqrt(2.0)/100.0);
+	//lamda=minnd/log(2.0);
+	cout<<"sigma="<<sigma<<", lamda="<<lamda<<endl;
 	preCompEnergy(sigma,lamda);
     GRAPH graph(2+width*height+(width-1)*height+(height-1)*width,
                 2*width*height+2*((width-1)*height+(height-1)*width),
                 errorInformation);
-    int nsample=samples.size();
     double m=DBL_MAX;
 	int count=0;
     while(count<itermax)
