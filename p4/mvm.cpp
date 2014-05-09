@@ -17,7 +17,9 @@ void MVM::initialNormal(int NSAMPLE, const string &folder, const string &outPref
 	bool is_readfile = this->normal.read_file(folder);
 	
 	if(!is_readfile)
+	{
 		return;
+	}
 
     normal.uniform_division(1,NSAMPLE);
 	normal.find_denominator(0.7, 0.9);

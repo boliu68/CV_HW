@@ -103,7 +103,7 @@ void normal_class::find_nearest()
 			
 			double dist = distance(sample_bg, capture_bg);
 
-			if (dist < 0.3)
+			if (dist < 0.05)
 				vec_idx.push_back(j);
 			j++;
 			capture_bg ++;
@@ -170,10 +170,10 @@ bool normal_class::find_denominator(float L, float H)
 	update_kr(L, H);
 
 	//show the denominator image
-	Mat show_tmp = Mat(interplote_imgs[denominator_idx].size(), CV_8U);
-	interplote_imgs[denominator_idx].convertTo(show_tmp, CV_8U);
-	imshow("DisplayImage", show_tmp);
-	waitKey(20);
+	//Mat show_tmp = Mat(interplote_imgs[denominator_idx].size(), CV_8U);
+	//interplote_imgs[denominator_idx].convertTo(show_tmp, CV_8U);
+	//imshow("DisplayImage", show_tmp);
+	//waitKey(20);
 	
 	return true;
 }
@@ -210,7 +210,7 @@ void normal_class::update_kr(float L, float H)
 			}
 		}
 
-		if((r / k) > Hrank)
+		if((r * 1.000 / k) > Hrank)
 		{
 			Kil.push_back(-1);
 			Ril.push_back(-1);
@@ -281,7 +281,7 @@ bool normal_class::get_normal()
 {
 	Mat detnominator_image = this->interplote_imgs[this->denominator_idx];
 	Vec3d denominator_light = this->sampled_light_direction[this->denominator_idx];
-	
+
 	int k = this->interplote_imgs.size();
 	int width = detnominator_image.size[0];
 	int height = detnominator_image.size[1];
@@ -292,10 +292,7 @@ bool normal_class::get_normal()
 
 		for (int x = 0; x < width; x++)
 		{
-			
-			double **abc = new double*[k - 1];
-			for(int i = 0; i < k - 1; i++)
-				abc[i] = new double[3];
+			Mat abc = Mat::zeros(k - 1, 3, CV_64FC1);
 
 			int img_id = 0;
 
@@ -312,43 +309,49 @@ bool normal_class::get_normal()
 
 				Vec3d l1 = this->sampled_light_direction[i];
 
-				abc[img_id][0] = I1 * denominator_light.val[0] - I2 * l1.val[0];
-				abc[img_id][1] = I1 * denominator_light.val[1] - I2 * l1.val[1];
-				abc[img_id][2] = I1 * denominator_light.val[2] - I2 * l1.val[2];
+				/*cout<<"I1:"<<I1<<endl;
+				cout<<"I2:"<<I2<<endl;
+				cout<<"val0:"<<denominator_light.val[0]<<endl;
+				cout<<"val1:"<<denominator_light.val[1]<<endl;
+				cout<<"val2:"<<denominator_light.val[2]<<endl;
+				cout<<"l val0:"<<l1.val[0]<<endl;
+				cout<<"l val1:"<<l1.val[1]<<endl;
+				cout<<"l val2:"<<l1.val[2]<<endl;*/
+
+				//abc[img_id][0] = (I1 * denominator_light.val[0] - I2 * l1.val[0]);
+				//abc[img_id][1] = (I1 * denominator_light.val[1] - I2 * l1.val[1]);
+				//abc[img_id][2] = (I1 * denominator_light.val[2] - I2 * l1.val[2]);
+		
+				abc.at<double>(img_id, 0) = double(I1 * denominator_light.val[0] - I2 * l1.val[0]);
+				abc.at<double>(img_id, 1) = double(I1 * denominator_light.val[1] - I2 * l1.val[1]);
+				abc.at<double>(img_id,2) = double(I1 * denominator_light.val[2] - I2 * l1.val[2]);
+
+				/*cout<<"val1:"<< double(I1 * denominator_light.val[0] - I2 * l1.val[0])<<endl;
+				cout<<"abc0:"<<abc.at<double>(img_id,0)<<endl;
+				cout<<"abc1:"<<abc.at<double>(img_id,1)<<endl;
+				cout<<"abc2:"<<abc.at<double>(img_id,2)<<endl;*/
+
 				img_id ++;
 			}
 			
-			double * w = new double[3];
-			double ** v = new double*[3];
-			for(int i = 0; i< 3;i++)
-				v[i] = new double[3];
-
-			svdcmp(abc, k - 1, 3, w, v);
+			Mat Vt = Mat(3, 1, CV_64FC1);
+			SVD::solveZ(abc, Vt);
+			//Vt = thisvd.vt;
 
 			Pixel px(x, y);
 			Vec3d norm;
 
-			//cout <<v[1][2]<<" ";
-
-			if(v[2][2] >= 0)
-				norm = Vec3d(v[0][2], v[1][2], v[2][2]);
+			if(Vt.at<double>(2) > 0)
+				//norm = Vec3d(v[2][0], v[2][1], v[2][2]);
+				norm = Vec3d(Vt.at<double>(0), Vt.at<double>(1),Vt.at<double>(2));
 			else
-				norm = Vec3d(-v[0][2], -v[1][2], -v[2][2]);
+				//norm = Vec3d(-v[2][0], -v[2][1], -v[2][2]);
+				norm = Vec3d( -Vt.at<double>(0),- Vt.at<double>(1), -Vt.at<double>(2));
 
 			px.setNormal(norm);
 			px.setDepth(8);
 
 			pixel_row.push_back(px);
-
-			//delete abc;
-			//delete v;
-			for(int i = 0; i < k - 1; i++)
-				delete abc[i];
-			for(int i = 0; i < 3; i++)
-				delete v[i];
-			delete abc;
-			delete v;
-			delete w;
 		}
 
 		pixels.push_back(pixel_row);
@@ -361,9 +364,9 @@ double distance(vector<Vec3d>::iterator x, vector<Vec3d>::iterator  y)
 {
 	//double dist = x->val[0] * y->val[0] + x->val[1] * y->val[1] + x->val[2] * y->val[2];
 		
-	 double dist = sqrt((x->val[0] - y->val[0]) * (x->val[0] - y->val[0])
+	 double dist = (x->val[0] - y->val[0]) * (x->val[0] - y->val[0])
 	 + (x->val[1] - y->val[1]) * (x->val[1] - y->val[1])
-	 + (x->val[2] - y->val[2]) * (x->val[2] - y->val[2]));
+	 + (x->val[2] - y->val[2]) * (x->val[2] - y->val[2]);
 
 	 return dist;
 }
